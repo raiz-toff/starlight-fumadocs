@@ -1,0 +1,33 @@
+{
+  "name": "starlight-fumadocs",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "Fumadocs Looks For Starlight",
+  "author": "raiz-toff",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./styles": "./src/styles/fumadocs.css",
+    "./overrides/*": "./src/overrides/*"
+  },
+  "devDependencies": {
+    "@astrojs/starlight": "^0.38.4",
+    "astro": "^6.1.10"
+  },
+  "peerDependencies": {
+    "@astrojs/starlight": ">=0.38"
+  },
+  "engines": {
+    "node": "^18.17.1 || ^20.3.0 || >=21.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/raiz-toff/starlight-fumadocs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raiz-toff/starlight-fumadocs.git",
+    "directory": "packages/starlight-fumadocs"
+  },
+  "bugs": "https://github.com/raiz-toff/starlight-fumadocs/issues"
+}

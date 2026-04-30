@@ -1,0 +1,421 @@
+/**
+ * Just like Starlight uses cascade layers to manage the order of its styles, the theme will also use its own layer.
+ * We first define a default, but still overridable, layer order for the theme relative to Starlight's layers.
+ *
+ * @see https://starlight.astro.build/guides/css-and-tailwind/#cascade-layers
+ * @see https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Cascade_layers
+ */
+@layer starlight, fuma-theme;
+
+/**
+ * Scope the theme styles to its own layer so that user styles can override them easily.
+ *
+ * This is where any custom CSS related to the theme should go and the current content is only
+ * provided for demonstration and documentation purposes.
+ *
+ * Feel free to remove it and add your own customizations.
+ */
+@layer fuma-theme {
+  :root {
+    --fuma-theme-enabled: true;
+
+    /* Backgrounds */
+    --sl-color-bg: hsl(0, 0%, 98.5%); /* FumaDocs default is 96%, but we use a cleaner white */
+    --sl-color-bg-nav: hsl(0, 0%, 98.5%);
+    --sl-color-bg-sidebar: hsl(0, 0%, 96.1%);
+    --sl-color-bg-inline-code: hsl(0, 0%, 93.1%);
+
+    /* Accents (FumaDocs Neutral Palette) */
+    --sl-color-accent-low: hsl(0, 0%, 90%);
+    --sl-color-accent: hsl(0, 0%, 9%);
+    --sl-color-accent-high: hsl(0, 0%, 0%);
+
+    /* Gray Scale (Mapped to FumaDocs functional colors) */
+    --sl-color-gray-1: hsl(0, 0%, 3.9%);       /* Foreground */
+    --sl-color-gray-2: hsl(0, 0%, 15.1%);      /* Popover Foreground */
+    --sl-color-gray-3: hsl(0, 0%, 45.1%);      /* Muted Foreground */
+    --sl-color-gray-4: hsl(0, 0%, 63.9%);      /* Ring */
+    --sl-color-gray-5: hsla(0, 0%, 80%, 50%);  /* Border */
+    --sl-color-gray-6: hsl(0, 0%, 94.7%);      /* Card */
+    --sl-color-gray-7: hsl(0, 0%, 96.1%);      /* Muted */
+
+    /* Text */
+    --sl-color-text: var(--sl-color-gray-1);
+    --sl-color-text-accent: var(--sl-color-accent);
+    --sl-color-text-invert: var(--sl-color-bg);
+
+    /* Borders */
+    --sl-color-hairline: var(--sl-color-gray-5);
+    --sl-color-hairline-light: hsla(0, 0%, 90%, 50%);
+    --sl-color-hairline-shade: hsla(0, 0%, 70%, 50%);
+
+    /* Expressive Code configuration */
+    --ec-brdRad: 8px;
+    --ec-brdWdth: 1px;
+    --ec-brdCol: var(--sl-color-hairline);
+    --ec-bg: var(--sl-color-bg-sidebar);
+    --ec-frm-tbarBg: var(--sl-color-bg-nav);
+    --ec-frm-tbarBrdCol: var(--sl-color-hairline);
+    --ec-codeInsBg: rgba(14, 180, 100, 0.1);
+    --ec-codeInsBrd: rgb(10, 200, 100);
+    --ec-codeInsText: inherit;
+    --ec-codeDelBg: rgba(200, 10, 100, 0.12);
+    --ec-codeDelBrd: rgb(230, 10, 100);
+    --ec-codeDelText: inherit;
+    --ec-codeMarkBg: hsla(0, 0%, 9%, 0.1);
+    --ec-codeMarkBrd: hsla(0, 0%, 9%, 0.5);
+    --ec-codeMarkText: inherit;
+
+    /* Typography: Geist Fonts */
+    --sl-font: "Geist Sans", "Inter", var(--sl-font-system);
+    --sl-font-mono: "Geist Mono", "JetBrains Mono", var(--sl-font-system-mono);
+    --sl-text-base: 16px;
+    --sl-line-height: 1.625;
+  }
+
+  :root[data-theme='dark'] {
+    /* Backgrounds */
+    --sl-color-bg: hsl(0, 0%, 7.04%);
+    --sl-color-bg-nav: hsl(0, 0%, 7.04%);
+    --sl-color-bg-sidebar: hsl(0, 0%, 9.8%);
+    --sl-color-bg-inline-code: hsl(0, 0%, 12.9%);
+
+    /* Accents */
+    --sl-color-accent-low: hsl(0, 0%, 15%);
+    --sl-color-accent: hsl(0, 0%, 98%);
+    --sl-color-accent-high: hsl(0, 0%, 100%);
+
+    /* Gray Scale */
+    --sl-color-gray-1: hsl(0, 0%, 92%);       /* Foreground */
+    --sl-color-gray-2: hsl(0, 0%, 86.9%);     /* Popover Foreground */
+    --sl-color-gray-3: hsla(0, 0%, 70%, 0.8); /* Muted Foreground */
+    --sl-color-gray-4: hsl(0, 0%, 54.9%);     /* Ring */
+    --sl-color-gray-5: hsla(0, 0%, 40%, 20%); /* Border */
+    --sl-color-gray-6: hsl(0, 0%, 11.6%);     /* Popover */
+    --sl-color-gray-7: hsl(0, 0%, 12.9%);     /* Muted */
+
+    /* Text */
+    --sl-color-text: var(--sl-color-gray-1);
+    --sl-color-text-accent: var(--sl-color-accent);
+    --sl-color-text-invert: var(--sl-color-bg);
+
+    /* Borders */
+    --sl-color-hairline: var(--sl-color-gray-5);
+    --sl-color-hairline-light: hsla(0, 0%, 50%, 20%);
+    --sl-color-hairline-shade: hsla(0, 0%, 30%, 20%);
+
+    /* Expressive Code configuration */
+    --ec-brdRad: 8px;
+    --ec-brdWdth: 1px;
+    --ec-brdCol: var(--sl-color-hairline);
+    --ec-bg: var(--sl-color-bg-sidebar);
+    --ec-frm-tbarBg: hsl(0, 0%, 11.6%);
+    --ec-frm-tbarBrdCol: var(--sl-color-hairline);
+    --ec-codeInsBg: rgba(14, 180, 100, 0.1);
+    --ec-codeInsBrd: rgb(10, 200, 100);
+    --ec-codeInsText: inherit;
+    --ec-codeDelBg: rgba(200, 10, 100, 0.12);
+    --ec-codeDelBrd: rgb(230, 10, 100);
+    --ec-codeDelText: inherit;
+    --ec-codeMarkBg: hsla(0, 0%, 98%, 0.1);
+    --ec-codeMarkBrd: hsla(0, 0%, 98%, 0.5);
+    --ec-codeMarkText: inherit;
+  }
+
+  /* Global Prose Styles */
+  .sl-markdown-content {
+    h1 {
+      font-weight: 800;
+      font-size: var(--sl-text-3xl);
+      line-height: 1.1;
+      margin-top: 0;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 1.5rem;
+      line-height: 1.33;
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      font-weight: 600;
+      font-size: 1.25rem;
+      line-height: 1.6;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    h4 {
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    a:not([data-card]) {
+      color: var(--sl-color-text);
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 3.5px;
+      text-decoration-color: var(--sl-color-accent);
+      text-decoration-thickness: 1.5px;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    strong {
+      font-weight: 600;
+      color: var(--sl-color-text);
+    }
+
+    em {
+      font-style: italic;
+      color: var(--sl-color-text);
+    }
+
+    code:not(pre code) {
+      padding: 0.2rem 0.3rem;
+      border: 1px solid var(--sl-color-hairline);
+      font-size: 0.875em;
+      border-radius: 5px;
+      font-weight: 400;
+      background-color: var(--sl-color-bg-inline-code);
+      color: var(--sl-color-text);
+    }
+
+    blockquote {
+      margin-top: 1.6rem;
+      margin-bottom: 1.6rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      padding-inline-start: 1rem;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--sl-color-text);
+      border-inline-start: 0.25rem solid var(--sl-color-hairline);
+    }
+
+    ul {
+      padding-inline-start: 1rem;
+      list-style-type: disc;
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+
+      li {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    ol {
+      padding-inline-start: 1.625rem;
+      list-style-type: decimal;
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+
+      li {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid var(--sl-color-hairline);
+      margin: 3rem 0;
+    }
+
+    table {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background-color: var(--sl-color-bg-sidebar);
+      border-radius: 8px;
+      border: 1px solid var(--sl-color-hairline);
+      overflow: hidden;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+
+      th,
+      td {
+        padding: 0.625rem;
+        border-inline-start: 1px solid var(--sl-color-hairline);
+        text-align: start;
+      }
+
+      th:first-child,
+      td:first-child {
+        border-inline-start: none;
+      }
+
+      th {
+        background-color: var(--sl-color-bg-nav);
+        font-weight: 600;
+        color: var(--sl-color-text);
+        border-bottom: 1px solid var(--sl-color-hairline);
+      }
+
+      tr:not(:last-child) td {
+        border-bottom: 1px solid var(--sl-color-hairline);
+      }
+
+      tbody tr:hover td {
+        background-color: var(--sl-color-gray-7);
+      }
+    }
+
+    /* Details / disclosure element */
+    details {
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--sl-color-hairline);
+      border-radius: 8px;
+      overflow: hidden;
+
+      summary {
+        padding: 0.75rem 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
+        background-color: var(--sl-color-bg-sidebar);
+        transition: background-color 0.15s;
+        list-style: none;
+
+        &::-webkit-details-marker {
+          display: none;
+        }
+
+        &::before {
+          content: '▶';
+          display: inline-block;
+          margin-inline-end: 0.5rem;
+          font-size: 0.7em;
+          transition: transform 0.2s;
+          transform-origin: center;
+        }
+      }
+
+      &[open] > summary::before {
+        transform: rotate(90deg);
+      }
+
+      & > *:not(summary) {
+        padding: 0.75rem 1rem;
+      }
+
+      & > summary + * {
+        border-top: 1px solid var(--sl-color-hairline);
+      }
+    }
+
+    /* Heading anchor links */
+    h1, h2, h3, h4, h5, h6 {
+      position: relative;
+      scroll-margin-top: calc(var(--sl-nav-height) + 1rem);
+
+      /* The `.anchor-link` is added by Starlight to each heading */
+      .anchor-link {
+        opacity: 0;
+        transition: opacity 0.2s;
+        color: var(--sl-color-gray-3);
+        text-decoration: none;
+        font-weight: 400;
+        font-size: 0.8em;
+        margin-inline-start: 0.5rem;
+
+        &:hover {
+          color: var(--sl-color-text);
+          opacity: 1;
+        }
+      }
+
+      &:hover .anchor-link,
+      &:focus-within .anchor-link {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* Expressive Code Overrides */
+  .expressive-code {
+    box-shadow: none;
+
+    .frame {
+      border: 1px solid var(--ec-brdCol);
+      border-radius: var(--ec-brdRad);
+      overflow: hidden;
+    }
+
+    .header {
+      border-bottom: 1px solid var(--ec-frm-tbarBrdCol);
+      background-color: var(--ec-frm-tbarBg);
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--sl-color-gray-3);
+    }
+    
+    .title {
+      border: none !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+
+    .copy {
+      top: 0.5rem;
+      inset-inline-end: 0.5rem;
+    }
+
+    .copy button {
+      opacity: 0;
+      transition: opacity 0.2s, background-color 0.2s;
+      border: 1px solid var(--sl-color-hairline);
+      border-radius: 6px;
+      background: var(--sl-color-bg-nav);
+      padding: 0.25rem;
+      width: 1.75rem;
+      height: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background: var(--sl-color-bg-sidebar);
+      }
+    }
+
+    &:hover .copy button {
+      opacity: 1;
+    }
+    
+    /* Make inline diff marks subtle like FumaDocs */
+    .ec-line ins {
+      background-color: var(--ec-codeInsBg);
+      border-color: var(--ec-codeInsBrd);
+    }
+    .ec-line del {
+      background-color: var(--ec-codeDelBg);
+      border-color: var(--ec-codeDelBrd);
+    }
+    .ec-line mark {
+      background-color: var(--ec-codeMarkBg);
+      border-color: var(--ec-codeMarkBrd);
+    }
+  }
+}
+
+

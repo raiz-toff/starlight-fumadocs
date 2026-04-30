@@ -1,0 +1,26 @@
+{
+  "name": "starlight-fumadocs-monorepo",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "Fumadocs Looks For Starlight",
+  "author": "raiz-toff",
+  "type": "module",
+  "engines": {
+    "node": "^18.17.1 || ^20.3.0 || >=21.0.0"
+  },
+  "packageManager": "pnpm@9.6.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --workspace=docs"
+  },
+  "workspaces": [
+    "docs",
+    "packages/*"
+  ],
+  "homepage": "https://github.com/raiz-toff/starlight-fumadocs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raiz-toff/starlight-fumadocs.git"
+  },
+  "bugs": "https://github.com/raiz-toff/starlight-fumadocs/issues"
+}

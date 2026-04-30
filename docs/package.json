@@ -1,0 +1,36 @@
+{
+  "name": "starlight-fumadocs-docs",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "Fumadocs Looks For Starlight",
+  "author": "raiz-toff",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.38.4",
+    "@fontsource/geist": "^5.2.8",
+    "@fontsource/geist-mono": "^5.2.7",
+    "@tailwindcss/vite": "^4.2.4",
+    "astro": "^6.1.10",
+    "sharp": "^0.34.5",
+    "starlight-fumadocs": "*",
+    "tailwindcss": "^4.2.4"
+  },
+  "engines": {
+    "node": "^18.17.1 || ^20.3.0 || >=21.0.0"
+  },
+  "private": true,
+  "homepage": "https://github.com/raiz-toff/starlight-fumadocs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raiz-toff/starlight-fumadocs.git",
+    "directory": "docs"
+  },
+  "bugs": "https://github.com/raiz-toff/starlight-fumadocs/issues"
+}

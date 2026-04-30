@@ -1,0 +1,1632 @@
+<!DOCTYPE html><html lang="en" dir="ltr" data-theme="dark" data-has-toc data-has-sidebar class="astro-bfvx4nu5"> <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Code Blocks | starlight-fumadocs</title><link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml"/><meta name="generator" content="Astro v6.1.10"/><meta name="generator" content="Starlight v0.38.4"/><meta property="og:title" content="Code Blocks"/><meta property="og:type" content="article"/><meta property="og:locale" content="en"/><meta property="og:site_name" content="starlight-fumadocs"/><meta name="twitter:card" content="summary_large_image"/><script>
+	window.StarlightThemeProvider = (() => {
+		const storedTheme =
+			typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme');
+		const theme =
+			storedTheme ||
+			(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+		document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+		return {
+			updatePickers(theme = storedTheme || 'auto') {
+				document.querySelectorAll('starlight-theme-select').forEach((picker) => {
+					const select = picker.querySelector('select');
+					if (select) select.value = theme;
+					/** @type {HTMLTemplateElement | null} */
+					const tmpl = document.querySelector(`#theme-icons`);
+					const newIcon = tmpl && tmpl.content.querySelector('.' + theme);
+					if (newIcon) {
+						const oldIcon = picker.querySelector('svg.label-icon');
+						if (oldIcon) {
+							oldIcon.replaceChildren(...newIcon.cloneNode(true).childNodes);
+						}
+					}
+				});
+			},
+		};
+	})();
+</script><template id="theme-icons" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/ThemeProvider.astro" data-astro-source-loc="34:28"><svg aria-hidden="true" class="light astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M5 12a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1Zm.64 5-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 1.41 0l.71-.71A1 1 0 0 0 5.64 17ZM12 5a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v1a1 1 0 0 0 1 1Zm5.66 2.34a1 1 0 0 0 .7-.29l.71-.71a1 1 0 1 0-1.41-1.41l-.66.71a1 1 0 0 0 0 1.41 1 1 0 0 0 .66.29Zm-12-.29a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.71-.71a1.004 1.004 0 1 0-1.43 1.41l.73.71ZM21 11h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm-2.64 6A1 1 0 0 0 17 18.36l.71.71a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.76-.66ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.51 5.51 0 0 0 12 6.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm0 3.5a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1Z"/></svg><svg aria-hidden="true" class="dark astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M21.64 13a1 1 0 0 0-1.05-.14 8.049 8.049 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05Zm-9.5 6.69A8.14 8.14 0 0 1 7.08 5.22v.27a10.15 10.15 0 0 0 10.14 10.14 9.784 9.784 0 0 0 2.1-.22 8.11 8.11 0 0 1-7.18 4.32v-.04Z"/></svg><svg aria-hidden="true" class="auto astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg></template><link rel="stylesheet" href="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/print.css?no-inline" media="print"><style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/docs/src/styles/tailwind.css">/*! tailwindcss v4.2.4 | MIT License | https://tailwindcss.com */
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --spacing: 0.25rem;
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .relative {
+    position: relative;
+  }
+  .start {
+    inset-inline-start: var(--spacing);
+  }
+  .block {
+    display: block;
+  }
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
+  }
+  .inline {
+    display: inline;
+  }
+  .table {
+    display: table;
+  }
+  .underline {
+    text-decoration-line: underline;
+  }
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist/files/geist-cyrillic-400-normal.woff2) format('woff2'), url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist/files/geist-cyrillic-400-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist/files/geist-latin-ext-400-normal.woff2) format('woff2'), url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist/files/geist-latin-ext-400-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist/files/geist-latin-400-normal.woff2) format('woff2'), url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist/files/geist-latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist-mono/files/geist-mono-cyrillic-400-normal.woff2) format('woff2'), url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist-mono/files/geist-mono-cyrillic-400-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist-mono/files/geist-mono-latin-ext-400-normal.woff2) format('woff2'), url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist-mono/files/geist-mono-latin-ext-400-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist-mono/files/geist-mono-latin-400-normal.woff2) format('woff2'), url(/@fs/home/coder/Production/starlight-fumadocs/node_modules/@fontsource/geist-mono/files/geist-mono-latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/styles/fumadocs.css">/**
+ * Just like Starlight uses cascade layers to manage the order of its styles, the theme will also use its own layer.
+ * We first define a default, but still overridable, layer order for the theme relative to Starlight's layers.
+ *
+ * @see https://starlight.astro.build/guides/css-and-tailwind/#cascade-layers
+ * @see https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Cascade_layers
+ */
+@layer starlight, fuma-theme;
+
+/**
+ * Scope the theme styles to its own layer so that user styles can override them easily.
+ *
+ * This is where any custom CSS related to the theme should go and the current content is only
+ * provided for demonstration and documentation purposes.
+ *
+ * Feel free to remove it and add your own customizations.
+ */
+@layer fuma-theme {
+  :root {
+    --fuma-theme-enabled: true;
+
+    /* Backgrounds */
+    --sl-color-bg: hsl(0, 0%, 98.5%); /* FumaDocs default is 96%, but we use a cleaner white */
+    --sl-color-bg-nav: hsl(0, 0%, 98.5%);
+    --sl-color-bg-sidebar: hsl(0, 0%, 96.1%);
+    --sl-color-bg-inline-code: hsl(0, 0%, 93.1%);
+
+    /* Accents (FumaDocs Neutral Palette) */
+    --sl-color-accent-low: hsl(0, 0%, 90%);
+    --sl-color-accent: hsl(0, 0%, 9%);
+    --sl-color-accent-high: hsl(0, 0%, 0%);
+
+    /* Gray Scale (Mapped to FumaDocs functional colors) */
+    --sl-color-gray-1: hsl(0, 0%, 3.9%);       /* Foreground */
+    --sl-color-gray-2: hsl(0, 0%, 15.1%);      /* Popover Foreground */
+    --sl-color-gray-3: hsl(0, 0%, 45.1%);      /* Muted Foreground */
+    --sl-color-gray-4: hsl(0, 0%, 63.9%);      /* Ring */
+    --sl-color-gray-5: hsla(0, 0%, 80%, 50%);  /* Border */
+    --sl-color-gray-6: hsl(0, 0%, 94.7%);      /* Card */
+    --sl-color-gray-7: hsl(0, 0%, 96.1%);      /* Muted */
+
+    /* Text */
+    --sl-color-text: var(--sl-color-gray-1);
+    --sl-color-text-accent: var(--sl-color-accent);
+    --sl-color-text-invert: var(--sl-color-bg);
+
+    /* Borders */
+    --sl-color-hairline: var(--sl-color-gray-5);
+    --sl-color-hairline-light: hsla(0, 0%, 90%, 50%);
+    --sl-color-hairline-shade: hsla(0, 0%, 70%, 50%);
+
+    /* Expressive Code configuration */
+    --ec-brdRad: 8px;
+    --ec-brdWdth: 1px;
+    --ec-brdCol: var(--sl-color-hairline);
+    --ec-bg: var(--sl-color-bg-sidebar);
+    --ec-frm-tbarBg: var(--sl-color-bg-nav);
+    --ec-frm-tbarBrdCol: var(--sl-color-hairline);
+
+    /* Typography: Geist Fonts */
+    --sl-font: "Geist Sans", "Inter", var(--sl-font-system);
+    --sl-font-mono: "Geist Mono", "JetBrains Mono", var(--sl-font-system-mono);
+    --sl-text-base: 16px;
+    --sl-line-height: 1.625;
+  }
+
+  :root[data-theme='dark'] {
+    /* Backgrounds */
+    --sl-color-bg: hsl(0, 0%, 7.04%);
+    --sl-color-bg-nav: hsl(0, 0%, 7.04%);
+    --sl-color-bg-sidebar: hsl(0, 0%, 9.8%);
+    --sl-color-bg-inline-code: hsl(0, 0%, 12.9%);
+
+    /* Accents */
+    --sl-color-accent-low: hsl(0, 0%, 15%);
+    --sl-color-accent: hsl(0, 0%, 98%);
+    --sl-color-accent-high: hsl(0, 0%, 100%);
+
+    /* Gray Scale */
+    --sl-color-gray-1: hsl(0, 0%, 92%);       /* Foreground */
+    --sl-color-gray-2: hsl(0, 0%, 86.9%);     /* Popover Foreground */
+    --sl-color-gray-3: hsla(0, 0%, 70%, 0.8); /* Muted Foreground */
+    --sl-color-gray-4: hsl(0, 0%, 54.9%);     /* Ring */
+    --sl-color-gray-5: hsla(0, 0%, 40%, 20%); /* Border */
+    --sl-color-gray-6: hsl(0, 0%, 11.6%);     /* Popover */
+    --sl-color-gray-7: hsl(0, 0%, 12.9%);     /* Muted */
+
+    /* Text */
+    --sl-color-text: var(--sl-color-gray-1);
+    --sl-color-text-accent: var(--sl-color-accent);
+    --sl-color-text-invert: var(--sl-color-bg);
+
+    /* Borders */
+    --sl-color-hairline: var(--sl-color-gray-5);
+    --sl-color-hairline-light: hsla(0, 0%, 50%, 20%);
+    --sl-color-hairline-shade: hsla(0, 0%, 30%, 20%);
+
+    /* Expressive Code configuration */
+    --ec-brdRad: 8px;
+    --ec-brdWdth: 1px;
+    --ec-brdCol: var(--sl-color-hairline);
+    --ec-bg: var(--sl-color-bg-sidebar);
+    --ec-frm-tbarBg: hsl(0, 0%, 11.6%);
+    --ec-frm-tbarBrdCol: var(--sl-color-hairline);
+  }
+
+  /* Global Prose Styles */
+  .sl-markdown-content {
+    h1 {
+      font-weight: 800;
+      font-size: var(--sl-text-3xl);
+      line-height: 1.1;
+      margin-top: 0;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 1.5rem;
+      line-height: 1.33;
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      font-weight: 600;
+      font-size: 1.25rem;
+      line-height: 1.6;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    h4 {
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    a:not([data-card]) {
+      color: var(--sl-color-text);
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 3.5px;
+      text-decoration-color: var(--sl-color-accent);
+      text-decoration-thickness: 1.5px;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    strong {
+      font-weight: 600;
+      color: var(--sl-color-text);
+    }
+
+    em {
+      font-style: italic;
+      color: var(--sl-color-text);
+    }
+
+    code:not(pre code) {
+      padding: 0.2rem 0.3rem;
+      border: 1px solid var(--sl-color-hairline);
+      font-size: 0.875em;
+      border-radius: 5px;
+      font-weight: 400;
+      background-color: var(--sl-color-bg-inline-code);
+      color: var(--sl-color-text);
+    }
+
+    blockquote {
+      margin-top: 1.6rem;
+      margin-bottom: 1.6rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      padding-inline-start: 1rem;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--sl-color-text);
+      border-inline-start: 0.25rem solid var(--sl-color-hairline);
+    }
+
+    ul {
+      padding-inline-start: 1rem;
+      list-style-type: disc;
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+
+      li {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    ol {
+      padding-inline-start: 1.625rem;
+      list-style-type: decimal;
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+
+      li {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid var(--sl-color-hairline);
+      margin: 3rem 0;
+    }
+
+    table {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background-color: var(--sl-color-bg-sidebar);
+      border-radius: 8px;
+      border: 1px solid var(--sl-color-hairline);
+      overflow: hidden;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+
+      th,
+      td {
+        padding: 0.625rem;
+        border-inline-start: 1px solid var(--sl-color-hairline);
+        text-align: start;
+      }
+
+      th:first-child,
+      td:first-child {
+        border-inline-start: none;
+      }
+
+      th {
+        background-color: var(--sl-color-bg-nav);
+        font-weight: 600;
+        color: var(--sl-color-text);
+        border-bottom: 1px solid var(--sl-color-hairline);
+      }
+
+      tr:not(:last-child) td {
+        border-bottom: 1px solid var(--sl-color-hairline);
+      }
+
+      tbody tr:hover td {
+        background-color: var(--sl-color-gray-7);
+      }
+    }
+
+    /* Details / disclosure element */
+    details {
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--sl-color-hairline);
+      border-radius: 8px;
+      overflow: hidden;
+
+      summary {
+        padding: 0.75rem 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
+        background-color: var(--sl-color-bg-sidebar);
+        transition: background-color 0.15s;
+        list-style: none;
+
+        &::-webkit-details-marker {
+          display: none;
+        }
+
+        &::before {
+          content: '▶';
+          display: inline-block;
+          margin-inline-end: 0.5rem;
+          font-size: 0.7em;
+          transition: transform 0.2s;
+          transform-origin: center;
+        }
+      }
+
+      &[open] > summary::before {
+        transform: rotate(90deg);
+      }
+
+      & > *:not(summary) {
+        padding: 0.75rem 1rem;
+      }
+
+      & > summary + * {
+        border-top: 1px solid var(--sl-color-hairline);
+      }
+    }
+
+    /* Heading anchor links */
+    h1, h2, h3, h4, h5, h6 {
+      position: relative;
+      scroll-margin-top: calc(var(--sl-nav-height) + 1rem);
+
+      /* The `.anchor-link` is added by Starlight to each heading */
+      .anchor-link {
+        opacity: 0;
+        transition: opacity 0.2s;
+        color: var(--sl-color-gray-3);
+        text-decoration: none;
+        font-weight: 400;
+        font-size: 0.8em;
+        margin-inline-start: 0.5rem;
+
+        &:hover {
+          color: var(--sl-color-text);
+          opacity: 1;
+        }
+      }
+
+      &:hover .anchor-link,
+      &:focus-within .anchor-link {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* Expressive Code Overrides */
+  .expressive-code {
+    box-shadow: none;
+
+    .frame {
+      border: 1px solid var(--ec-brdCol);
+      border-radius: var(--ec-brdRad);
+      overflow: hidden;
+    }
+
+    .header {
+      border-bottom: 1px solid var(--ec-frm-tbarBrdCol);
+      background-color: var(--ec-frm-tbarBg);
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--sl-color-gray-3);
+    }
+
+    .copy button {
+      opacity: 0;
+      transition: opacity 0.2s;
+      border: 1px solid var(--sl-color-hairline);
+      border-radius: 4px;
+      background: var(--sl-color-bg-nav);
+    }
+
+    &:hover .copy button {
+      opacity: 1;
+    }
+  }
+}
+
+
+</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/layers.css">@layer starlight.base, starlight.reset, starlight.core, starlight.content, starlight.components, starlight.utils;
+</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/props.css">@layer starlight.base {
+	:root,
+	::backdrop {
+		/* Colors (dark mode) */
+		--sl-color-white: hsl(0, 0%, 100%); /* “white” */
+		--sl-color-gray-1: hsl(224, 20%, 94%);
+		--sl-color-gray-2: hsl(224, 6%, 77%);
+		--sl-color-gray-3: hsl(224, 6%, 56%);
+		--sl-color-gray-4: hsl(224, 7%, 36%);
+		--sl-color-gray-5: hsl(224, 10%, 23%);
+		--sl-color-gray-6: hsl(224, 14%, 16%);
+		--sl-color-black: hsl(224, 10%, 10%);
+
+		--sl-hue-orange: 41;
+		--sl-color-orange-low: hsl(var(--sl-hue-orange), 39%, 22%);
+		--sl-color-orange: hsl(var(--sl-hue-orange), 82%, 63%);
+		--sl-color-orange-high: hsl(var(--sl-hue-orange), 82%, 87%);
+		--sl-hue-green: 101;
+		--sl-color-green-low: hsl(var(--sl-hue-green), 39%, 22%);
+		--sl-color-green: hsl(var(--sl-hue-green), 82%, 63%);
+		--sl-color-green-high: hsl(var(--sl-hue-green), 82%, 80%);
+		--sl-hue-blue: 234;
+		--sl-color-blue-low: hsl(var(--sl-hue-blue), 54%, 20%);
+		--sl-color-blue: hsl(var(--sl-hue-blue), 100%, 60%);
+		--sl-color-blue-high: hsl(var(--sl-hue-blue), 100%, 87%);
+		--sl-hue-purple: 281;
+		--sl-color-purple-low: hsl(var(--sl-hue-purple), 39%, 22%);
+		--sl-color-purple: hsl(var(--sl-hue-purple), 82%, 63%);
+		--sl-color-purple-high: hsl(var(--sl-hue-purple), 82%, 89%);
+		--sl-hue-red: 339;
+		--sl-color-red-low: hsl(var(--sl-hue-red), 39%, 22%);
+		--sl-color-red: hsl(var(--sl-hue-red), 82%, 63%);
+		--sl-color-red-high: hsl(var(--sl-hue-red), 82%, 87%);
+
+		--sl-color-accent-low: hsl(224, 54%, 20%);
+		--sl-color-accent: hsl(224, 100%, 60%);
+		--sl-color-accent-high: hsl(224, 100%, 85%);
+
+		--sl-color-text: var(--sl-color-gray-2);
+		--sl-color-text-accent: var(--sl-color-accent-high);
+		--sl-color-text-invert: var(--sl-color-accent-low);
+		--sl-color-bg: var(--sl-color-black);
+		--sl-color-bg-nav: var(--sl-color-gray-6);
+		--sl-color-bg-sidebar: var(--sl-color-gray-6);
+		--sl-color-bg-inline-code: var(--sl-color-gray-5);
+		--sl-color-bg-accent: var(--sl-color-accent-high);
+		--sl-color-hairline-light: var(--sl-color-gray-5);
+		--sl-color-hairline: var(--sl-color-gray-6);
+		--sl-color-hairline-shade: var(--sl-color-black);
+
+		--sl-color-backdrop-overlay: hsla(223, 13%, 10%, 0.66);
+
+		/* Shadows (dark mode) */
+		--sl-shadow-sm: 0px 1px 1px hsla(0, 0%, 0%, 0.12), 0px 2px 1px hsla(0, 0%, 0%, 0.24);
+		--sl-shadow-md: 0px 8px 4px hsla(0, 0%, 0%, 0.08), 0px 5px 2px hsla(0, 0%, 0%, 0.08),
+			0px 3px 2px hsla(0, 0%, 0%, 0.12), 0px 1px 1px hsla(0, 0%, 0%, 0.15);
+		--sl-shadow-lg: 0px 25px 7px hsla(0, 0%, 0%, 0.03), 0px 16px 6px hsla(0, 0%, 0%, 0.1),
+			0px 9px 5px hsla(223, 13%, 10%, 0.33), 0px 4px 4px hsla(0, 0%, 0%, 0.75),
+			0px 4px 2px hsla(0, 0%, 0%, 0.25);
+
+		/* Text size and line height */
+		--sl-text-2xs: 0.75rem; /* 12px */
+		--sl-text-xs: 0.8125rem; /* 13px */
+		--sl-text-sm: 0.875rem; /* 14px */
+		--sl-text-base: 1rem; /* 16px */
+		--sl-text-lg: 1.125rem; /* 18px */
+		--sl-text-xl: 1.25rem; /* 20px */
+		--sl-text-2xl: 1.5rem; /* 24px */
+		--sl-text-3xl: 1.8125rem; /* 29px */
+		--sl-text-4xl: 2.1875rem; /* 35px */
+		--sl-text-5xl: 2.625rem; /* 42px */
+		--sl-text-6xl: 4rem; /* 64px */
+
+		--sl-text-body: var(--sl-text-base);
+		--sl-text-body-sm: var(--sl-text-xs);
+		--sl-text-code: var(--sl-text-sm);
+		--sl-text-code-sm: var(--sl-text-xs);
+		--sl-text-h1: var(--sl-text-4xl);
+		--sl-text-h2: var(--sl-text-3xl);
+		--sl-text-h3: var(--sl-text-2xl);
+		--sl-text-h4: var(--sl-text-xl);
+		--sl-text-h5: var(--sl-text-lg);
+
+		--sl-line-height: 1.75;
+		--sl-line-height-headings: 1.2;
+
+		/*
+			Although technically superseded by the `system-ui` font-family, we use `-apple-system` and
+			`BlinkMacSystemFont` because `system-ui` causes issues on Windows computers in some languages.
+			See: https://github.com/withastro/starlight/issues/3721
+		*/
+		--sl-font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+			'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+			'Noto Color Emoji';
+		--sl-font-system-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+			'Courier New', monospace;
+		--__sl-font: var(--sl-font, var(--sl-font-system)), var(--sl-font-system);
+		--__sl-font-mono: var(--sl-font-mono, var(--sl-font-system-mono)), var(--sl-font-system-mono);
+
+		/** Key layout values */
+		--sl-nav-height: 3.5rem;
+		--sl-nav-pad-x: 1rem;
+		--sl-nav-pad-y: 0.75rem;
+		--sl-mobile-toc-height: 3rem;
+		--sl-sidebar-width: 18.75rem;
+		--sl-sidebar-pad-x: 1rem;
+		--sl-content-width: 45rem;
+		--sl-content-pad-x: 1rem;
+		--sl-content-gap-y: 1rem;
+		--sl-main-pad: 0 0 3vh 0;
+		--sl-menu-button-size: 2rem;
+		--sl-nav-gap: var(--sl-content-pad-x);
+		/* Offset required to show outline inside an element instead of round the outside */
+		--sl-outline-offset-inside: -0.1875rem;
+
+		/* Global z-index values */
+		--sl-z-index-toc: 4;
+		--sl-z-index-menu: 5;
+		--sl-z-index-navbar: 10;
+		--sl-z-index-skiplink: 20;
+	}
+
+	:root[data-theme='light'],
+	[data-theme='light'] ::backdrop {
+		/* Colours (light mode) */
+		--sl-color-white: hsl(224, 10%, 10%);
+		--sl-color-gray-1: hsl(224, 14%, 16%);
+		--sl-color-gray-2: hsl(224, 10%, 23%);
+		--sl-color-gray-3: hsl(224, 7%, 36%);
+		--sl-color-gray-4: hsl(224, 6%, 56%);
+		--sl-color-gray-5: hsl(224, 6%, 77%);
+		--sl-color-gray-6: hsl(224, 20%, 94%);
+		--sl-color-gray-7: hsl(224, 19%, 97%);
+		--sl-color-black: hsl(0, 0%, 100%);
+
+		--sl-color-orange-high: hsl(var(--sl-hue-orange), 80%, 25%);
+		--sl-color-orange: hsl(var(--sl-hue-orange), 90%, 60%);
+		--sl-color-orange-low: hsl(var(--sl-hue-orange), 90%, 88%);
+		--sl-color-green-high: hsl(var(--sl-hue-green), 80%, 22%);
+		--sl-color-green: hsl(var(--sl-hue-green), 90%, 46%);
+		--sl-color-green-low: hsl(var(--sl-hue-green), 85%, 90%);
+		--sl-color-blue-high: hsl(var(--sl-hue-blue), 80%, 30%);
+		--sl-color-blue: hsl(var(--sl-hue-blue), 90%, 60%);
+		--sl-color-blue-low: hsl(var(--sl-hue-blue), 88%, 90%);
+		--sl-color-purple-high: hsl(var(--sl-hue-purple), 90%, 30%);
+		--sl-color-purple: hsl(var(--sl-hue-purple), 90%, 60%);
+		--sl-color-purple-low: hsl(var(--sl-hue-purple), 80%, 90%);
+		--sl-color-red-high: hsl(var(--sl-hue-red), 80%, 30%);
+		--sl-color-red: hsl(var(--sl-hue-red), 90%, 60%);
+		--sl-color-red-low: hsl(var(--sl-hue-red), 80%, 90%);
+
+		--sl-color-accent-high: hsl(234, 80%, 30%);
+		--sl-color-accent: hsl(234, 90%, 60%);
+		--sl-color-accent-low: hsl(234, 88%, 90%);
+
+		--sl-color-text-accent: var(--sl-color-accent);
+		--sl-color-text-invert: var(--sl-color-black);
+		--sl-color-bg-nav: var(--sl-color-gray-7);
+		--sl-color-bg-sidebar: var(--sl-color-bg);
+		--sl-color-bg-inline-code: var(--sl-color-gray-6);
+		--sl-color-bg-accent: var(--sl-color-accent);
+		--sl-color-hairline-light: var(--sl-color-gray-6);
+		--sl-color-hairline-shade: var(--sl-color-gray-6);
+
+		--sl-color-backdrop-overlay: hsla(225, 9%, 36%, 0.66);
+
+		/* Shadows (light mode) */
+		--sl-shadow-sm: 0px 1px 1px hsla(0, 0%, 0%, 0.06), 0px 2px 1px hsla(0, 0%, 0%, 0.06);
+		--sl-shadow-md: 0px 8px 4px hsla(0, 0%, 0%, 0.03), 0px 5px 2px hsla(0, 0%, 0%, 0.03),
+			0px 3px 2px hsla(0, 0%, 0%, 0.06), 0px 1px 1px hsla(0, 0%, 0%, 0.06);
+		--sl-shadow-lg: 0px 25px 7px rgba(0, 0, 0, 0.01), 0px 16px 6px hsla(0, 0%, 0%, 0.03),
+			0px 9px 5px hsla(223, 13%, 10%, 0.08), 0px 4px 4px hsla(0, 0%, 0%, 0.16),
+			0px 4px 2px hsla(0, 0%, 0%, 0.04);
+	}
+
+	@media (min-width: 50em) {
+		:root {
+			--sl-nav-height: 4rem;
+			--sl-nav-pad-x: 1.5rem;
+			--sl-text-h1: var(--sl-text-5xl);
+			--sl-text-h2: var(--sl-text-4xl);
+			--sl-text-h3: var(--sl-text-3xl);
+			--sl-text-h4: var(--sl-text-2xl);
+		}
+	}
+
+	@media (min-width: 72rem) {
+		:root {
+			--sl-content-pad-x: 1.5rem;
+			--sl-mobile-toc-height: 0rem;
+		}
+	}
+}
+</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/reset.css">@layer starlight.reset {
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	* {
+		margin: 0;
+	}
+
+	html {
+		color-scheme: dark;
+		accent-color: var(--sl-color-accent);
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+	}
+
+	html[data-theme='light'] {
+		color-scheme: light;
+	}
+
+	body {
+		font-family: var(--__sl-font);
+		line-height: var(--sl-line-height);
+		-webkit-font-smoothing: antialiased;
+		color: var(--sl-color-text);
+		background-color: var(--sl-color-bg);
+	}
+
+	input,
+	button,
+	textarea,
+	select {
+		font: inherit;
+	}
+
+	p,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	code {
+		overflow-wrap: break-word;
+	}
+
+	code {
+		font-family: var(--__sl-font-mono);
+	}
+}
+</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/asides.css">@layer starlight.components {
+	.starlight-aside {
+		padding: 1rem;
+		border-inline-start: 0.25rem solid var(--sl-color-asides-border);
+		color: var(--sl-color-white);
+	}
+	.starlight-aside--note {
+		--sl-color-asides-text-accent: var(--sl-color-blue-high);
+		--sl-color-asides-border: var(--sl-color-blue);
+		background-color: var(--sl-color-blue-low);
+	}
+	.starlight-aside--tip {
+		--sl-color-asides-text-accent: var(--sl-color-purple-high);
+		--sl-color-asides-border: var(--sl-color-purple);
+		background-color: var(--sl-color-purple-low);
+	}
+	.starlight-aside--caution {
+		--sl-color-asides-text-accent: var(--sl-color-orange-high);
+		--sl-color-asides-border: var(--sl-color-orange);
+		background-color: var(--sl-color-orange-low);
+	}
+	.starlight-aside--danger {
+		--sl-color-asides-text-accent: var(--sl-color-red-high);
+		--sl-color-asides-border: var(--sl-color-red);
+		background-color: var(--sl-color-red-low);
+	}
+
+	.starlight-aside__title {
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+		font-size: var(--sl-text-h5);
+		font-weight: 600;
+		line-height: var(--sl-line-height-headings);
+		color: var(--sl-color-asides-text-accent);
+	}
+
+	.starlight-aside__icon {
+		font-size: 1.333em;
+		width: 1em;
+		height: 1em;
+	}
+
+	.starlight-aside__title + .starlight-aside__content {
+		margin-top: 0.5rem;
+	}
+
+	.starlight-aside__content:empty {
+		display: none;
+	}
+
+	.starlight-aside__content a {
+		color: var(--sl-color-asides-text-accent);
+	}
+}
+</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/util.css">@layer starlight.utils {
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
+	}
+
+	.sl-hidden {
+		display: none;
+	}
+	.sl-flex {
+		display: flex;
+	}
+	.sl-block {
+		display: block;
+	}
+	@media (min-width: 50rem) {
+		.md\:sl-hidden {
+			display: none;
+		}
+		.md\:sl-flex {
+			display: flex;
+		}
+		.md\:sl-block {
+			display: block;
+		}
+	}
+	@media (min-width: 72rem) {
+		.lg\:sl-hidden {
+			display: none;
+		}
+		.lg\:sl-flex {
+			display: flex;
+		}
+		.lg\:sl-block {
+			display: block;
+		}
+	}
+	[data-theme='light'] .light\:sl-hidden {
+		display: none;
+	}
+	[data-theme='dark'] .dark\:sl-hidden {
+		display: none;
+	}
+
+	/**
+	 * Flip an element around the y-axis when in an RTL context.
+	 * Primarily useful for things where we can’t rely on writing direction like icons.
+	 *
+	 * <Icon name="right-arrow" class="rtl:flip" />
+	 *
+	 * In a LTR context: →					In a RTL context: ←
+	 */
+	[dir='rtl'] .rtl\:flip:not(:where([dir='rtl'] [dir='ltr'] *)) {
+		transform: matrix(-1, 0, 0, 1, 0, 0);
+	}
+}
+</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/anchor-links.css">/* 
+How does anchor link placement work?
+
+Because anchor links need to placed inline at the end of a heading, but are not children of the
+heading element itself, positioning them to behave in a desirable way is a tiny bit tricky. Here’s
+how we do it.
+
+1. We wrap the heading and anchor link in a div and make the heading element inline:
+   <div class="sl-heading-wrapper">
+     <h2>...</h2><a class="sl-anchor-link">...</a>
+   </a>
+
+2. We need to avoid the anchor link wrapping onto a new line by itself like this because it looks
+   broken:
+
+   Some heading text
+   ⛓
+
+3. To achieve this we add an area of padding to the end of the heading and move the link over this
+   padding using negative margin:
+
+                        padding-inline-end creates space at the end of the line
+                         ↓
+      Some heading text[   ]⛓
+
+                        margin-inline-start then pulls the anchor link into that space
+                         ↓
+      Some heading text[ ⛓ ]
+
+   This ensures that when the anchor link wraps, the final word in the heading will wrap with it.
+
+*/
+@layer starlight.content {
+	/* ======================================================
+   WRAPPER
+   ====================================================== */
+	.sl-markdown-content .sl-heading-wrapper {
+		/* The size of the SVG icon. */
+		--sl-anchor-icon-size: 0.8275em;
+		/* The horizontal space between the SVG icon and the end of the heading text. */
+		--sl-anchor-icon-gap: 0.25em;
+		/* The end of line space required to accommodate the anchor link. */
+		--sl-anchor-icon-space: calc(var(--sl-anchor-icon-size) + var(--sl-anchor-icon-gap));
+
+		line-height: var(--sl-line-height-headings);
+	}
+
+	/* We need to apply the same rule we use for heading spacing to the parent wrapper. */
+	.sl-markdown-content
+		:not(h1, h2, h3, h4, h5, h6, .sl-heading-wrapper)
+		+ :is(.sl-heading-wrapper) {
+		margin-top: 1.5em;
+	}
+
+	/* These font sizes are set in `markdown.css` for heading elements, but we need them one level higher on the wrapper. */
+	.sl-markdown-content .sl-heading-wrapper.level-h1 {
+		font-size: var(--sl-text-h1);
+	}
+	.sl-markdown-content .sl-heading-wrapper.level-h2 {
+		font-size: var(--sl-text-h2);
+	}
+	.sl-markdown-content .sl-heading-wrapper.level-h3 {
+		font-size: var(--sl-text-h3);
+	}
+	.sl-markdown-content .sl-heading-wrapper.level-h4 {
+		font-size: var(--sl-text-h4);
+	}
+	.sl-markdown-content .sl-heading-wrapper.level-h5 {
+		font-size: var(--sl-text-h5);
+	}
+	.sl-markdown-content .sl-heading-wrapper.level-h6 {
+		font-size: var(--sl-text-h6);
+	}
+
+	/* ======================================================
+   HEADING
+   ====================================================== */
+	.sl-markdown-content .sl-heading-wrapper > :first-child {
+		display: inline;
+		/* Apply end-of-line padding to the heading element. */
+		padding-inline-end: var(--sl-anchor-icon-space);
+	}
+
+	/* ======================================================
+   LINK
+   ====================================================== */
+	.sl-markdown-content .sl-anchor-link {
+		position: relative;
+		/* Move the anchor link over the heading element’s end-of-line padding. */
+		margin-inline-start: calc(-1 * var(--sl-anchor-icon-size));
+		/* Prevent double or triple clicks from potentially selecting the anchor link a11y text. */
+		-webkit-user-select: none;
+		user-select: none;
+		/* Prevent double clicks on the last word (or single word) of a heading to include an extra new
+     line in Chrome and Safari. */
+		display: inline-flex;
+	}
+
+	/* Increase clickable area for anchor links with a pseudo element that doesn’t impact layout. */
+	.sl-markdown-content .sl-anchor-link::after {
+		content: '';
+		position: absolute;
+		/* While most icon spacing is done with `em` to be relative to the heading font-size, increasing
+     the touch area is most important for smaller headings like h5/h6, so we use absolute units,
+     which have a diminishing impact at larger font-sizes. */
+		inset: -0.25rem -0.5rem;
+	}
+
+	/* Size and position the SVG icon inside the link. */
+	.sl-markdown-content .sl-anchor-icon > svg {
+		display: inline;
+		width: var(--sl-anchor-icon-size);
+		/* Center the link icon SVG vertically in the line. */
+		vertical-align: top;
+		transform: translateY(
+			calc((var(--sl-line-height-headings) * 1em - var(--sl-anchor-icon-size)) / 2)
+		);
+	}
+
+	/* On devices with hover capability, hide the anchor link icons and show only show them when focused
+   or when the heading is hovered. */
+	@media (hover: hover) {
+		.sl-markdown-content .sl-anchor-link {
+			opacity: 0;
+		}
+		.sl-markdown-content .sl-anchor-link:focus,
+		.sl-markdown-content .sl-heading-wrapper:hover .sl-anchor-link {
+			opacity: 1;
+		}
+	}
+}
+</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Banner.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{.sl-banner:where(.astro-jv464woa){--__sl-banner-text: var(--sl-color-banner-text, var(--sl-color-text-invert));padding:var(--sl-nav-pad-y) var(--sl-nav-pad-x);background-color:var(--sl-color-banner-bg, var(--sl-color-bg-accent));color:var(--__sl-banner-text);line-height:var(--sl-line-height-headings);text-align:center;text-wrap:balance;box-shadow:var(--sl-shadow-sm)}.sl-banner:where(.astro-jv464woa) a{color:var(--__sl-banner-text)}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/ContentPanel.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{.content-panel:where(.astro-5muiuvld){padding:1.5rem var(--sl-content-pad-x)}.content-panel:where(.astro-5muiuvld)+.content-panel:where(.astro-5muiuvld){border-top:1px solid var(--sl-color-hairline)}.sl-container:where(.astro-5muiuvld){max-width:var(--sl-content-width)}.sl-container:where(.astro-5muiuvld)>* + *{margin-top:1.5rem}@media (min-width: 72rem){.sl-container:where(.astro-5muiuvld){margin-inline:var(--sl-content-margin-inline, auto)}}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.components{svg:where(.astro-ckair3ac){color:var(--sl-icon-color);font-size:var(--sl-icon-size, 1em);width:1em;height:1em}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/ContentNotice.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{p:where(.astro-sceqa5qb){border:1px solid var(--sl-color-orange);padding:0.75em 1em;background-color:var(--sl-color-orange-low);color:var(--sl-color-orange-high);width:max-content;max-width:100%;align-items:center;gap:0.75em;font-size:var(--sl-text-body-sm);line-height:var(--sl-line-height-headings);text-align:start}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/EditLink.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{a:where(.astro-ti2nxoh6){gap:0.5rem;align-items:center;text-decoration:none;color:var(--sl-color-gray-3)}a:where(.astro-ti2nxoh6):hover{color:var(--sl-color-white)}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{.pagination-links:where(.astro-plywdj7w){display:grid;grid-template-columns:repeat(auto-fit,minmax(min(18rem,100%),1fr));gap:1rem}a:where(.astro-plywdj7w){display:flex;align-items:center;justify-content:flex-start;gap:0.5rem;width:100%;flex-basis:calc(50% - 0.5rem);flex-grow:1;border:1px solid var(--sl-color-gray-5);border-radius:0.5rem;padding:1rem;text-decoration:none;color:var(--sl-color-gray-2);box-shadow:var(--sl-shadow-md);overflow-wrap:anywhere}:where(.astro-plywdj7w)[rel=next]{justify-content:end;text-align:end;flex-direction:row-reverse}a:where(.astro-plywdj7w):hover{border-color:var(--sl-color-gray-2)}.link-title:where(.astro-plywdj7w){color:var(--sl-color-white);font-size:var(--sl-text-2xl);line-height:var(--sl-line-height-headings)}svg:where(.astro-plywdj7w){flex-shrink:0}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Badge.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.components{:root{--sl-badge-default-border: var(--sl-color-accent);--sl-badge-default-bg: var(--sl-color-accent-low);--sl-badge-default-text: #fff;--sl-badge-note-border: var(--sl-color-blue);--sl-badge-note-bg: var(--sl-color-blue-low);--sl-badge-note-text: #fff;--sl-badge-danger-border: var(--sl-color-red);--sl-badge-danger-bg: var(--sl-color-red-low);--sl-badge-danger-text: #fff;--sl-badge-success-border: var(--sl-color-green);--sl-badge-success-bg: var(--sl-color-green-low);--sl-badge-success-text: #fff;--sl-badge-caution-border: var(--sl-color-orange);--sl-badge-caution-bg: var(--sl-color-orange-low);--sl-badge-caution-text: #fff;--sl-badge-tip-border: var(--sl-color-purple);--sl-badge-tip-bg: var(--sl-color-purple-low);--sl-badge-tip-text: #fff}[data-theme="light"]:root{--sl-badge-default-bg: var(--sl-color-accent-high);--sl-badge-note-bg: var(--sl-color-blue-high);--sl-badge-danger-bg: var(--sl-color-red-high);--sl-badge-success-bg: var(--sl-color-green-high);--sl-badge-caution-bg: var(--sl-color-orange-high);--sl-badge-tip-bg: var(--sl-color-purple-high)}.sl-badge:where(.astro-kj3iu4nl){display:inline-block;border:1px solid var(--sl-color-border-badge);border-radius:0.25rem;font-family:var(--sl-font-system-mono);line-height:normal;color:var(--sl-color-text-badge);background-color:var(--sl-color-bg-badge);overflow-wrap:anywhere}.sidebar-content .sl-badge:where(.astro-kj3iu4nl){line-height:1;font-size:var(--sl-text-xs);padding:0.125rem 0.375rem}.sidebar-content a[aria-current="page"]>.sl-badge:where(.astro-kj3iu4nl){--sl-color-bg-badge: transparent;--sl-color-border-badge: currentColor;color:inherit}.default:where(.astro-kj3iu4nl){--sl-color-bg-badge: var(--sl-badge-default-bg);--sl-color-border-badge: var(--sl-badge-default-border);--sl-color-text-badge: var(--sl-badge-default-text)}.note:where(.astro-kj3iu4nl){--sl-color-bg-badge: var(--sl-badge-note-bg);--sl-color-border-badge: var(--sl-badge-note-border);--sl-color-text-badge: var(--sl-badge-note-text)}.danger:where(.astro-kj3iu4nl){--sl-color-bg-badge: var(--sl-badge-danger-bg);--sl-color-border-badge: var(--sl-badge-danger-border);--sl-color-text-badge: var(--sl-badge-danger-text)}.success:where(.astro-kj3iu4nl){--sl-color-bg-badge: var(--sl-badge-success-bg);--sl-color-border-badge: var(--sl-badge-success-border);--sl-color-text-badge: var(--sl-badge-success-text)}.tip:where(.astro-kj3iu4nl){--sl-color-bg-badge: var(--sl-badge-tip-bg);--sl-color-border-badge: var(--sl-badge-tip-border);--sl-color-text-badge: var(--sl-badge-tip-text)}.caution:where(.astro-kj3iu4nl){--sl-color-bg-badge: var(--sl-badge-caution-bg);--sl-color-border-badge: var(--sl-badge-caution-border);--sl-color-text-badge: var(--sl-badge-caution-text)}.small:where(.astro-kj3iu4nl){font-size:var(--sl-text-xs);padding:0.125rem 0.25rem}.medium:where(.astro-kj3iu4nl){font-size:var(--sl-text-sm);padding:0.175rem 0.35rem}.large:where(.astro-kj3iu4nl){font-size:var(--sl-text-base);padding:0.225rem 0.45rem}.sl-markdown-content :is(h1,h2,h3,h4,h5,h6) .sl-badge:where(.astro-kj3iu4nl){vertical-align:middle}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Card.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.components{.card:where(.astro-2kco76my){--sl-card-border: var(--sl-color-purple);--sl-card-bg: var(--sl-color-purple-low);border:1px solid var(--sl-color-gray-5);background-color:var(--sl-color-black);padding:clamp(1rem,calc(0.125rem + 3vw),2.5rem);flex-direction:column;gap:clamp(0.5rem,calc(0.125rem + 1vw),1rem)}.card:where(.astro-2kco76my):nth-child(4n + 1){--sl-card-border: var(--sl-color-orange);--sl-card-bg: var(--sl-color-orange-low)}.card:where(.astro-2kco76my):nth-child(4n + 3){--sl-card-border: var(--sl-color-green);--sl-card-bg: var(--sl-color-green-low)}.card:where(.astro-2kco76my):nth-child(4n + 4){--sl-card-border: var(--sl-color-red);--sl-card-bg: var(--sl-color-red-low)}.card:where(.astro-2kco76my):nth-child(4n + 5){--sl-card-border: var(--sl-color-blue);--sl-card-bg: var(--sl-color-blue-low)}.title:where(.astro-2kco76my){font-weight:600;font-size:var(--sl-text-h4);color:var(--sl-color-white);line-height:var(--sl-line-height-headings);gap:1rem;align-items:center}.card:where(.astro-2kco76my) .icon:where(.astro-2kco76my){border:1px solid var(--sl-card-border);background-color:var(--sl-card-bg);padding:0.2em;border-radius:0.25rem;flex-shrink:0}.card:where(.astro-2kco76my) .body:where(.astro-2kco76my){margin:0;font-size:clamp(var(--sl-text-sm),calc(0.5rem + 1vw),var(--sl-text-body))}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/CardGrid.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.components{.card-grid:where(.astro-xci6nnyp){display:grid;grid-template-columns:100%;gap:1rem}.card-grid:where(.astro-xci6nnyp)>*{margin-top:0!important}@media (min-width: 50rem){.card-grid:where(.astro-xci6nnyp){grid-template-columns:1fr 1fr;gap:1.5rem}.stagger:where(.astro-xci6nnyp){--stagger-height: 5rem;padding-bottom:var(--stagger-height)}.stagger:where(.astro-xci6nnyp)>*:nth-child(2n){transform:translateY(var(--stagger-height))}}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Tabs.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.components{starlight-tabs:where(.astro-6toso4ju){display:block}.tablist-wrapper:where(.astro-6toso4ju){overflow-x:auto}:where(.astro-6toso4ju)[role=tablist]{display:flex;list-style:none;border-bottom:2px solid var(--sl-color-gray-5);padding:0}.tab:where(.astro-6toso4ju){display:flex}.tab:where(.astro-6toso4ju)>:where(.astro-6toso4ju)[role=tab]{--sl-tab-color-border: var(--sl-color-gray-5);display:flex;align-items:center;gap:0.5rem;line-height:var(--sl-line-height-headings);padding:0.275rem 1.25rem;text-decoration:none;box-shadow:0 2px 0 var(--sl-tab-color-border);color:var(--sl-color-gray-3);outline-offset:var(--sl-outline-offset-inside);overflow-wrap:initial}.tab:where(.astro-6toso4ju) :where(.astro-6toso4ju)[role=tab][aria-selected=true]{--sl-tab-color-border: var(--sl-color-text-accent);color:var(--sl-color-white);font-weight:600}.tablist-wrapper:where(.astro-6toso4ju)~[role="tabpanel"]{margin-top:1rem}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/LinkCard.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.components{.sl-link-card:where(.astro-e37xgdkq){display:grid;grid-template-columns:1fr auto;gap:0.5rem;border:1px solid var(--sl-color-gray-5);border-radius:0.5rem;padding:1rem;box-shadow:var(--sl-shadow-sm);position:relative}a:where(.astro-e37xgdkq){text-decoration:none;line-height:var(--sl-line-height-headings)}a:where(.astro-e37xgdkq)::before{content:"";position:absolute;inset:0}.stack:where(.astro-e37xgdkq){flex-direction:column;gap:0.5rem}.title:where(.astro-e37xgdkq){color:var(--sl-color-white);font-weight:600;font-size:var(--sl-text-lg)}.description:where(.astro-e37xgdkq){color:var(--sl-color-gray-3);line-height:1.5}.icon:where(.astro-e37xgdkq){color:var(--sl-color-gray-3)}.sl-link-card:where(.astro-e37xgdkq):hover{background:var(--sl-color-gray-7, var(--sl-color-gray-6));border-color:var(--sl-color-gray-2)}.sl-link-card:where(.astro-e37xgdkq):hover .icon:where(.astro-e37xgdkq){color:var(--sl-color-white)}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Steps.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.components {
+		.sl-steps {
+			--bullet-size: calc(var(--sl-line-height) * 1rem);
+			--bullet-margin: 0.375rem;
+
+			list-style: none;
+			counter-reset: steps-counter var(--sl-steps-start, 0);
+			padding-inline-start: 0;
+		}
+
+		.sl-steps > li {
+			counter-increment: steps-counter;
+			position: relative;
+			padding-inline-start: calc(var(--bullet-size) + 1rem);
+			/* HACK: Keeps any `margin-bottom` inside the `<li>`’s padding box to avoid gaps in the hairline border. */
+			padding-bottom: 1px;
+			/* Prevent bullets from touching in short list items. */
+			min-height: calc(var(--bullet-size) + var(--bullet-margin));
+		}
+		.sl-steps > li + li {
+			/* Remove margin between steps. */
+			margin-top: 0;
+		}
+
+		/* Custom list marker element. */
+		.sl-steps > li::before {
+			content: counter(steps-counter);
+			position: absolute;
+			top: 0;
+			inset-inline-start: 0;
+			width: var(--bullet-size);
+			height: var(--bullet-size);
+			line-height: var(--bullet-size);
+
+			font-size: var(--sl-text-xs);
+			font-weight: 600;
+			text-align: center;
+			color: var(--sl-color-white);
+			background-color: var(--sl-color-gray-6);
+			border-radius: 99rem;
+			box-shadow: inset 0 0 0 1px var(--sl-color-gray-5);
+		}
+
+		/* Vertical guideline linking list numbers. */
+		.sl-steps > li::after {
+			--guide-width: 1px;
+			content: '';
+			position: absolute;
+			top: calc(var(--bullet-size) + var(--bullet-margin));
+			bottom: var(--bullet-margin);
+			inset-inline-start: calc((var(--bullet-size) - var(--guide-width)) / 2);
+			width: var(--guide-width);
+			background-color: var(--sl-color-hairline-light);
+		}
+	}
+
+	@layer starlight.content {
+		/* Adjust first item inside a step so that it aligns vertically with the number
+			even if using a larger font size (e.g. a heading) */
+		.sl-steps > li > :first-child {
+			/*
+		The `lh` unit is not yet supported by all browsers in our support matrix
+		— see https://caniuse.com/mdn-css_types_length_lh
+		In unsupported browsers we approximate this using our known line-heights.
+		*/
+			--lh: calc(1em * var(--sl-line-height));
+			--shift-y: calc(0.5 * (var(--bullet-size) - var(--lh)));
+			transform: translateY(var(--shift-y));
+			margin-bottom: var(--shift-y);
+		}
+		.sl-steps > li > :first-child:where(h1, h2, h3, h4, h5, h6) {
+			--lh: calc(1em * var(--sl-line-height-headings));
+		}
+		@supports (--prop: 1lh) {
+			.sl-steps > li > :first-child {
+				--lh: 1lh;
+			}
+		}
+	}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/FileTree.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.components{starlight-file-tree:where(.astro-qs3h3jdq){--x-space: 1.5rem;--y-space: 0.125rem;--y-pad: 0;display:block;border:1px solid var(--sl-color-gray-5);padding:1rem;background-color:var(--sl-color-gray-6);font-size:var(--sl-text-xs);font-family:var(--__sl-font-mono);overflow-x:auto}starlight-file-tree:where(.astro-qs3h3jdq) .directory > details{border:0;padding:0;padding-inline-start:var(--x-space);background:transparent}starlight-file-tree:where(.astro-qs3h3jdq) .directory > details > summary{margin-inline-start:calc(-1 * var(--x-space));border:0;padding:var(--y-pad) 0.625rem;font-weight:normal;color:var(--sl-color-white);max-width:100%}starlight-file-tree:where(.astro-qs3h3jdq) .directory > details > summary::marker,starlight-file-tree:where(.astro-qs3h3jdq) .directory > details > summary::-webkit-details-marker{color:var(--sl-color-gray-3)}starlight-file-tree:where(.astro-qs3h3jdq) .directory > details > summary:hover,starlight-file-tree:where(.astro-qs3h3jdq) .directory > details > summary:hover .tree-icon{cursor:pointer;color:var(--sl-color-text-accent);fill:currentColor}starlight-file-tree:where(.astro-qs3h3jdq) .directory > details > summary:hover ~ ul{border-color:var(--sl-color-gray-4)}starlight-file-tree:where(.astro-qs3h3jdq) .directory > details > summary:hover .highlight .tree-icon{color:var(--sl-color-text-invert);fill:currentColor}starlight-file-tree:where(.astro-qs3h3jdq) ul{margin-inline-start:0.5rem;border-inline-start:1px solid var(--sl-color-gray-5);padding:0;padding-inline-start:0.125rem;list-style:none}starlight-file-tree:where(.astro-qs3h3jdq)>ul{margin:0;border:0;padding:0}starlight-file-tree:where(.astro-qs3h3jdq) li{margin:var(--y-space) 0;padding:var(--y-pad) 0}starlight-file-tree:where(.astro-qs3h3jdq) .file{margin-inline-start:calc(var(--x-space) - 0.125rem);color:var(--sl-color-white)}starlight-file-tree:where(.astro-qs3h3jdq) .tree-entry{display:inline-flex;align-items:flex-start;flex-wrap:wrap;max-width:calc(100% - 1rem)}@media (min-width: 30em){starlight-file-tree:where(.astro-qs3h3jdq) .tree-entry{flex-wrap:nowrap}}starlight-file-tree:where(.astro-qs3h3jdq) .tree-entry > :first-child{flex-shrink:0}starlight-file-tree:where(.astro-qs3h3jdq) .empty{color:var(--sl-color-gray-3);padding-inline-start:0.375rem}starlight-file-tree:where(.astro-qs3h3jdq) .comment{color:var(--sl-color-gray-3);padding-inline-start:1.625rem;max-width:24rem;min-width:12rem}starlight-file-tree:where(.astro-qs3h3jdq) .highlight{display:inline-block;border-radius:0.25rem;padding-inline-end:0.5rem;color:var(--sl-color-text-invert);background-color:var(--sl-color-text-accent)}starlight-file-tree:where(.astro-qs3h3jdq) svg{display:inline;fill:var(--sl-color-gray-3);vertical-align:middle;margin-inline:0.25rem 0.375rem;width:0.875rem;height:0.875rem}starlight-file-tree:where(.astro-qs3h3jdq) .highlight svg.tree-icon{fill:currentColor}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/LinkButton.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.components{.sl-link-button:where(.astro-kdx2kbqx){align-items:center;border:1px solid transparent;border-radius:999rem;display:inline-flex;font-size:var(--sl-text-sm);gap:0.5em;line-height:1.1875;outline-offset:0.25rem;padding:0.4375rem 1.125rem;text-decoration:none}.sl-link-button:where(.astro-kdx2kbqx).primary{background:var(--sl-color-text-accent);border-color:var(--sl-color-text-accent);color:var(--sl-color-black)}.sl-link-button:where(.astro-kdx2kbqx).primary:hover{color:var(--sl-color-black)}.sl-link-button:where(.astro-kdx2kbqx).secondary{border-color:inherit;color:var(--sl-color-white)}.sl-link-button:where(.astro-kdx2kbqx).minimal{color:var(--sl-color-white);padding-inline:0}.sl-link-button:where(.astro-kdx2kbqx) svg{flex-shrink:0}@media (min-width: 50rem){.sl-link-button:where(.astro-kdx2kbqx){font-size:var(--sl-text-base);padding:0.9375rem 1.25rem}}.sl-markdown-content .sl-link-button:where(.astro-kdx2kbqx){margin-inline-end:1rem}.sl-markdown-content .sl-link-button:where(.astro-kdx2kbqx):not(:where(p *)){margin-block:1rem}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Footer.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{footer:where(.astro-r4ia5ikh){flex-direction:column;gap:1.5rem}.meta:where(.astro-r4ia5ikh){gap:0.75rem 3rem;justify-content:space-between;flex-wrap:wrap;margin-top:3rem;font-size:var(--sl-text-sm);color:var(--sl-color-gray-3)}.meta:where(.astro-r4ia5ikh)>p:only-child{margin-inline-start:auto}.kudos:where(.astro-r4ia5ikh){align-items:center;gap:0.5em;margin:1.5rem auto;font-size:var(--sl-text-xs);text-decoration:none;color:var(--sl-color-gray-3)}.kudos:where(.astro-r4ia5ikh):hover{color:var(--sl-color-white)}}@layer starlight.components{.kudos:where(.astro-r4ia5ikh) svg{color:var(--sl-color-orange)}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Select.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{label:where(.astro-bellfhx2){--sl-label-icon-size: 0.875rem;--sl-caret-size: 1.25rem;--sl-inline-padding: 0.5rem;position:relative;display:flex;align-items:center;gap:0.25rem;color:var(--sl-color-gray-2)}label:where(.astro-bellfhx2):hover{color:var(--sl-color-white)}.icon:where(.astro-bellfhx2){position:absolute;top:50%;transform:translateY(-50%);pointer-events:none}select:where(.astro-bellfhx2){border:0;padding-block:0.625rem;padding-inline:calc(var(--sl-label-icon-size) + var(--sl-inline-padding) + 0.25rem) calc(var(--sl-caret-size) + var(--sl-inline-padding) + 0.25rem);margin-inline:calc(var(--sl-inline-padding) * -1);width:calc(var(--sl-select-width) + var(--sl-inline-padding) * 2);background-color:transparent;text-overflow:ellipsis;color:inherit;cursor:pointer;appearance:none}option:where(.astro-bellfhx2){background-color:var(--sl-color-bg-nav);color:var(--sl-color-gray-1)}@media (min-width: 50rem){select:where(.astro-bellfhx2){font-size:var(--sl-text-sm)}}}@layer starlight.components{.label-icon:where(.astro-bellfhx2){font-size:var(--sl-label-icon-size);inset-inline-start:0}.caret:where(.astro-bellfhx2){font-size:var(--sl-caret-size);inset-inline-end:0}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro?astro&#38;type=style&#38;index=0&#38;lang.css">site-search:where(.astro-lgvex2zy){display:contents}.search-trigger:where(.astro-lgvex2zy){align-items:center;gap:0.5rem;padding:0.375rem 0.625rem;border:1px solid var(--sl-color-hairline);border-radius:8px;background-color:var(--sl-color-bg-sidebar);color:var(--sl-color-gray-3);font-size:0.875rem;cursor:pointer;width:100%;max-width:20rem;transition:border-color 0.2s,background-color 0.2s}.search-trigger:where(.astro-lgvex2zy):hover{border-color:var(--sl-color-gray-4);background-color:var(--sl-color-bg-nav)}.search-icon:where(.astro-lgvex2zy){width:1rem;height:1rem}.placeholder:where(.astro-lgvex2zy){flex:1;text-align:left}.shortcut:where(.astro-lgvex2zy){gap:0.25rem;align-items:center}kbd:where(.astro-lgvex2zy){font-family:inherit;font-size:0.75rem;background-color:var(--sl-color-bg-nav);border:1px solid var(--sl-color-hairline);border-radius:4px;padding:0.1rem 0.3rem;color:var(--sl-color-gray-3)}@media (max-width: 50rem){.search-trigger:where(.astro-lgvex2zy){padding:0.5rem;width:auto;border:none;background:none}}dialog:where(.astro-lgvex2zy){margin:0;background-color:var(--sl-color-gray-6);border:1px solid var(--sl-color-gray-5);width:100%;max-width:100%;height:100%;max-height:100%;box-shadow:var(--sl-shadow-lg)}dialog:where(.astro-lgvex2zy)[open]{display:flex}dialog:where(.astro-lgvex2zy)::backdrop{background-color:var(--sl-color-backdrop-overlay);backdrop-filter:blur(4px)}.dialog-frame:where(.astro-lgvex2zy){position:relative;overflow:auto;flex-direction:column;flex-grow:1;gap:1rem;padding:1rem}@media (min-width: 50rem){dialog:where(.astro-lgvex2zy){margin:4rem auto auto;border-radius:0.5rem;width:90%;max-width:40rem;height:max-content;min-height:15rem;max-height:calc(100% - 8rem)}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/SiteTitle.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.site-title:where(.astro-7yp5ilc6){align-items:center;gap:0.625rem;font-size:1rem;font-weight:600;color:var(--sl-color-text);text-decoration:none;white-space:nowrap;transition:opacity 0.2s}.site-title:where(.astro-7yp5ilc6):hover{opacity:0.8}img:where(.astro-7yp5ilc6){height:1.5rem;width:auto}@media (min-width: 50rem){.site-title:where(.astro-7yp5ilc6){font-size:1.125rem}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SocialIcons.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{a:where(.astro-xjvxiezb){color:var(--sl-color-text-accent);padding:0.5em;margin:-0.5em}a:where(.astro-xjvxiezb):hover{color:var(--sl-color-white)}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro?astro&#38;type=style&#38;index=0&#38;lang.css">starlight-theme-select:where(.astro-gs3nqnjg){display:block}.theme-toggle-container:where(.astro-gs3nqnjg){align-items:center;background-color:var(--sl-color-bg-nav);border:1px solid var(--sl-color-hairline);border-radius:9999px;padding:0.2rem;gap:0.1rem}.theme-toggle-button:where(.astro-gs3nqnjg){align-items:center;justify-content:center;width:1.75rem;height:1.75rem;border:none;background:transparent;color:var(--sl-color-gray-3);border-radius:9999px;cursor:pointer;transition:all 0.2s cubic-bezier(0.4,0,0.2,1);padding:0}.theme-toggle-button:where(.astro-gs3nqnjg):hover{color:var(--sl-color-text);background-color:var(--sl-color-bg-sidebar)}.theme-toggle-button:where(.astro-gs3nqnjg)[aria-selected=true]{background-color:var(--sl-color-bg-sidebar);color:var(--sl-color-accent);box-shadow:var(--sl-shadow-sm)}.theme-toggle-button:where(.astro-gs3nqnjg) svg{width:1rem;height:1rem}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Header.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.header:where(.astro-lx2f7bh5){position:sticky;top:0;z-index:var(--sl-z-index-navbar);border-bottom:1px solid var(--sl-color-hairline);background-color:color-mix(in srgb,var(--sl-color-bg-nav),transparent 20%);backdrop-filter:blur(8px);height:var(--sl-nav-height)}.header-container:where(.astro-lx2f7bh5){padding-inline:var(--sl-nav-pad-x);display:flex;justify-content:space-between;align-items:center;height:100%;gap:var(--sl-nav-gap)}.title-wrapper:where(.astro-lx2f7bh5){min-width:0}.search-wrapper:where(.astro-lx2f7bh5){flex:1;display:flex;justify-content:center;max-width:40rem}.right-group:where(.astro-lx2f7bh5),.social-icons:where(.astro-lx2f7bh5){gap:1rem;align-items:center}.social-icons:where(.astro-lx2f7bh5)::after{content:"";height:1.5rem;border-inline-end:1px solid var(--sl-color-gray-5);margin-inline-start:0.5rem}@media (min-width: 50rem){.header-container:where(.astro-lx2f7bh5){display:grid;grid-template-columns:auto 1fr auto}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Hero.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{.hero:where(.astro-fkuwpgmx){display:grid;grid-template-columns:100%;align-items:center;gap:1rem;padding-bottom:1rem}.hero:where(.astro-fkuwpgmx)>img:where(.astro-fkuwpgmx),.hero:where(.astro-fkuwpgmx)>.hero-html:where(.astro-fkuwpgmx){object-fit:contain;width:min(70%,20rem);height:auto;margin-inline:auto}.stack:where(.astro-fkuwpgmx){flex-direction:column;gap:clamp(1.5rem,calc(1.5rem + 1vw),2rem);text-align:center}.copy:where(.astro-fkuwpgmx){flex-direction:column;gap:1rem;align-items:center}.copy:where(.astro-fkuwpgmx)>:where(.astro-fkuwpgmx){max-width:50ch}h1:where(.astro-fkuwpgmx){font-size:clamp(var(--sl-text-3xl),calc(0.25rem + 5vw),var(--sl-text-6xl));line-height:var(--sl-line-height-headings);font-weight:600;color:var(--sl-color-white)}.tagline:where(.astro-fkuwpgmx){font-size:clamp(var(--sl-text-base),calc(0.0625rem + 2vw),var(--sl-text-xl));color:var(--sl-color-gray-2)}.actions:where(.astro-fkuwpgmx){gap:1rem 2rem;flex-wrap:wrap;justify-content:center}@media (min-width: 50rem){.hero:where(.astro-fkuwpgmx){grid-template-columns:7fr 4fr;gap:3%;padding-block:clamp(2.5rem,calc(1rem + 10vmin),10rem)}.hero:where(.astro-fkuwpgmx)>img:where(.astro-fkuwpgmx),.hero:where(.astro-fkuwpgmx)>.hero-html:where(.astro-fkuwpgmx){order:2;width:min(100%,25rem)}.stack:where(.astro-fkuwpgmx){text-align:start}.copy:where(.astro-fkuwpgmx){align-items:flex-start}.actions:where(.astro-fkuwpgmx){justify-content:flex-start}}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/markdown.css">@layer starlight.content {
+	.sl-markdown-content
+		:not(a, strong, em, del, span, input, code, br)
+		+ :not(a, strong, em, del, span, input, code, br, :where(.not-content *)) {
+		margin-top: var(--sl-content-gap-y);
+	}
+
+	/* Vertical spacing between Markdown content blocks and UI Framework components using client directives. */
+	.sl-markdown-content
+		:not(a, strong, em, del, span, input, code, br)
+		+ :is(astro-island, astro-slot)
+		> :not(a, strong, em, del, span, input, code, br, :where(.not-content *)):first-child {
+		margin-top: var(--sl-content-gap-y);
+	}
+
+	/* Headings after non-headings have more spacing. */
+	.sl-markdown-content
+		:not(h1, h2, h3, h4, h5, h6)
+		+ :is(h1, h2, h3, h4, h5, h6):not(:where(.not-content *)) {
+		margin-top: 1.5em;
+	}
+
+	.sl-markdown-content li + li:not(:where(.not-content *)),
+	.sl-markdown-content dt + dt:not(:where(.not-content *)),
+	.sl-markdown-content dt + dd:not(:where(.not-content *)),
+	.sl-markdown-content dd + dd:not(:where(.not-content *)) {
+		margin-top: 0.25rem;
+	}
+
+	.sl-markdown-content li:not(:where(.not-content *)) {
+		overflow-wrap: anywhere;
+	}
+
+	.sl-markdown-content
+	li
+	> :is(
+		:last-child:not(
+				li,
+				ul,
+				ol,
+				a,
+				strong,
+				em,
+				del,
+				span,
+				input,
+				code,
+				br,
+				script,
+				:where(.not-content *)
+			),
+			/**
+			 * For list items ending with 1 or multiple script elements (`:has(~ script:last-child)`), we
+			 * need to style the last non-script element (`:not(script)`) that doesn't have a subsequent
+			 * sibling that is not a script (`:not(:has(~ :not(script)))`).
+			 */
+		:not(script):has(~ script:last-child):not(:has(~ :not(script)))
+	) {
+		margin-bottom: 1.25rem;
+	}
+
+	.sl-markdown-content dt:not(:where(.not-content *)) {
+		font-weight: 700;
+	}
+	.sl-markdown-content dd:not(:where(.not-content *)) {
+		padding-inline-start: 1rem;
+	}
+
+	.sl-markdown-content :is(h1, h2, h3, h4, h5, h6):not(:where(.not-content *)) {
+		color: var(--sl-color-white);
+		line-height: var(--sl-line-height-headings);
+		font-weight: 600;
+	}
+
+	.sl-markdown-content :is(img, picture, video, canvas, svg, iframe):not(:where(.not-content *)) {
+		display: block;
+		max-width: 100%;
+		height: auto;
+	}
+
+	.sl-markdown-content h1:not(:where(.not-content *)) {
+		font-size: var(--sl-text-h1);
+	}
+	.sl-markdown-content h2:not(:where(.not-content *)) {
+		font-size: var(--sl-text-h2);
+	}
+	.sl-markdown-content h3:not(:where(.not-content *)) {
+		font-size: var(--sl-text-h3);
+	}
+	.sl-markdown-content h4:not(:where(.not-content *)) {
+		font-size: var(--sl-text-h4);
+	}
+	.sl-markdown-content h5:not(:where(.not-content *)) {
+		font-size: var(--sl-text-h5);
+	}
+	.sl-markdown-content h6:not(:where(.not-content *)) {
+		font-size: var(--sl-text-h6);
+	}
+
+	.sl-markdown-content a:not(:where(.not-content *)) {
+		color: var(--sl-color-text-accent);
+	}
+	.sl-markdown-content a:hover:not(:where(.not-content *)) {
+		color: var(--sl-color-white);
+	}
+
+	.sl-markdown-content code:not(:where(.not-content *)) {
+		background-color: var(--sl-color-bg-inline-code);
+		margin-block: -0.125rem;
+		padding: 0.125rem 0.375rem;
+		font-size: var(--sl-text-code-sm);
+	}
+	.sl-markdown-content :is(h1, h2, h3, h4, h5, h6) code {
+		font-size: inherit;
+	}
+
+	.sl-markdown-content pre:not(:where(.not-content *)) {
+		border: 1px solid var(--sl-color-gray-5);
+		padding: 0.75rem 1rem;
+		font-size: var(--sl-text-code);
+		tab-size: 2;
+	}
+
+	.sl-markdown-content pre code:not(:where(.not-content *)) {
+		all: unset;
+		font-family: var(--__sl-font-mono);
+	}
+
+	.sl-markdown-content blockquote:not(:where(.not-content *)) {
+		border-inline-start: 1px solid var(--sl-color-gray-5);
+		padding-inline-start: 1rem;
+	}
+
+	/* Table styling */
+	.sl-markdown-content table:not(:where(.not-content *)) {
+		display: block;
+		overflow: auto;
+		border-spacing: 0;
+	}
+	.sl-markdown-content :is(th, td):not(:where(.not-content *)) {
+		border-bottom: 1px solid var(--sl-color-gray-5);
+		padding: 0.5rem 1rem;
+		/* Align text to the top of the row in multiline tables. */
+		vertical-align: baseline;
+	}
+	.sl-markdown-content :is(th:first-child, td:first-child):not(:where(.not-content *)) {
+		padding-inline-start: 0;
+	}
+	.sl-markdown-content :is(th:last-child, td:last-child):not(:where(.not-content *)) {
+		padding-inline-end: 0;
+	}
+	.sl-markdown-content th:not(:where(.not-content *)) {
+		color: var(--sl-color-white);
+		font-weight: 600;
+	}
+	/* Align headings to the start of the line unless set by the `align` attribute. */
+	.sl-markdown-content th:not([align]):not(:where(.not-content *)) {
+		text-align: start;
+	}
+	/* <table>s, <hr>s, and <blockquote>s inside asides */
+	.sl-markdown-content .starlight-aside :is(th, td, hr, blockquote):not(:where(.not-content *)) {
+		border-color: var(--sl-color-gray-4);
+	}
+	@supports (
+		border-color: color-mix(in srgb, var(--sl-color-asides-text-accent) 30%, transparent)
+	) {
+		.sl-markdown-content .starlight-aside :is(th, td, hr, blockquote):not(:where(.not-content *)) {
+			border-color: color-mix(in srgb, var(--sl-color-asides-text-accent) 30%, transparent);
+		}
+	}
+
+	/* <code> inside asides */
+	@supports (
+		border-color: color-mix(in srgb, var(--sl-color-asides-text-accent) 12%, transparent)
+	) {
+		.sl-markdown-content .starlight-aside code:not(:where(.not-content *)) {
+			background-color: color-mix(in srgb, var(--sl-color-asides-text-accent) 12%, transparent);
+		}
+	}
+
+	.sl-markdown-content hr:not(:where(.not-content *)) {
+		border: 0;
+		border-bottom: 1px solid var(--sl-color-hairline);
+	}
+
+	/* <details> and <summary> styles */
+	.sl-markdown-content details:not(:where(.not-content *)) {
+		--sl-details-border-color: var(--sl-color-gray-5);
+		--sl-details-border-color--hover: var(--sl-color-text-accent);
+
+		border-inline-start: 2px solid var(--sl-details-border-color);
+		padding-inline-start: 1rem;
+	}
+	.sl-markdown-content details:not([open]):hover:not(:where(.not-content *)),
+	.sl-markdown-content details:has(> summary:hover):not(:where(.not-content *)) {
+		border-color: var(--sl-details-border-color--hover);
+	}
+	.sl-markdown-content summary:not(:where(.not-content *)) {
+		color: var(--sl-color-white);
+		cursor: pointer;
+		display: block; /* Needed to hide the default marker in some browsers. */
+		font-weight: 600;
+		/* Expand the outline so that the marker cannot distort it. */
+		margin-inline-start: -0.5rem;
+		padding-inline-start: 0.5rem;
+	}
+	.sl-markdown-content details[open] > summary:not(:where(.not-content *)) {
+		margin-bottom: 1rem;
+	}
+
+	/* <summary> marker styles */
+	.sl-markdown-content summary:not(:where(.not-content *))::marker,
+	.sl-markdown-content summary:not(:where(.not-content *))::-webkit-details-marker {
+		display: none;
+	}
+	.sl-markdown-content summary:not(:where(.not-content *))::before {
+		--sl-details-marker-size: 1.25rem;
+
+		background-color: currentColor;
+		content: '';
+		display: inline-block;
+		height: var(--sl-details-marker-size);
+		width: var(--sl-details-marker-size);
+		margin-inline: calc((var(--sl-details-marker-size) / 4) * -1) 0.25rem;
+		vertical-align: middle;
+		-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.8 11.3 10.6 7a1 1 0 1 0-1.4 1.5l3.5 3.5-3.5 3.5a1 1 0 0 0 0 1.4 1 1 0 0 0 .7.3 1 1 0 0 0 .7-.3l4.2-4.2a1 1 0 0 0 0-1.4Z'/%3E%3C/svg%3E%0A");
+		mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.8 11.3 10.6 7a1 1 0 1 0-1.4 1.5l3.5 3.5-3.5 3.5a1 1 0 0 0 0 1.4 1 1 0 0 0 .7.3 1 1 0 0 0 .7-.3l4.2-4.2a1 1 0 0 0 0-1.4Z'/%3E%3C/svg%3E%0A");
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		.sl-markdown-content summary:not(:where(.not-content *))::before {
+			transition: transform 0.2s ease-in-out;
+		}
+	}
+	.sl-markdown-content details[open] > summary:not(:where(.not-content *))::before {
+		transform: rotateZ(90deg);
+	}
+	[dir='rtl'] .sl-markdown-content summary:not(:where(.not-content *))::before,
+	.sl-markdown-content [dir='rtl'] summary:not(:where(.not-content *))::before {
+		transform: rotateZ(180deg);
+	}
+	/* <summary> with only a paragraph automatically added when using MDX */
+	.sl-markdown-content summary:not(:where(.not-content *)) p:only-child {
+		display: inline;
+	}
+
+	/* <details> styles inside asides */
+	.sl-markdown-content .starlight-aside details:not(:where(.not-content *)) {
+		--sl-details-border-color: var(--sl-color-asides-border);
+		--sl-details-border-color--hover: var(--sl-color-asides-text-accent);
+	}
+}
+</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuToggle.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{button:where(.astro-b25fdepn){position:fixed;top:calc((var(--sl-nav-height) - var(--sl-menu-button-size)) / 2);inset-inline-end:var(--sl-nav-pad-x);z-index:var(--sl-z-index-navbar);border:0;border-radius:50%;width:var(--sl-menu-button-size);height:var(--sl-menu-button-size);padding:0.5rem;background-color:var(--sl-color-white);color:var(--sl-color-black);box-shadow:var(--sl-shadow-md);cursor:pointer}:where(.astro-b25fdepn)[aria-expanded=true] button:where(.astro-b25fdepn){background-color:var(--sl-color-gray-2);box-shadow:none}:where(.astro-b25fdepn)[aria-expanded=true] button:where(.astro-b25fdepn) .open-menu:where(.astro-b25fdepn){display:none}:where(.astro-b25fdepn):not([aria-expanded="true"]) button:where(.astro-b25fdepn) .close-menu:where(.astro-b25fdepn){display:none}[data-theme="light"] button:where(.astro-b25fdepn){background-color:var(--sl-color-black);color:var(--sl-color-white)}[data-theme="light"] :where(.astro-b25fdepn)[aria-expanded=true] button:where(.astro-b25fdepn){background-color:var(--sl-color-gray-5)}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuToggle.astro?astro&#38;type=style&#38;index=1&#38;lang.css">@layer starlight.core {
+		[data-mobile-menu-expanded] {
+			overflow: hidden;
+		}
+
+		@media (min-width: 50rem) {
+			[data-mobile-menu-expanded] {
+				overflow: auto;
+			}
+		}
+	}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageFrame.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{.page:where(.astro-tcjptpbk){flex-direction:column;min-height:100vh}.header:where(.astro-tcjptpbk){z-index:var(--sl-z-index-navbar);position:fixed;inset-inline-start:0;inset-block-start:0;width:100%;height:var(--sl-nav-height);border-bottom:1px solid var(--sl-color-hairline-shade);padding:var(--sl-nav-pad-y) var(--sl-nav-pad-x);padding-inline-end:var(--sl-nav-pad-x);background-color:var(--sl-color-bg-nav)}[data-has-sidebar] .header:where(.astro-tcjptpbk){padding-inline-end:calc(var(--sl-nav-gap) + var(--sl-nav-pad-x) + var(--sl-menu-button-size))}.sidebar-pane:where(.astro-tcjptpbk){visibility:var(--sl-sidebar-visibility, hidden);position:fixed;z-index:var(--sl-z-index-menu);inset-block:var(--sl-nav-height) 0;inset-inline-start:0;width:100%;background-color:var(--sl-color-black);overflow-y:auto}[aria-expanded="true"]~.sidebar-pane:where(.astro-tcjptpbk){--sl-sidebar-visibility: visible}.sidebar-content:where(.astro-tcjptpbk){height:100%;min-height:max-content;padding:1rem var(--sl-sidebar-pad-x) 0;flex-direction:column;gap:1rem}@media (min-width: 50rem){.sidebar-content:where(.astro-tcjptpbk)::after{content:"";padding-bottom:1px}}.main-frame:where(.astro-tcjptpbk){padding-top:calc(var(--sl-nav-height) + var(--sl-mobile-toc-height));padding-inline-start:var(--sl-content-inline-start)}@media (min-width: 50rem){[data-has-sidebar] .header:where(.astro-tcjptpbk){padding-inline-end:var(--sl-nav-pad-x)}.sidebar-pane:where(.astro-tcjptpbk){--sl-sidebar-visibility: visible;width:var(--sl-sidebar-width);background-color:var(--sl-color-bg-sidebar);border-inline-end:1px solid var(--sl-color-hairline-shade)}}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{ul:where(.astro-idwy3lyp){padding:0;list-style:none}a:where(.astro-idwy3lyp){--pad-inline: 0.5rem;display:block;border-radius:0.25rem;padding-block:0.25rem;padding-inline:calc(1rem * var(--depth) + var(--pad-inline)) var(--pad-inline);line-height:1.25}a:where(.astro-idwy3lyp)[aria-current=true]{color:var(--sl-color-text-accent)}.isMobile:where(.astro-idwy3lyp) a:where(.astro-idwy3lyp){--pad-inline: 1rem;display:flex;justify-content:space-between;gap:var(--pad-inline);border-top:1px solid var(--sl-color-gray-6);border-radius:0;padding-block:0.5rem;color:var(--sl-color-text);font-size:var(--sl-text-sm);text-decoration:none;outline-offset:var(--sl-outline-offset-inside)}.isMobile:where(.astro-idwy3lyp):first-child>li:where(.astro-idwy3lyp):first-child>a:where(.astro-idwy3lyp){border-top:0}.isMobile:where(.astro-idwy3lyp) a:where(.astro-idwy3lyp)[aria-current=true],.isMobile:where(.astro-idwy3lyp) a:where(.astro-idwy3lyp)[aria-current=true]:hover,.isMobile:where(.astro-idwy3lyp) a:where(.astro-idwy3lyp)[aria-current=true]:focus{color:var(--sl-color-white);background-color:unset}.isMobile:where(.astro-idwy3lyp) a:where(.astro-idwy3lyp)[aria-current=true]::after{content:"";width:1rem;background-color:var(--sl-color-text-accent);-webkit-mask-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxNCAxNCc+PHBhdGggZD0nTTEwLjkxNCA0LjIwNmEuNTgzLjU4MyAwIDAgMC0uODI4IDBMNS43NCA4LjU1NyAzLjkxNCA2LjcyNmEuNTk2LjU5NiAwIDAgMC0uODI4Ljg1N2wyLjI0IDIuMjRhLjU4My41ODMgMCAwIDAgLjgyOCAwbDQuNzYtNC43NmEuNTgzLjU4MyAwIDAgMCAwLS44NTdaJy8+PC9zdmc+Cg==);mask-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxNCAxNCc+PHBhdGggZD0nTTEwLjkxNCA0LjIwNmEuNTgzLjU4MyAwIDAgMC0uODI4IDBMNS43NCA4LjU1NyAzLjkxNCA2LjcyNmEuNTk2LjU5NiAwIDAgMC0uODI4Ljg1N2wyLjI0IDIuMjRhLjU4My41ODMgMCAwIDAgLjgyOCAwbDQuNzYtNC43NmEuNTgzLjU4MyAwIDAgMCAwLS44NTdaJy8+PC9zdmc+Cg==);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;flex-shrink:0}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{nav:where(.astro-zxmhelrt){position:fixed;z-index:var(--sl-z-index-toc);top:calc(var(--sl-nav-height) - 1px);inset-inline:0;border-top:1px solid var(--sl-color-gray-5);background-color:var(--sl-color-bg-nav)}@media (min-width: 50rem){nav:where(.astro-zxmhelrt){inset-inline-start:var(--sl-content-inline-start, 0)}}summary:where(.astro-zxmhelrt){gap:0.5rem;align-items:center;height:var(--sl-mobile-toc-height);border-bottom:1px solid var(--sl-color-hairline-shade);padding:0.5rem 1rem;font-size:var(--sl-text-xs);outline-offset:var(--sl-outline-offset-inside)}summary:where(.astro-zxmhelrt)::marker,summary:where(.astro-zxmhelrt)::-webkit-details-marker{display:none}.toggle:where(.astro-zxmhelrt){flex-shrink:0;gap:1rem;align-items:center;justify-content:space-between;border:1px solid var(--sl-color-gray-5);border-radius:0.5rem;padding-block:0.5rem;padding-inline-start:0.75rem;padding-inline-end:0.5rem;line-height:1;background-color:var(--sl-color-black);user-select:none;cursor:pointer}details:where(.astro-zxmhelrt)[open] .toggle:where(.astro-zxmhelrt){color:var(--sl-color-white);border-color:var(--sl-color-accent)}details:where(.astro-zxmhelrt) .toggle:where(.astro-zxmhelrt):hover{color:var(--sl-color-white);border-color:var(--sl-color-gray-2)}[dir="rtl"] .caret:where(.astro-zxmhelrt){transform:rotateZ(180deg)}details:where(.astro-zxmhelrt)[open] .caret:where(.astro-zxmhelrt){transform:rotateZ(90deg)}.display-current:where(.astro-zxmhelrt){white-space:nowrap;text-overflow:ellipsis;overflow:hidden;color:var(--sl-color-white)}.dropdown:where(.astro-zxmhelrt){--border-top: 1px;margin-top:calc(-1 * var(--border-top));border:var(--border-top) solid var(--sl-color-gray-6);border-top-color:var(--sl-color-hairline-shade);max-height:calc(85vh - var(--sl-nav-height) - var(--sl-mobile-toc-height));overflow-y:auto;background-color:var(--sl-color-black);box-shadow:var(--sl-shadow-md);overscroll-behavior:contain}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageSidebar.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{.right-sidebar-panel:where(.astro-c6vknzyo){padding:1rem var(--sl-sidebar-pad-x)}.sl-container:where(.astro-c6vknzyo){width:calc(var(--sl-sidebar-width) - 2 * var(--sl-sidebar-pad-x))}.right-sidebar-panel:where(.astro-c6vknzyo) h2{color:var(--sl-color-white);font-size:var(--sl-text-h5);font-weight:600;line-height:var(--sl-line-height-headings);margin-bottom:0.5rem}.right-sidebar-panel:where(.astro-c6vknzyo) :where(a){display:block;font-size:var(--sl-text-xs);text-decoration:none;color:var(--sl-color-gray-3);overflow-wrap:anywhere}.right-sidebar-panel:where(.astro-c6vknzyo) :where(a):hover{color:var(--sl-color-white)}@media (min-width: 72rem){.sl-container:where(.astro-c6vknzyo){max-width:calc(((100vw - var(--sl-sidebar-width) - 2 * var(--sl-content-pad-x) - 2 * var(--sl-sidebar-pad-x)) * 0.25))}}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageTitle.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{h1:where(.astro-yohij4kb){margin-top:1rem;font-size:var(--sl-text-h1);line-height:var(--sl-line-height-headings);font-weight:600;color:var(--sl-color-white)}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuFooter.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{.social-icons:where(.astro-bg56cjiy){display:flex;margin-inline-end:auto;gap:1rem;align-items:center;padding-block:1rem}.social-icons:where(.astro-bg56cjiy):empty{display:none}.mobile-preferences:where(.astro-bg56cjiy){justify-content:space-between;flex-wrap:wrap;border-top:1px solid var(--sl-color-gray-6);column-gap:1rem;padding:0.5rem 0}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarPersister.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{sl-sidebar-state-persist:where(.astro-dna3a2h4){display:contents}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{ul:where(.astro-5ncaq4um){--sl-sidebar-item-padding-inline: 0.5rem;list-style:none;padding:0}li:where(.astro-5ncaq4um){overflow-wrap:anywhere}ul:where(.astro-5ncaq4um) ul:where(.astro-5ncaq4um) li:where(.astro-5ncaq4um){margin-inline-start:var(--sl-sidebar-item-padding-inline);border-inline-start:1px solid var(--sl-color-hairline-light);padding-inline-start:var(--sl-sidebar-item-padding-inline)}.large:where(.astro-5ncaq4um){font-size:var(--sl-text-lg);font-weight:600;color:var(--sl-color-white)}.top-level:where(.astro-5ncaq4um)>li:where(.astro-5ncaq4um)+li:where(.astro-5ncaq4um){margin-top:0.75rem}summary:where(.astro-5ncaq4um){display:flex;align-items:center;justify-content:space-between;padding:0.2em var(--sl-sidebar-item-padding-inline);line-height:1.4;cursor:pointer;user-select:none}summary:where(.astro-5ncaq4um)::marker,summary:where(.astro-5ncaq4um)::-webkit-details-marker{display:none}.caret:where(.astro-5ncaq4um){transition:transform 0.2s ease-in-out;flex-shrink:0}[dir="rtl"] .caret:where(.astro-5ncaq4um){transform:rotateZ(180deg)}:where(.astro-5ncaq4um)[open]>summary:where(.astro-5ncaq4um) .caret:where(.astro-5ncaq4um){transform:rotateZ(90deg)}a:where(.astro-5ncaq4um){display:block;border-radius:0.25rem;text-decoration:none;color:var(--sl-color-gray-2);padding:0.3em var(--sl-sidebar-item-padding-inline);line-height:1.4}a:where(.astro-5ncaq4um):hover,a:where(.astro-5ncaq4um):focus{color:var(--sl-color-white)}:where(.astro-5ncaq4um)[aria-current=page],:where(.astro-5ncaq4um)[aria-current=page]:hover,:where(.astro-5ncaq4um)[aria-current=page]:focus{font-weight:600;color:var(--sl-color-text-invert);background-color:var(--sl-color-text-accent)}a:where(.astro-5ncaq4um)>:where(.astro-5ncaq4um):not(:last-child),.group-label:where(.astro-5ncaq4um)>:where(.astro-5ncaq4um):not(:last-child){margin-inline-end:0.25em}@media (min-width: 50rem){.top-level:where(.astro-5ncaq4um)>li:where(.astro-5ncaq4um)+li:where(.astro-5ncaq4um){margin-top:0.5rem}.large:where(.astro-5ncaq4um){font-size:var(--sl-text-base)}a:where(.astro-5ncaq4um){font-size:var(--sl-text-sm)}}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SkipLink.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{a:where(.astro-aigm6qj5){clip:rect(0,0,0,0);position:fixed;top:0.75rem;inset-inline-start:0.75rem}a:where(.astro-aigm6qj5):focus{clip:unset;z-index:var(--sl-z-index-skiplink);display:block;padding:0.5rem 1rem;text-decoration:none;color:var(--sl-color-text-invert);background-color:var(--sl-color-text-accent);box-shadow:var(--sl-shadow-lg)}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TwoColumnContent.astro?astro&#38;type=style&#38;index=0&#38;lang.css">@layer starlight.core{.main-pane:where(.astro-7kdboxll){isolation:isolate}@media (min-width: 72rem){.right-sidebar-container:where(.astro-7kdboxll){order:2;position:relative;width:calc(var(--sl-sidebar-width) + (100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2)}.right-sidebar:where(.astro-7kdboxll){position:fixed;top:0;border-inline-start:1px solid var(--sl-color-hairline);padding-top:var(--sl-nav-height);width:100%;height:100vh;overflow-y:auto;scrollbar-width:none}.main-pane:where(.astro-7kdboxll){width:100%}[data-has-sidebar][data-has-toc] .main-pane:where(.astro-7kdboxll){--sl-content-margin-inline: auto 0;order:1;width:calc(var(--sl-content-width) + (100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2)}}}</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/print.css?url&#38;no-inline">export default "/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/print.css?no-inline"</style>
+<style data-vite-dev-id="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Page.astro?astro&#38;type=style&#38;index=0&#38;lang.css">html:not([data-has-toc]){--sl-mobile-toc-height: 0rem}html:not([data-has-sidebar]){--sl-content-width: 67.5rem}html{scroll-padding-top:calc(1.5rem + var(--sl-nav-height) + var(--sl-mobile-toc-height))}main:where(.astro-bfvx4nu5){padding:var(--sl-main-pad)}@media (min-width: 50em){:where(.astro-bfvx4nu5)[data-has-sidebar]{--sl-content-inline-start: var(--sl-sidebar-width)}}@media (min-width: 72em){html{scroll-padding-top:calc(1.5rem + var(--sl-nav-height))}}</style><script type="module" src="/@vite/client"></script>
+<script type="module" src="/@id/astro/runtime/client/dev-toolbar/entrypoint.js"></script>
+<script>window.__astro_dev_toolbar__ = {"root":"/home/coder/Production/starlight-fumadocs/docs/","version":"6.1.10","debugInfo":"Astro                    v6.1.10\nNode                     v24.15.0\nSystem                   Linux (x64)\nPackage Manager          npm\nOutput                   static\nAdapter                  none\nIntegrations             @astrojs/starlight\n                         astro-expressive-code\n                         @astrojs/sitemap\n                         @astrojs/mdx\n                         starlight-directives-restoration"}</script>
+<script type="module" src="/@id/astro:scripts/page.js"></script>
+<script type="module" src="/src/styles/tailwind.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/styles/fumadocs.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/layers.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/props.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/reset.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/asides.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/util.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/anchor-links.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Banner.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/ContentPanel.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/ContentNotice.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/EditLink.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Badge.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Card.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/CardGrid.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Tabs.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/LinkCard.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Steps.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/FileTree.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/LinkButton.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Footer.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Select.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/SiteTitle.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SocialIcons.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Header.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Hero.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/markdown.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuToggle.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuToggle.astro?astro&type=style&index=1&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageFrame.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageSidebar.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageTitle.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuFooter.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarPersister.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SkipLink.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TwoColumnContent.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/style/print.css?url&no-inline"></script>
+<script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Page.astro?astro&type=style&index=0&lang.css"></script></head> <body class="astro-bfvx4nu5" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Page.astro" data-astro-source-loc="82:8"> <a href="#_top" class="astro-aigm6qj5" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SkipLink.astro" data-astro-source-loc="5:31">Skip to content</a> <div class="page sl-flex astro-tcjptpbk" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageFrame.astro" data-astro-source-loc="7:27"> <header class="header astro-tcjptpbk" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageFrame.astro" data-astro-source-loc="8:26"><header class="header astro-lx2f7bh5" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Header.astro" data-astro-source-loc="10:24"> <div class="header-container sl-flex astro-lx2f7bh5" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Header.astro" data-astro-source-loc="11:40"> <div class="title-wrapper sl-flex astro-lx2f7bh5" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Header.astro" data-astro-source-loc="12:38"> <a class="site-title sl-flex astro-7yp5ilc6" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/SiteTitle.astro" data-astro-source-loc="9:52">  <span class="astro-7yp5ilc6" translate="no" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/SiteTitle.astro" data-astro-source-loc="19:78">  </span> </a> </div> <div class="sl-flex print:hidden search-wrapper astro-lx2f7bh5" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Header.astro" data-astro-source-loc="15:52"> <site-search class="astro-lx2f7bh5 astro-lgvex2zy" data-translations="{&#34;placeholder&#34;:&#34;Search&#34;}" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro"> <button data-open-modal disabled class="search-trigger sl-flex astro-lgvex2zy" aria-label="Search" aria-keyshortcuts="Control+K Meta+K" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="29:3"> <svg aria-hidden="true" class="search-icon astro-lgvex2zy astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"></svg> <span class="placeholder sl-hidden md:sl-inline-block astro-lgvex2zy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="31:58">Search</span> <div class="shortcut sl-hidden md:sl-flex astro-lgvex2zy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="32:46"> <kbd class="astro-lgvex2zy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="33:9">Ctrl</kbd> <kbd class="astro-lgvex2zy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="34:9">K</kbd> </div> </button> <dialog style="padding:0" aria-label="Search" class="astro-lgvex2zy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="38:72"> <div class="dialog-frame sl-flex astro-lgvex2zy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="39:37"> <button data-close-modal class="sl-flex md:sl-hidden astro-lgvex2zy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="40:58"> Cancel </button> <div style="margin: auto; text-align: center; white-space: pre-line;" dir="ltr" class="astro-lgvex2zy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="45:86"> <p class="astro-lgvex2zy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro" data-astro-source-loc="46:10">Search is only available in production builds. 
+Try building and previewing the site to test it out locally.</p> </div> </div> </dialog> </site-search>  <script>
+	(() => {
+		const openBtn = document.querySelector('button[data-open-modal]');
+		const shortcut = openBtn?.querySelector('.shortcut');
+		if (!openBtn || !(shortcut instanceof HTMLElement)) return;
+		const platformKey = shortcut.querySelector('kbd');
+		if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+			platformKey.textContent = '⌘';
+			openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
+		}
+	})();
+</script> <script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Search.astro?astro&type=script&index=0&lang.ts"></script> </div> <div class="sl-hidden md:sl-flex print:hidden right-group astro-lx2f7bh5" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Header.astro" data-astro-source-loc="18:62"> <div class="sl-flex social-icons astro-lx2f7bh5" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/Header.astro" data-astro-source-loc="19:38"> <a href="https://github.com/raiz-toff/starlight-fumadocs" rel="me" class="sl-flex astro-xjvxiezb" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SocialIcons.astro" data-astro-source-loc="12:40"><span class="sr-only astro-xjvxiezb" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SocialIcons.astro" data-astro-source-loc="13:28">GitHub</span><svg aria-hidden="true" class="astro-xjvxiezb astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z"/></svg></a> </div> <starlight-theme-select class="astro-gs3nqnjg" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro"> <div class="theme-toggle-container sl-flex astro-gs3nqnjg" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro" data-astro-source-loc="9:46"> <button class="theme-toggle-button sl-flex astro-gs3nqnjg" data-theme-value="light" title="Light" aria-label="Light" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro" data-astro-source-loc="15:4"> <svg aria-hidden="true" class="astro-gs3nqnjg astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M5 12a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1Zm.64 5-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 1.41 0l.71-.71A1 1 0 0 0 5.64 17ZM12 5a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v1a1 1 0 0 0 1 1Zm5.66 2.34a1 1 0 0 0 .7-.29l.71-.71a1 1 0 1 0-1.41-1.41l-.66.71a1 1 0 0 0 0 1.41 1 1 0 0 0 .66.29Zm-12-.29a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.71-.71a1.004 1.004 0 1 0-1.43 1.41l.73.71ZM21 11h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm-2.64 6A1 1 0 0 0 17 18.36l.71.71a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.76-.66ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.51 5.51 0 0 0 12 6.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm0 3.5a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1Z"/></svg> </button> <button class="theme-toggle-button sl-flex astro-gs3nqnjg" data-theme-value="dark" title="Dark" aria-label="Dark" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro" data-astro-source-loc="23:4"> <svg aria-hidden="true" class="astro-gs3nqnjg astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M21.64 13a1 1 0 0 0-1.05-.14 8.049 8.049 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05Zm-9.5 6.69A8.14 8.14 0 0 1 7.08 5.22v.27a10.15 10.15 0 0 0 10.14 10.14 9.784 9.784 0 0 0 2.1-.22 8.11 8.11 0 0 1-7.18 4.32v-.04Z"/></svg> </button> <button class="theme-toggle-button sl-flex astro-gs3nqnjg" data-theme-value="auto" title="Auto" aria-label="Auto" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro" data-astro-source-loc="31:4"> <svg aria-hidden="true" class="astro-gs3nqnjg astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg> </button> </div> </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script>  <script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro?astro&type=script&index=0&lang.ts"></script> <script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/LanguageSelect.astro?astro&type=script&index=0&lang.ts"></script> </div> </div> </header></header> <nav class="sidebar print:hidden astro-tcjptpbk" aria-label="Main" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageFrame.astro" data-astro-source-loc="11:96"> <starlight-menu-button class="print:hidden astro-b25fdepn" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuToggle.astro"> <button aria-expanded="false" aria-label="Menu" aria-controls="starlight__sidebar" class="sl-flex md:sl-hidden astro-b25fdepn" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuToggle.astro" data-astro-source-loc="11:3"> <svg aria-hidden="true" class="open-menu astro-b25fdepn astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M3 8h18a1 1 0 1 0 0-2H3a1 1 0 0 0 0 2Zm18 8H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Zm0-5H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Z"/></svg> <svg aria-hidden="true" class="close-menu astro-b25fdepn astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="m13.41 12 6.3-6.29a1.004 1.004 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1.004 1.004 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 0 1.42.998.998 0 0 0 1.42 0l6.29-6.3 6.29 6.3a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.42L13.41 12Z"/></svg> </button> </starlight-menu-button> <script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuToggle.astro?astro&type=script&index=0&lang.ts"></script>  <div id="starlight__sidebar" class="sidebar-pane astro-tcjptpbk" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageFrame.astro" data-astro-source-loc="13:55"> <div class="sidebar-content sl-flex astro-tcjptpbk" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageFrame.astro" data-astro-source-loc="14:43"> <sl-sidebar-state-persist data-hash="1wrwcp2" class="astro-dna3a2h4" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarPersister.astro"> <script aria-hidden="true">
+		(() => {
+			try {
+				if (!matchMedia('(min-width: 50em)').matches) return;
+				/** @type {HTMLElement | null} */
+				const target = document.querySelector('sl-sidebar-state-persist');
+				const state = JSON.parse(sessionStorage.getItem('sl-sidebar-state') || '0');
+				if (!target || !state || target.dataset.hash !== state.hash) return;
+				window._starlightScrollRestore = state.scroll;
+				customElements.define(
+					'sl-sidebar-restore',
+					class SidebarRestore extends HTMLElement {
+						connectedCallback() {
+							try {
+								const idx = parseInt(this.dataset.index || '');
+								const details = this.closest('details');
+								if (details && typeof state.open[idx] === 'boolean') details.open = state.open[idx];
+							} catch {}
+						}
+					}
+				);
+			} catch {}
+		})();
+	</script>  <ul class="top-level astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="16:43"> <li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <details open class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="39:7"> <summary class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="40:16"> <span class="group-label astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="41:34"> <span class="large astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="42:29">Start Here</span>  </span> <svg aria-hidden="true" class="caret astro-5ncaq4um astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="0" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarRestorePoint.astro"></sl-sidebar-restore> <ul class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="16:43"> <li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/getting-started/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Getting Started</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/customization/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Customization</span>  </a> </li> </ul> </details> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <details open class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="39:7"> <summary class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="40:16"> <span class="group-label astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="41:34"> <span class="large astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="42:29">Examples</span>  </span> <svg aria-hidden="true" class="caret astro-5ncaq4um astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="1" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarRestorePoint.astro"></sl-sidebar-restore> <ul class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="16:43"> <li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/typography/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Typography Test</span> <span class="sl-badge default small  astro-5ncaq4um astro-kj3iu4nl" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Badge.astro" data-astro-source-loc="26:74">Sprint 2</span> </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/kitchen-sink/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Kitchen sink</span> <span class="sl-badge default small  astro-5ncaq4um astro-kj3iu4nl" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Badge.astro" data-astro-source-loc="26:74">Demo</span> </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/asides/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Asides</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/badges/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Badges</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/banner/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Banner</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/banner-splash/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Banner - Splash</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/cards/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Cards</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/code-blocks/" aria-current="page" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Code Blocks</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/draft/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Draft</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/file-tree/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">File Tree</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/hero/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Hero</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/link-buttons/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Link Buttons</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/markdown/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Markdown</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/steps/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Steps</span>  </a> </li><li class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="19:8"> <a href="/examples/tabs/" class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="26:7"> <span class="astro-5ncaq4um" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SidebarSublist.astro" data-astro-source-loc="27:13">Tabs</span>  </a> </li> </ul> </details> </li> </ul>  <script aria-hidden="true">
+		(() => {
+			const scroller = document.getElementById('starlight__sidebar');
+			if (!window._starlightScrollRestore || !scroller) return;
+			scroller.scrollTop = window._starlightScrollRestore;
+			delete window._starlightScrollRestore;
+		})();
+	</script> </sl-sidebar-state-persist> <div class="md:sl-hidden" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Sidebar.astro" data-astro-source-loc="13:27"> <div class="mobile-preferences sl-flex astro-bg56cjiy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuFooter.astro" data-astro-source-loc="7:41"> <div class="social-icons astro-bg56cjiy" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileMenuFooter.astro" data-astro-source-loc="8:28"> <a href="https://github.com/raiz-toff/starlight-fumadocs" rel="me" class="sl-flex astro-xjvxiezb" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SocialIcons.astro" data-astro-source-loc="12:40"><span class="sr-only astro-xjvxiezb" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/SocialIcons.astro" data-astro-source-loc="13:28">GitHub</span><svg aria-hidden="true" class="astro-xjvxiezb astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z"/></svg></a> </div> <starlight-theme-select class="astro-gs3nqnjg" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro"> <div class="theme-toggle-container sl-flex astro-gs3nqnjg" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro" data-astro-source-loc="9:46"> <button class="theme-toggle-button sl-flex astro-gs3nqnjg" data-theme-value="light" title="Light" aria-label="Light" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro" data-astro-source-loc="15:4"> <svg aria-hidden="true" class="astro-gs3nqnjg astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M5 12a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1Zm.64 5-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 1.41 0l.71-.71A1 1 0 0 0 5.64 17ZM12 5a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v1a1 1 0 0 0 1 1Zm5.66 2.34a1 1 0 0 0 .7-.29l.71-.71a1 1 0 1 0-1.41-1.41l-.66.71a1 1 0 0 0 0 1.41 1 1 0 0 0 .66.29Zm-12-.29a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.71-.71a1.004 1.004 0 1 0-1.43 1.41l.73.71ZM21 11h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm-2.64 6A1 1 0 0 0 17 18.36l.71.71a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.76-.66ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.51 5.51 0 0 0 12 6.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm0 3.5a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1Z"/></svg> </button> <button class="theme-toggle-button sl-flex astro-gs3nqnjg" data-theme-value="dark" title="Dark" aria-label="Dark" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro" data-astro-source-loc="23:4"> <svg aria-hidden="true" class="astro-gs3nqnjg astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M21.64 13a1 1 0 0 0-1.05-.14 8.049 8.049 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05Zm-9.5 6.69A8.14 8.14 0 0 1 7.08 5.22v.27a10.15 10.15 0 0 0 10.14 10.14 9.784 9.784 0 0 0 2.1-.22 8.11 8.11 0 0 1-7.18 4.32v-.04Z"/></svg> </button> <button class="theme-toggle-button sl-flex astro-gs3nqnjg" data-theme-value="auto" title="Auto" aria-label="Auto" data-astro-source-file="/home/coder/Production/starlight-fumadocs/packages/starlight-fumadocs/src/overrides/ThemeSelect.astro" data-astro-source-loc="31:4"> <svg aria-hidden="true" class="astro-gs3nqnjg astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg> </button> </div> </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script>    </div> </div> </div> </div> </nav> <div class="main-frame astro-tcjptpbk" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageFrame.astro" data-astro-source-loc="21:27">  <script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Page.astro?astro&type=script&index=0&lang.ts"></script> <div class="lg:sl-flex astro-7kdboxll" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TwoColumnContent.astro" data-astro-source-loc="1:25"> <aside class="right-sidebar-container print:hidden astro-7kdboxll" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TwoColumnContent.astro" data-astro-source-loc="4:56"> <div class="right-sidebar astro-7kdboxll" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TwoColumnContent.astro" data-astro-source-loc="5:32"> <div class="lg:sl-hidden astro-c6vknzyo" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageSidebar.astro" data-astro-source-loc="9:30"><mobile-starlight-toc data-min-h="2" data-max-h="3" class="astro-zxmhelrt" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro"><nav aria-labelledby="starlight__on-this-page--mobile" class="astro-zxmhelrt" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro" data-astro-source-loc="11:59"><details id="starlight__mobile-toc" class="astro-zxmhelrt" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro" data-astro-source-loc="12:41"><summary id="starlight__on-this-page--mobile" class="sl-flex astro-zxmhelrt" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro" data-astro-source-loc="13:68"><span class="toggle sl-flex astro-zxmhelrt" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro" data-astro-source-loc="14:36">On this page<svg aria-hidden="true" class="caret astro-zxmhelrt astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1rem;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></span><span class="display-current astro-zxmhelrt" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro" data-astro-source-loc="18:8"></span></summary><div class="dropdown astro-zxmhelrt" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro" data-astro-source-loc="20:28"><ul class="isMobile astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="13:31"> <li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#_top" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Overview</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#markdown-code-block" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Markdown code block</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#code-component" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">&lt;Code&gt; component</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#text-markers" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Text markers</span> </a> <ul class="isMobile astro-idwy3lyp" style="--depth: 1;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="13:31"> <li class="astro-idwy3lyp" style="--depth: 1;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#labels" class="astro-idwy3lyp" style="--depth: 1;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 1;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Labels</span> </a>  </li> </ul> </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#diff" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Diff</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#editor-frame" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Editor frame</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#terminal-frame" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Terminal frame</span> </a>  </li> </ul></div></details></nav></mobile-starlight-toc><script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MobileTableOfContents.astro?astro&type=script&index=0&lang.ts"></script></div><div class="right-sidebar-panel sl-hidden lg:sl-block astro-c6vknzyo" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageSidebar.astro" data-astro-source-loc="12:59"><div class="sl-container astro-c6vknzyo" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageSidebar.astro" data-astro-source-loc="13:31"><starlight-toc data-min-h="2" data-max-h="3" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TableOfContents.astro"><nav aria-labelledby="starlight__on-this-page" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TableOfContents.astro" data-astro-source-loc="10:51"><h2 id="starlight__on-this-page" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TableOfContents.astro" data-astro-source-loc="11:38">On this page</h2><ul class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="13:31"> <li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#_top" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Overview</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#markdown-code-block" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Markdown code block</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#code-component" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">&lt;Code&gt; component</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#text-markers" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Text markers</span> </a> <ul class="astro-idwy3lyp" style="--depth: 1;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="13:31"> <li class="astro-idwy3lyp" style="--depth: 1;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#labels" class="astro-idwy3lyp" style="--depth: 1;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 1;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Labels</span> </a>  </li> </ul> </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#diff" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Diff</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#editor-frame" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Editor frame</span> </a>  </li><li class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="16:8"> <a href="#terminal-frame" class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="17:34"> <span class="astro-idwy3lyp" style="--depth: 0;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components-internals/TableOfContents/TableOfContentsList.astro" data-astro-source-loc="18:12">Terminal frame</span> </a>  </li> </ul></nav></starlight-toc><script type="module" src="/@fs/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TableOfContents.astro?astro&type=script&index=0&lang.ts"></script></div></div> </div> </aside> <div class="main-pane astro-7kdboxll" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/TwoColumnContent.astro" data-astro-source-loc="11:26">  <main class="astro-bfvx4nu5" lang="en" dir="ltr" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Page.astro" data-astro-source-loc="94:6">    <div class="content-panel astro-5muiuvld" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/ContentPanel.astro" data-astro-source-loc="1:28"> <div class="sl-container astro-5muiuvld" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/ContentPanel.astro" data-astro-source-loc="2:29"> <h1 id="_top" class="astro-yohij4kb" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/PageTitle.astro" data-astro-source-loc="5:24">Code Blocks</h1> </div> </div> <div class="content-panel astro-5muiuvld" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/ContentPanel.astro" data-astro-source-loc="1:28"> <div class="sl-container astro-5muiuvld" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/ContentPanel.astro" data-astro-source-loc="2:29"> <div class="sl-markdown-content" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/MarkdownContent.astro" data-astro-source-loc="5:35"> <div class="sl-heading-wrapper level-h2"><h2 id="markdown-code-block">Markdown code block</h2><a class="sl-anchor-link" href="#markdown-code-block"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Markdown code block”</span></a></div>
+<p>Code block rendered with the <a href="https://starlight.astro.build/guides/authoring-content/#code-blocks">Markdown syntax</a> using three backticks <code>```</code> at the start and end.</p>
+<div class="expressive-code"><link rel="stylesheet" href="/_astro/ec.w8rqx.css"><script type="module" src="/_astro/ec.0vx5m.js"></script><figure class="frame not-content"><figcaption class="header"></figcaption><pre data-language="js"><code><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#79B8FF;--1:#005CC5">foo</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">=</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">'bar'</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="const foo = &#x27;bar&#x27;"><div></div></button></div></figure></div>
+<div class="sl-heading-wrapper level-h2"><h2 id="code-component"><code dir="auto">&#x3C;Code></code> component</h2><a class="sl-anchor-link" href="#code-component"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “&#x3C;Code> component”</span></a></div>
+<p>Code block rendered with the <a href="https://starlight.astro.build/components/code/"><code dir="auto">&#x3C;Code></code> component</a>.</p>
+
+<div class="expressive-code"><link rel="stylesheet" href="/_astro/ec.w8rqx.css"><script type="module" src="/_astro/ec.0vx5m.js"></script><figure class="frame not-content"><figcaption class="header"></figcaption><pre data-language="js"><code><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#79B8FF;--1:#005CC5">foo</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">=</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">'bar'</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="const foo = &#x27;bar&#x27;"><div></div></button></div></figure></div>
+<div class="sl-heading-wrapper level-h2"><h2 id="text-markers">Text markers</h2><a class="sl-anchor-link" href="#text-markers"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Text markers”</span></a></div>
+<p>Code blocks with some <a href="https://expressive-code.com/key-features/text-markers/">text markers</a>.</p>
+<div class="expressive-code"><figure class="frame not-content"><figcaption class="header"></figcaption><pre data-language="js"><code><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">function</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">test</span><span style="--0:#E1E4E8;--1:#24292E">() {</span></div></div><div class="ec-line highlight mark"><div class="code"><span class="indent">  </span><span style="--0:#fb9fa9;--1:#8f2731">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#81bcff;--1:#004ba0">foo</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#fb9fa9;--1:#8f2731">=</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">'bar'</span></div></div><div class="ec-line"><div class="code"><span style="--0:#E1E4E8;--1:#24292E">}</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="function test() {  const foo = &#x27;bar&#x27;}"><div></div></button></div></figure></div>
+<div class="expressive-code"><figure class="frame not-content"><figcaption class="header"></figcaption><pre data-language="js"><code><div class="ec-line"><div class="code"><mark><span style="--0:#fb9fa9;--1:#8f2731">function</span></mark><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">test</span><span style="--0:#E1E4E8;--1:#24292E">() {</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><ins><span style="--0:#82bdff;--1:#004ba0">foo</span></ins><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">=</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">'</span><del><span style="--0:#9ECBFF;--1:#032F62">bar</span></del><span style="--0:#9ECBFF;--1:#032F62">'</span></div></div><div class="ec-line"><div class="code"><span style="--0:#E1E4E8;--1:#24292E">}</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="function test() {  const foo = &#x27;bar&#x27;}"><div></div></button></div></figure></div>
+<div class="sl-heading-wrapper level-h3"><h3 id="labels">Labels</h3><a class="sl-anchor-link" href="#labels"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Labels”</span></a></div>
+<p>Code blocks with some <a href="https://expressive-code.com/key-features/text-markers/">text markers</a> and <a href="https://expressive-code.com/key-features/text-markers/#adding-labels-to-line-markers">labels</a>.</p>
+<div class="expressive-code"><figure class="frame has-title not-content"><figcaption class="header"><span class="title">example.astro</span></figcaption><pre data-language="astro"><code><div class="ec-line"><div class="code"><span style="--0:#99A0A6;--1:#616972">---</span></div></div><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">import</span><span style="--0:#E1E4E8;--1:#24292E"> { Icon } </span><span style="--0:#F97583;--1:#BF3441">from</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">'@astrojs/starlight/components'</span><span style="--0:#E1E4E8;--1:#24292E">;</span></div></div><div class="ec-line"><div class="code"><span style="--0:#99A0A6;--1:#616972">---</span></div></div><div class="ec-line"><div class="code">
+</div></div><div class="ec-line highlight mark tm-label" style="--tmLabel:&#x27;1. Keep the existing icon.&#x27;"><div class="code">
+</div></div><div class="ec-line highlight mark"><div class="code"><span style="--0:#E1E4E8;--1:#24292E">&#x3C;</span><span style="--0:#81bcff;--1:#004ba0">Icon</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#c5acf4;--1:#5c37a0">name</span><span style="--0:#E1E4E8;--1:#24292E">=</span><span style="--0:#9ECBFF;--1:#032F62">"seti:lock"</span><span style="--0:#E1E4E8;--1:#24292E"> /></span></div></div><div class="ec-line"><div class="code">
+</div></div><div class="ec-line highlight del tm-label" style="--tmLabel:&#x27;2. Remove the button.&#x27;"><div class="code">
+</div></div><div class="ec-line highlight del"><div class="code"><span style="--0:#E1E4E8;--1:#24292E">&#x3C;</span><span style="--0:#85E89D;--1:#175927">button</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#c3a9f3;--1:#5a369d">type</span><span style="--0:#E1E4E8;--1:#24292E">=</span><span style="--0:#9ECBFF;--1:#032F62">"button"</span><span style="--0:#E1E4E8;--1:#24292E">>Login&#x3C;/</span><span style="--0:#85E89D;--1:#175927">button</span><span style="--0:#E1E4E8;--1:#24292E">></span></div></div><div class="ec-line"><div class="code">
+</div></div><div class="ec-line highlight ins tm-label" style="--tmLabel:&#x27;3. Add a link.&#x27;"><div class="code">
+</div></div><div class="ec-line highlight ins"><div class="code"><span style="--0:#E1E4E8;--1:#24292E">&#x3C;</span><span style="--0:#85E89D;--1:#175927">a</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#c6adf4;--1:#5c37a0">href</span><span style="--0:#E1E4E8;--1:#24292E">=</span><span style="--0:#9ECBFF;--1:#032F62">"/login/"</span><span style="--0:#E1E4E8;--1:#24292E">>Login&#x3C;/</span><span style="--0:#85E89D;--1:#175927">a</span><span style="--0:#E1E4E8;--1:#24292E">></span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="---import { Icon } from &#x27;@astrojs/starlight/components&#x27;;---<Icon name=&#x22;seti:lock&#x22; /><button type=&#x22;button&#x22;>Login</button><a href=&#x22;/login/&#x22;>Login</a>"><div></div></button></div></figure></div>
+<div class="sl-heading-wrapper level-h2"><h2 id="diff">Diff</h2><a class="sl-anchor-link" href="#diff"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Diff”</span></a></div>
+<p>Code block combining <a href="https://expressive-code.com/key-features/text-markers/#combining-syntax-highlighting-with-diff-like-syntax">syntax highlighting with <code dir="auto">diff</code>-like syntax</a>.</p>
+<div class="expressive-code"><figure class="frame not-content"><figcaption class="header"></figcaption><pre data-language="js"><code><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">function</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">test</span><span style="--0:#E1E4E8;--1:#24292E">() {</span></div></div><div class="ec-line highlight del"><div class="code"><span class="indent">  </span><span style="--0:#fb9aa4;--1:#8f2731">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#7cbaff;--1:#004ba0">foo</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#fb9aa4;--1:#8f2731">=</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">'bar'</span></div></div><div class="ec-line highlight ins"><div class="code"><span class="indent">  </span><span style="--0:#fb9fa9;--1:#8f2731">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#82bdff;--1:#004ba0">foo</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#fb9fa9;--1:#8f2731">=</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">'baz'</span></div></div><div class="ec-line"><div class="code"><span style="--0:#E1E4E8;--1:#24292E">}</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="function test() {  const foo = &#x27;bar&#x27;  const foo = &#x27;baz&#x27;}"><div></div></button></div></figure></div>
+<div class="sl-heading-wrapper level-h2"><h2 id="editor-frame">Editor frame</h2><a class="sl-anchor-link" href="#editor-frame"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Editor frame”</span></a></div>
+<p>Code block with a <a href="https://expressive-code.com/key-features/frames/#code-editor-frames">file name</a> in the editor frame.</p>
+<div class="expressive-code"><figure class="frame has-title not-content"><figcaption class="header"><span class="title">test.js</span></figcaption><pre data-language="js"><code><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#79B8FF;--1:#005CC5">foo</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">=</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">'bar'</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="const foo = &#x27;bar&#x27;"><div></div></button></div></figure></div>
+<div class="sl-heading-wrapper level-h2"><h2 id="terminal-frame">Terminal frame</h2><a class="sl-anchor-link" href="#terminal-frame"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Terminal frame”</span></a></div>
+<p>Code block with a <a href="https://expressive-code.com/key-features/frames/#terminal-frames">terminal frame</a>.</p>
+<div class="expressive-code"><figure class="frame is-terminal has-title not-content"><figcaption class="header"><span class="title">Build something…</span></figcaption><pre data-language="bash"><code><div class="ec-line"><div class="code"><span style="--0:#B392F0;--1:#6F42C1">pnpm</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">run</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">build</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="pnpm run build"><div></div></button></div></figure></div> </div> <footer class="sl-flex astro-r4ia5ikh" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Footer.astro" data-astro-source-loc="9:25"> <div class="meta sl-flex astro-r4ia5ikh" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Footer.astro" data-astro-source-loc="10:28"> <a href="https://github.com/raiz-toff/starlight-fumadocs/edit/main/docs/src/content/docs/examples/code-blocks.mdx" class="sl-flex print:hidden astro-ti2nxoh6" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/EditLink.astro" data-astro-source-loc="9:50"><svg aria-hidden="true" class="astro-ti2nxoh6 astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.2em;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M22 7.24a1 1 0 0 0-.29-.71l-4.24-4.24a1 1 0 0 0-1.1-.22 1 1 0 0 0-.32.22l-2.83 2.83L2.29 16.05a1 1 0 0 0-.29.71V21a1 1 0 0 0 1 1h4.24a1 1 0 0 0 .76-.29l10.87-10.93L21.71 8c.1-.1.17-.2.22-.33a1 1 0 0 0 0-.24v-.14l.07-.05ZM6.83 20H4v-2.83l9.93-9.93 2.83 2.83L6.83 20ZM18.17 8.66l-2.83-2.83 1.42-1.41 2.82 2.82-1.41 1.42Z"/></svg>Edit page</a>  </div> <div class="pagination-links print:hidden astro-plywdj7w" dir="ltr" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro" data-astro-source-loc="9:54"> <a href="/examples/cards/" rel="prev" class="astro-plywdj7w" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro" data-astro-source-loc="12:35"> <svg aria-hidden="true" class="astro-plywdj7w astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z"/></svg> <span class="astro-plywdj7w" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro" data-astro-source-loc="14:11"> Previous <br class="astro-plywdj7w" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro" data-astro-source-loc="16:7"> <span class="link-title astro-plywdj7w" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro" data-astro-source-loc="17:31">Cards</span> </span> </a> <a href="/examples/draft/" rel="next" class="astro-plywdj7w" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro" data-astro-source-loc="24:35"> <svg aria-hidden="true" class="astro-plywdj7w astro-ckair3ac" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/user-components/Icon.astro" data-astro-source-loc="22:3"><path d="M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg> <span class="astro-plywdj7w" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro" data-astro-source-loc="26:11"> Next <br class="astro-plywdj7w" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro" data-astro-source-loc="28:7"> <span class="link-title astro-plywdj7w" data-astro-source-file="/home/coder/Production/starlight-fumadocs/node_modules/@astrojs/starlight/components/Pagination.astro" data-astro-source-loc="29:31">Draft</span> </span> </a> </div>  </footer> </div> </div>  </main> </div> </div> </div> </div> </body></html>

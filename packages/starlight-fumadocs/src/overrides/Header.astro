@@ -1,0 +1,78 @@
+---
+import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
+import Search from 'virtual:starlight/components/Search';
+import SiteTitle from 'virtual:starlight/components/SiteTitle';
+import SocialIcons from 'virtual:starlight/components/SocialIcons';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import { Icon } from '@astrojs/starlight/components';
+---
+
+<header class="header">
+	<div class="header-container sl-flex">
+		<div class="title-wrapper sl-flex">
+			<SiteTitle {...Astro.props} />
+		</div>
+		<div class="sl-flex print:hidden search-wrapper">
+			<Search {...Astro.props} />
+		</div>
+		<div class="sl-hidden md:sl-flex print:hidden right-group">
+			<div class="sl-flex social-icons">
+				<SocialIcons {...Astro.props} />
+			</div>
+			<ThemeSelect {...Astro.props} />
+			<LanguageSelect {...Astro.props} />
+		</div>
+	</div>
+</header>
+
+<style>
+	.header {
+		position: sticky;
+		top: 0;
+		z-index: var(--sl-z-index-navbar);
+		border-bottom: 1px solid var(--sl-color-hairline);
+		background-color: color-mix(in srgb, var(--sl-color-bg-nav), transparent 20%);
+		backdrop-filter: blur(8px);
+		height: var(--sl-nav-height);
+	}
+
+	.header-container {
+		padding-inline: var(--sl-nav-pad-x);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 100%;
+		gap: var(--sl-nav-gap);
+	}
+
+	.title-wrapper {
+		min-width: 0;
+	}
+
+	.search-wrapper {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		max-width: 40rem;
+	}
+
+	.right-group,
+	.social-icons {
+		gap: 1rem;
+		align-items: center;
+	}
+
+	.social-icons::after {
+		content: '';
+		height: 1.5rem;
+		border-inline-end: 1px solid var(--sl-color-gray-5);
+		margin-inline-start: 0.5rem;
+	}
+
+	@media (min-width: 50rem) {
+		.header-container {
+			display: grid;
+			grid-template-columns: auto 1fr auto;
+		}
+	}
+</style>
