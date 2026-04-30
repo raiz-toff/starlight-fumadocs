@@ -189,14 +189,14 @@ Each item below = one Gemini Flash task. Paste the relevant FumaDocs CSS + Starl
 **Goal:** Code blocks are visually identical to FumaDocs.
 
 **Tasks:**
-- [ ] Configure Expressive Code in `astro.config.mjs` with FumaDocs-matching dark theme
-- [ ] Code block container: border, border-radius, background color
-- [ ] Filename / title bar styles
-- [ ] Copy button style (position, icon, hover)
-- [ ] Inline `code` element style
-- [ ] Line highlight / diff highlight styles
+- [x] Configure Expressive Code in `astro.config.mjs` with FumaDocs-matching dark theme
+- [x] Code block container: border, border-radius, background color
+- [x] Filename / title bar styles
+- [x] Copy button style (position, icon, hover)
+- [x] Inline `code` element style
+- [x] Line highlight / diff highlight styles
 
-**Definition of Done:** Code blocks with filename, copy button, and highlights look identical to fumadocs.dev.
+**Definition of Done:** Code blocks with filename, copy button, and highlights look identical to fumadocs.dev. ✅
 
 ---
 
@@ -328,7 +328,7 @@ Each = one Gemini Flash task. Paste the FumaDocs component source + ask for the 
 | 0 | Repo Setup | ✅ Done |
 | 1 | Color Tokens | ✅ Done |
 | 2 | Typography | ✅ Done |
-| 3 | Code Blocks | ⬜ Not started |
+| 3 | Code Blocks | ✅ Done |
 | 3B | Layout Blueprint | ⬜ Not started |
 | 4 | Layout Shell Components | ⬜ Not started |
 | 5 | Page Content Components | ⬜ Not started |

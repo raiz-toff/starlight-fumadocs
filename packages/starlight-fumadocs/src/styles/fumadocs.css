@@ -403,17 +403,17 @@
     }
     
     /* Make inline diff marks subtle like FumaDocs */
-    .ec-line ins {
-      background-color: var(--ec-codeInsBg);
-      border-color: var(--ec-codeInsBrd);
+    .ec-line.ins, .ec-line ins {
+      background-color: var(--ec-codeInsBg) !important;
+      border-color: var(--ec-codeInsBrd) !important;
     }
-    .ec-line del {
-      background-color: var(--ec-codeDelBg);
-      border-color: var(--ec-codeDelBrd);
+    .ec-line.del, .ec-line del {
+      background-color: var(--ec-codeDelBg) !important;
+      border-color: var(--ec-codeDelBrd) !important;
     }
-    .ec-line mark {
-      background-color: var(--ec-codeMarkBg);
-      border-color: var(--ec-codeMarkBrd);
+    .ec-line.mark, .ec-line mark {
+      background-color: var(--ec-codeMarkBg) !important;
+      border-color: var(--ec-codeMarkBrd) !important;
     }
   }
 }
