@@ -3,20 +3,22 @@ import type { Props } from '@astrojs/starlight/props';
 import config from 'virtual:starlight/user-config';
 import { logos } from 'virtual:starlight/user-images';
 
-const { siteTitle, siteTitleHref } = Astro.props;
+const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
 ---
 
 <a href={siteTitleHref} class="site-title sl-flex">
 	{
-		config.logo && (
+		config.logo ? (
 			<img
-				class="sl-flex"
+				class="logo"
 				src={logos.dark?.src}
 				alt={config.logo.alt}
 			/>
+		) : (
+			<span class="logo emoji-logo">🥮</span>
 		)
 	}
-	<span class:list={{ 'sr-only': config.logo?.replacesTitle }} translate="no">
+	<span class:list={[{ 'sr-only': config.logo?.replacesTitle }, 'title-text']} translate="no">
 		{siteTitle}
 	</span>
 </a>
@@ -24,27 +26,52 @@ const { siteTitle, siteTitleHref } = Astro.props;
 <style>
 	.site-title {
 		align-items: center;
-		gap: 0.625rem;
-		font-size: 1rem;
-		font-weight: 600;
-		color: var(--sl-color-text);
+		gap: 0.5rem;
 		text-decoration: none;
+		color: var(--sl-color-white);
+		transition: color 0.2s ease;
+	}
+
+	.logo {
+		height: 1.625rem; /* ~26px */
+		width: auto;
+		flex-shrink: 0;
+	}
+
+	.emoji-logo {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.75rem; /* ~28px */
+		line-height: 1;
+	}
+
+	.title-text {
+		font-size: 1.125rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
 		white-space: nowrap;
-		transition: opacity 0.2s;
+		color: inherit;
 	}
 
 	.site-title:hover {
-		opacity: 0.8;
+		color: var(--sl-color-accent-high);
 	}
 
-	img {
-		height: 1.5rem;
-		width: auto;
+	@media (max-width: 30rem) { /* ~480px */
+		.logo + .title-text {
+			display: none;
+		}
 	}
 
-	@media (min-width: 50rem) {
-		.site-title {
-			font-size: 1.125rem;
+	/* Also hide text in the mobile sidebar drawer regardless of screen width */
+	:global(.sidebar-mobile) .title-text {
+		display: none;
+	}
+
+	@media (max-width: 50rem) {
+		.title-text {
+			font-size: 1rem;
 		}
 	}
 </style>

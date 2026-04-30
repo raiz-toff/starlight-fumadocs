@@ -1,0 +1,245 @@
+---
+/**
+ * RootNav — FumaDocs-style framework/version selector.
+ *
+ * Renders an icon + label + description row with a double-chevron (⇅) on the
+ * right.  On click it opens a dropdown listing all top-level sidebar groups
+ * so the user can jump between documentation sections.
+ *
+ * The active entry is the group that contains the current page (or the first
+ * group as a fallback).
+ */
+import type { Props } from '@astrojs/starlight/props';
+import { Icon } from '@astrojs/starlight/components';
+
+const { starlightFumadocs } = Astro.locals;
+const groups = starlightFumadocs?.allGroups ?? [];
+const activeGroup = starlightFumadocs?.activeGroup;
+const label = activeGroup?.label ?? 'Documentation';
+
+// Helper to find the first link in a group for navigation
+const getFirstLink = (entry: any): string | undefined => {
+  if (entry.type === 'link') return entry.href;
+  if (entry.entries) {
+    for (const child of entry.entries) {
+      const href = getFirstLink(child);
+      if (href) return href;
+    }
+  }
+  return undefined;
+};
+---
+
+{groups.length > 0 && (
+  <div class="root-nav" id="root-nav">
+    <button
+      class="root-nav-trigger sl-flex"
+      aria-haspopup="listbox"
+      aria-expanded="false"
+      aria-controls="root-nav-dropdown"
+      id="root-nav-button"
+    >
+      <!-- Left: book icon + text -->
+      <span class="root-nav-icon" aria-hidden="true">
+        <Icon name="open-book" size="1rem" />
+      </span>
+      <span class="root-nav-label">
+        <span class="root-nav-title">{label}</span>
+      </span>
+      <!-- Right: double-chevron ⇅ -->
+      <span class="root-nav-chevrons" aria-hidden="true">⇅</span>
+    </button>
+
+    <ul
+      id="root-nav-dropdown"
+      class="root-nav-dropdown"
+      role="listbox"
+      aria-labelledby="root-nav-button"
+      hidden
+    >
+      {groups.map((group: any) => {
+        const href = getFirstLink(group);
+        return (
+          <li role="option" aria-selected={group.label === label}>
+            <a
+              href={href}
+              class:list={['root-nav-option sl-flex', { 'is-active': group.label === label }]}
+            >
+              <span class="option-icon" aria-hidden="true">
+                <Icon name="open-book" size="0.875rem" />
+              </span>
+              <span class="option-label">{group.label}</span>
+              {group.label === label && (
+                <span class="option-check" aria-hidden="true">✓</span>
+              )}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+)}
+
+<style>
+  .root-nav {
+    position: relative;
+    width: 100%;
+  }
+
+  /* ── Trigger button ────────────────────────────────── */
+  .root-nav-trigger {
+    width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: none;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: var(--fuma-radius);
+    cursor: pointer;
+    color: var(--sl-color-text);
+    text-align: start;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .root-nav-trigger:hover {
+    background-color: var(--sl-color-gray-7);
+    border-color: var(--sl-color-gray-4);
+  }
+
+  .root-nav-trigger:focus {
+    outline: none;
+  }
+
+  .root-nav-trigger:focus-visible {
+    outline: none;
+    border-color: var(--sl-color-accent);
+    box-shadow: 0 0 0 2px hsla(var(--sl-color-accent-base), 0.2);
+  }
+
+  .root-nav-icon {
+    display: flex;
+    align-items: center;
+    color: var(--sl-color-gray-3);
+    flex-shrink: 0;
+  }
+
+  .root-nav-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .root-nav-title {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--sl-color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .root-nav-chevrons {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    letter-spacing: -0.05em;
+  }
+
+  /* ── Dropdown ──────────────────────────────────────── */
+  .root-nav-dropdown {
+    position: absolute;
+    inset-inline: 0;
+    top: calc(100% + 0.25rem);
+    z-index: 50;
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem;
+    background-color: var(--sl-color-bg-sidebar);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: var(--fuma-radius);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    min-width: 12rem;
+  }
+
+  .root-nav-dropdown[hidden] {
+    display: none;
+  }
+
+  /* ── Dropdown option ───────────────────────────────── */
+  .root-nav-option {
+    width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    background: none;
+    border: none;
+    border-radius: var(--fuma-radius);
+    cursor: pointer;
+    color: var(--sl-color-gray-2);
+    font-size: 0.8125rem;
+    text-align: start;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .root-nav-option:hover {
+    background-color: var(--sl-color-gray-7);
+    color: var(--sl-color-text);
+  }
+
+  .root-nav-option.is-active {
+    color: var(--sl-color-text);
+    font-weight: 500;
+  }
+
+  .option-icon {
+    display: flex;
+    align-items: center;
+    color: var(--sl-color-gray-3);
+    flex-shrink: 0;
+  }
+
+  .option-label {
+    flex: 1;
+  }
+
+  .option-check {
+    flex-shrink: 0;
+    color: var(--sl-color-accent);
+    font-size: 0.75rem;
+  }
+</style>
+
+<script>
+  const containers = document.querySelectorAll('.root-nav');
+
+  containers.forEach(container => {
+    const btn = container.querySelector('.root-nav-trigger') as HTMLButtonElement;
+    const dropdown = container.querySelector('.root-nav-dropdown') as HTMLUListElement;
+
+    if (btn && dropdown) {
+      // Toggle open/close
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !dropdown.hidden;
+        dropdown.hidden = isOpen;
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+
+      // Close on outside click
+      window.addEventListener('click', () => {
+        dropdown.hidden = true;
+        btn.setAttribute('aria-expanded', 'false');
+      });
+
+      // Close on Escape
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !dropdown.hidden) {
+          dropdown.hidden = true;
+          btn.setAttribute('aria-expanded', 'false');
+          btn.focus();
+        }
+      });
+    }
+  });
+</script>

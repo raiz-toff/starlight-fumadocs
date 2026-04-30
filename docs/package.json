@@ -18,8 +18,10 @@
     "@fontsource/geist-mono": "^5.2.7",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.1.10",
+    "astro-d2": "^0.10.0",
     "sharp": "^0.34.5",
     "starlight-fumadocs": "*",
+    "starlight-image-zoom": "^0.14.1",
     "tailwindcss": "^4.2.4"
   },
   "engines": {

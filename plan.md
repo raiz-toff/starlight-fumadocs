@@ -128,6 +128,7 @@ Starlight lets you override specific components in `astro.config.mjs` under `com
 ---
 
 ### Sprint 0 — Repo Setup & Source Gathering
+
 **Goal:** Everything is ready. You have sources to reference, project boots.
 
 **Tasks:**
@@ -144,6 +145,7 @@ Starlight lets you override specific components in `astro.config.mjs` under `com
 ---
 
 ### Sprint 1 — Color Token Mapping
+
 **Goal:** Full color system ported. Light and dark mode both work.
 
 Each item below = one Gemini Flash task. Paste the relevant FumaDocs CSS + Starlight props list. Ask for only that block.
@@ -163,6 +165,7 @@ Each item below = one Gemini Flash task. Paste the relevant FumaDocs CSS + Starl
 ---
 
 ### Sprint 2 — Typography & Prose CSS
+
 **Goal:** MDX content renders with FumaDocs prose styling.
 
 **Tasks:**
@@ -186,6 +189,7 @@ Each item below = one Gemini Flash task. Paste the relevant FumaDocs CSS + Starl
 ---
 
 ### Sprint 3 — Code Block Styles
+
 **Goal:** Code blocks are visually identical to FumaDocs.
 
 **Tasks:**
@@ -200,44 +204,178 @@ Each item below = one Gemini Flash task. Paste the relevant FumaDocs CSS + Starl
 
 ---
 
-### Sprint 3B — Layout Analysis & Blueprint ⭐ NEW PHASE
-**Goal:** You fully understand the FumaDocs grid system and have a written implementation plan for Starlight before writing a single component. This sprint is documentation and architecture only — no component code.
+### Sprint 3B — Layout Analysis & Blueprint (COMPLETE AUDIT)
 
-**Why this sprint exists:** The FumaDocs layout is a custom CSS Grid with a sticky offset system that Starlight has no equivalent of. Building components before you understand the grid will cause cascading layout bugs. This sprint prevents that.
+**Goal:** Complete technical specification of the FumaDocs layout system. Every zone, every question from the audit prompt answered.
 
-**Tasks:**
+#### 1. Grid System & Core Structure
 
-- [ ] **Task 1 — Audit the grid in DevTools**
-  Open fumadocs.dev. Inspect `#nd-docs-layout`. Record the exact `grid-template-areas`, column widths, and row heights at desktop, medium, and mobile. Take screenshots or write them down.
+- [x] **Grid Area Map**: `#nd-docs-layout` named grid areas:
+  - `sidebar` — left column
+  - `header` — top strip (**mobile/tablet only**; does NOT exist on desktop)
+  - `toc-popover` — sticky bar below header (medium/mobile only)
+  - `main` — center scrolling content column
+  - `toc` — right column (desktop only)
+- [x] **Column Definitions** (desktop):
+  - `sidebar`: `268px` (`--fd-sidebar-width`)
+  - `main`: `1fr` with `max-width: ~900px` centered inside
+  - `toc`: `268px` (`--fd-toc-width`)
+- [x] **Row Definitions**:
+  - Row 1: header row — `0` on desktop (no header), `~56px` on mobile
+  - Row 2: toc-popover row — hidden on desktop, `~40px` on medium/mobile
+  - Row 3: main content — fills remaining height
 
-- [ ] **Task 2 — Document all `--fd-*` vars**
-  In the cloned repo, search for every `--fd-` variable. Note what sets it, what reads it, and what happens when it changes. Write this into a local `LAYOUT-NOTES.md` file.
+#### 2. CSS Variable Specification (--fd-*)
 
-- [ ] **Task 3 — Trace each sticky element**
-  For sidebar, header, TOC, and TOC popover — write down the exact `position`, `top`, `height`, and `z-index` values computed in the browser. Do this for all 3 breakpoints.
+- [x] **Color Tokens** (from DevTools extraction):
+  - `--color-fd-background`: `#f5f5f5` (Light) / `#0a0a0a` (Dark)
+  - `--color-fd-foreground`: `#0a0a0a` / `#f5f5f5`
+  - `--color-fd-primary`: `#171717` (Brand, near-black)
+  - `--color-fd-accent`: `#d1d1d180` (hover bg, semi-transparent)
+  - `--color-fd-muted-foreground`: `#737373`
+  - `--color-fd-border`: `#cccccc80`
+  - `--color-fd-popover`: `#fafafa`
+  - `--color-fd-card`: `#f1f1f1`
+- [x] **Layout Tokens**:
+  - `--fd-sidebar-width`: `268px`
+  - `--fd-toc-width`: `268px`
+  - `--fd-header-height`: `3.5rem` (~56px) — only on mobile
+  - `--fd-banner-height`: `0px` (default, no banner)
+  - `--fd-sidebar-drawer-offset`: `100%`
+  - `--fd-docs-row-1`: = `--fd-banner-height` (sidebar sticky top)
+  - `--fd-docs-row-2`: = `--fd-banner-height` + `--fd-header-height` (TOC/popover sticky top)
+- [x] **Animation Tokens**:
+  - `--animate-fd-accordion-down`: `fd-accordion-down 0.2s ease-out`
+  - `--animate-fd-accordion-up`: `fd-accordion-up 0.2s ease-out`
+  - `--animate-fd-fade-in`: `fd-fade-in 0.3s ease`
+  - `--animate-fd-dialog-in`: `fd-dialog-in 0.3s cubic-bezier(0.16, 1, 0.3, 1)`
+  - `--animate-fd-popover-in`: `fd-popover-in 0.1s ease`
 
-- [ ] **Task 4 — Audit Starlight's layout source**
-  On GitHub, open `packages/starlight/components/`. Read: `Header.astro`, `Sidebar.astro`, `PageSidebar.astro`, `MobileTableOfContents.astro`, `Page.astro`. Note what CSS each one applies for positioning.
+#### 3. Sticky & Z-Index Chain
 
-- [ ] **Task 5 — Write your custom CSS var plan**
-  Define the full set of `--fuma-*` variables you will add to Starlight. Map each one to its FumaDocs equivalent. This is your contract for the rest of the build.
+- [x] **Sticky Positioning**:
+  - Desktop header: **DOES NOT EXIST** — no header on desktop
+  - Mobile header: `position: sticky`, `top: 0`, `z-index: 50`
+  - Desktop Sidebar: `position: sticky`, `top: var(--fd-docs-row-1)`, `height: calc(100dvh - var(--fd-docs-row-1))`
+  - Desktop TOC: `position: sticky`, `top: var(--fd-docs-row-2)`, `height: fit-content`
+  - TOC Popover bar: `position: sticky`, `top: var(--fd-docs-row-2)` (= `3.5rem` on mobile), `z-index: 30`
+- [x] **Z-Index Layering**:
+  - Mobile Header: `z-index: 50`
+  - Mobile Drawer: `z-index: 40`
+  - TOC Popover: `z-index: 30`
+  - Sidebar Overlay (backdrop): `z-index: 20`
 
-- [ ] **Task 6 — Write the master grid CSS (no components)**
-  Write a single `.fumadocs-layout { }` CSS block that reproduces the FumaDocs 3-column 3-row grid, using your `--fuma-*` vars. Put it in `src/styles/fumadocs.css`. No Astro components yet.
+#### 4. Zone 1 — Sidebar Full Spec
 
-- [ ] **Task 7 — Test the grid skeleton on a blank page**
-  Create a throwaway `src/pages/grid-test.astro`. Apply `.fumadocs-layout` to a div. Put colored placeholder divs in each grid area. Confirm the grid works at all 3 breakpoints in the browser.
+- [x] **Position**: `sticky` grid item. NOT `position: fixed`.
+- [x] **Top**: `var(--fd-docs-row-1)` (banner height; default `0px`). Never hardcode `top: 0`.
+- [x] **Width**: `268px` computed.
+- [x] **Background**: `rgb(245, 245, 245)` light / `rgb(10, 10, 10)` dark. **SAME as page body** — no visual contrast difference.
+- [x] **Right border**: `1px solid rgba(102, 102, 102, 0.2)`. No box-shadow.
+- [x] **Scroll**: Sidebar nav scrolls independently within the sidebar column.
+- [x] **Sidebar header area** (very top):
+  - Logo: SVG icon + site title. Clickable → links to `/`.
+  - Site title: `font-size: 14px`, `font-weight: 600`.
+  - Collapse toggle: positioned at **top-RIGHT** of the sidebar header row.
+  - Toggle icon: a panel/sidebar icon (not a simple chevron or X).
+- [x] **Search bar**: Is a `<button>` element. Clicking opens a modal. Not a real `<input>`. Has `Ctrl K` badge.
+- [x] **Root nav selector** ("Fumadocs UI" or "Framework" picker):
+  - Appearance: icon + label text + double-chevron (`⇅`) on right.
+  - On click: opens a **dropdown popup**, NOT a modal.
+- [x] **Nav tree items**: Each has a **small SVG icon before the text label** (icon + label style).
+- [x] **Group headers**: `font-size: ~11-12px`, uppercase, `font-weight: 500`, `color: --color-fd-muted-foreground`.
+- [x] **Active nav item**: background tint (`--color-fd-accent`), text `--color-fd-primary`. **No left border on nav active item.**
+- [x] **Expandable items**: Chevron on the right. **Rotates 90°** (right→down) on expand.
+- [x] **Children indent**: `1.5rem` extra indent from parent.
+- [x] **Hover state**: Background → `--color-fd-accent` tint. Smooth transition.
+- [x] **Sidebar footer** (GitHub + Theme toggle):
+  - **Sticky to viewport bottom** inside the sidebar. Does NOT scroll away with the nav tree.
+  - Has `border-top: 1px solid var(--color-fd-border)`.
+  - Layout: `flex`, `items-center`, `justify-between`.
+- [x] **Collapsed state**:
+  - Does **NOT fully disappear**. Shrinks to a **narrow icon rail** (sidebar toggle button + search icon remain visible).
+  - Main content width expands to fill freed space. Animated.
+  - **Hover while collapsed: NO auto-expand** on `fumadocs.dev`. Must click toggle to re-expand.
 
-- [ ] **Task 8 — Write the responsive breakpoint spec**
-  Document the exact `px` values where: sidebar collapses, TOC rail disappears, TOC popover appears, drawer activates. Write the media queries (not yet applied to components).
+#### 5. Zone 2 — Header / Top Navigation Bar
 
-- [ ] **Task 9 — Map every Starlight override needed**
-  For each grid area (sidebar, header, toc, toc-popover, main), write which Starlight component must be overridden, and what specifically changes from the Starlight default.
+- [x] **Desktop (≥1025px)**: **NO top header bar**. The page has no full-width header on desktop. Top of page = top of sidebar. This is a critical difference from most doc sites.
+- [x] **Mobile/tablet (≤1024px)**: A full-width sticky header appears containing:
+  - Logo on **LEFT**.
+  - Search icon button on **RIGHT**.
+  - Sidebar trigger button on **RIGHT** (rightmost). NOT on the left.
+  - Height: `~56px`.
+  - Background: same as page background.
+  - Border-bottom: `1px solid var(--color-fd-border)`.
+  - `position: sticky`, `top: 0`, `z-index: 50`.
+- [x] **No breadcrumb or page title in the header bar** — header is nav-only.
 
-- [ ] **Task 10 — Write the override execution order**
-  Order the component overrides by dependency. You can't style the sidebar correctly until the grid is right. You can't style TOC until header height is set. Write the chain.
+#### 6. Zone 3 — TOC Right Rail (Desktop)
 
-**Definition of Done:** A blank Astro page shows the FumaDocs 3-column grid with placeholder divs in the correct positions at all 3 breakpoints. You have a written spec for every component before you write any of them.
+- [x] **Width**: `268px` computed.
+- [x] **Background**: Same as page. No visual difference.
+- [x] **Left border/separator**: **None**. No divider between main and TOC.
+- [x] **"On this page" header**: `font-size: 12px`, `font-weight: 600`, uppercase, `letter-spacing: 0.05em`, color `--color-fd-muted-foreground`.
+- [x] **TOC items**: `font-size: 13px`, `line-height: 1.5`, color `--color-fd-muted-foreground`.
+- [x] **Active TOC item**: `color: --color-fd-primary` (NOT yellow — this is the primary brand color). Left border: `2px solid var(--color-fd-primary)`.
+- [x] **Sub-items indent**: `0.75rem` additional. Same color as top-level.
+- [x] **Sticky top**: `var(--fd-docs-row-2)` (banner + header height).
+- [x] **Exact breakpoint where TOC disappears**: **1024px** (the `lg` breakpoint). At ≤1024px it hides. It is NOT 768px.
+
+#### 7. Zone 4 — TOC Popover (Medium/Mobile)
+
+- [x] **Appears at**: ≤1024px width.
+- [x] **Position**: In `toc-popover` grid area. `position: sticky`, `top: var(--fd-docs-row-2)` (`3.5rem` on mobile), `z-index: 30`.
+- [x] **What the bar shows**: The **current section heading** the user has scrolled to (dynamic). NOT a static "On this page" text.
+- [x] **Height**: `~40px`. Background: same as page. Border-bottom: `1px solid var(--color-fd-border)`.
+- [x] **On click**: A **dropdown list** appears directly below (NOT a sheet, NOT a modal).
+- [x] **Animation**: `fd-accordion-down`, `0.2s ease-out`.
+- [x] **Active item in dropdown**: `color: --color-fd-primary`, left border `2px solid`. Same as desktop rail.
+- [x] **Close**: Click the bar again to collapse, OR click outside the dropdown.
+
+#### 8. Zone 5 — Mobile Sidebar Drawer
+
+- [x] **Trigger**: Located on **RIGHT** side of top nav header (rightmost element).
+- [x] **Trigger icon**: Panel/sidebar icon. NOT a hamburger ☰.
+- [x] **Slide direction**: Slides in from **RIGHT**.
+- [x] **Height**: Full viewport (`100dvh`).
+- [x] **Width**: Partial — `~255px` on 375px screen (`left: 120px`, `right: 0`).
+- [x] **Background**: `rgb(245, 245, 245)` light / `rgb(10, 10, 10)` dark.
+- [x] **Overlay**: Dark overlay on the exposed left portion of the screen. `opacity: ~0.5`. Clicking overlay closes drawer.
+- [x] **Drawer top row**: GitHub link + Theme toggle on left, Close button on **top-RIGHT**.
+- [x] **Close button icon**: Same panel/sidebar icon as trigger (NOT an X icon).
+- [x] **Drawer contents** (top to bottom): Close/icon row → Root nav selector → Full navigation tree.
+- [x] **Search inside drawer**: **NO search bar inside the drawer**. Search stays in the top nav bar.
+- [x] **Closing animation**: Slides out to right, ~`0.3s`.
+
+#### 9. Zone 6 — Main Content Area
+
+- [x] **Max-width**: `~900px` for the `<article>` element.
+- [x] **Padding**: `padding-left: 1.5rem`, `padding-right: 1.5rem` (~24px). Mobile: reduced.
+- [x] **Background**: Same as page. No visual difference.
+- [x] **Page title**: `font-size: 2.25rem`, `font-weight: 700`, `letter-spacing: -0.02em`.
+- [x] **Page description**: `font-size: 1.125rem`, color `--color-fd-muted-foreground`, `margin-top: 0.5rem`.
+- [x] **Action buttons** ("Copy Markdown" / "Open"): Row below description. Small `font-size: ~12px`. `border: 1px solid var(--color-fd-border)`, `border-radius: 4-6px`. Icon + text.
+- [x] **Breadcrumb**: Exists as a **standalone row above the title**. Present on **nested pages only** (not root-level pages like `/docs/ui`). Muted color. Separator: `›`. Current page item is not a link.
+- [x] **Pagination**: Card style with border. Shows small "Previous" / "Next" label + page title. **Arrow icons present** (← / →). Hover changes border color to `--color-fd-primary`.
+
+#### 10. Zone 7 — Interaction Tests
+
+- [x] **Sidebar collapse**: Shrinks to icon rail. Content expands. Animated `~0.2s` width.
+- [x] **Hover on collapsed sidebar**: **No hover-expand**. Button-toggle only.
+- [x] **Scroll long page**: Sidebar stays sticky. TOC updates active item as you scroll. **No scroll progress bar**.
+- [x] **Click TOC item**: Smooth scroll to heading. **URL hash updates** (e.g. `#overview`).
+- [x] **Open mobile drawer**: Slides from right. ~`0.3s ease`. Not instant.
+- [x] **Resize breakpoints** (exact):
+  - TOC rail disappears at **1024px** and below.
+  - TOC popover bar appears at **1024px** and below.
+  - Top header bar appears at **1024px** and below.
+  - Sidebar drawer activates at **768px** and below.
+- [x] **Theme toggle**: **Animated** CSS transition (~`0.2s`). Not instant snap.
+- [x] **Search**: Opens centered modal with `backdrop-filter`. Has text input + results list. Keyboard shortcut `Ctrl K`.
+- [x] **Expand nav group**: Chevron rotates **90°**. Accordion animation `0.2s ease-out`.
+
+**Definition of Done:** All 7 zones fully documented. Every question from the original audit prompt answered with confirmed values. ✅
 
 ---
 
@@ -247,18 +385,29 @@ Each item below = one Gemini Flash task. Paste the relevant FumaDocs CSS + Starl
 Build in this exact order. Each item = one Gemini Flash task. Do not start the next until the previous is verified in browser.
 
 **Tasks (in order):**
-- [ ] `ContentPanel.astro` — apply the master grid class, set `--fuma-*` vars at root
-- [ ] `Header.astro` — sticky, backdrop blur, bottom border, correct height, sets `--fuma-row-2`
-- [ ] `SiteTitle.astro` — logo + title typography
-- [ ] `Search.astro` — Cmd+K pill button (style only, keep Pagefind wired)
-- [ ] `ThemeSelect.astro` — sun/moon toggle styled to FumaDocs
-- [ ] `Sidebar.astro` — sticky left, correct width, scrollable nav tree, `top: --fuma-row-1`
-- [ ] Mobile drawer behavior — hamburger open/close with overlay (inside Sidebar.astro)
-- [ ] `PageSidebar.astro` — sticky right rail, correct width, `top: --fuma-row-2`, hidden on mobile
-- [ ] `MobileTableOfContents.astro` — sticky popover bar, hidden on desktop
-- [ ] `TableOfContents.astro` — TOC content inside right rail with active-line indicator
+
+- [x] `PageFrame.astro` — apply the master grid class, set `--fuma-*` vars at root
+- [x] `Header.astro` — sticky, backdrop blur, bottom border, correct height, sets `--fuma-row-2`
+- [x] `SiteTitle.astro` — logo + title typography
+- [x] `Search.astro` — Cmd+K pill button (style only, keep Pagefind wired)
+- [x] `ThemeSelect.astro` — sun/moon toggle styled to FumaDocs
+- [x] `Sidebar.astro` — sticky left, correct width, scrollable nav tree, `top: --fuma-row-1`
+- [x] `RootNav.astro` — Version/Framework selector below search; icon, label, description, chevron
+- [x] Mobile drawer behavior — hamburger open/close with overlay (inside Sidebar.astro)
+- [x] Sidebar collapse button — toggle-only; NO hover-expand (confirmed: fumadocs.dev does not auto-expand on hover)
+- [x] `PageSidebar.astro` — sticky right rail, correct width, `top: --fuma-row-2`, hidden on mobile
+- [x] `MobileTableOfContents.astro` — sticky popover bar, hidden on desktop
+- [x] `TableOfContents.astro` — TOC content inside right rail with `--color-fd-primary` active indicator (left border + text color; NOT yellow)
 
 **Definition of Done:** At all 3 breakpoints, the layout grid positions match fumadocs.dev. Sidebar opens/closes on mobile. TOC appears in right rail on desktop, collapses to popover on medium/mobile.
+
+**Sprint 4 Fixes Applied (2026-04-30):**
+- [x] All breakpoints corrected: 1280px → 1024px across fumadocs.css, PageSidebar, MobileTableOfContents
+- [x] Header.astro: now hides at ≥1024px (was 768px)
+- [x] Tablet breakpoint (768px–1023px) now correctly sets `--fuma-header-height: 56px`
+- [x] PageSidebar.astro: TOC sticky top corrected to `--fuma-docs-row-2` (was row-1)
+- [x] Sidebar.astro: mobile drawer direction fixed — now slides from RIGHT (was left)
+- [x] RootNav.astro created — icon + label + chevron ⇅ + dropdown, wired into Sidebar.astro
 
 ---
 
@@ -266,29 +415,22 @@ Build in this exact order. Each item = one Gemini Flash task. Do not start the n
 **Goal:** The page-level content area matches FumaDocs.
 
 **Tasks:**
-- [ ] `PageTitle.astro` — title, description, breadcrumb block
-- [ ] `Pagination.astro` — prev/next cards at page bottom
-- [ ] `Footer.astro` — last updated, edit link, minimal styling
-- [ ] Breadcrumb styling (can be inside PageTitle.astro)
+- [x] `Breadcrumb.astro` — standalone task; muted color, separator treatment, above title
+- [x] `PageTitle.astro` — title, description block
+- [x] Page action buttons — "Copy Markdown" and "Open" strip (style only, no JS needed)
+- [x] `Pagination.astro` — prev/next cards at page bottom
+- [x] `Footer.astro` — last updated, edit link, minimal styling
 
-**Definition of Done:** A full doc page from top breadcrumb to bottom pagination looks like fumadocs.dev.
+**Definition of Done:** A full doc page from top breadcrumb to bottom pagination looks like fumadocs.dev. ✅
 
----
+---- [x] `Callout.astro` — info / warn / error / tip variants with left border + icon
+- [x] `Card.astro` — icon + title + description card
+- [x] `Cards.astro` — responsive grid wrapper for cards
+- [x] `Steps.astro` — numbered step list with vertical connector line
+- [x] `Tabs.astro` — tab strip with border-bottom active style
+- [x] `FileTree.astro` — directory tree with icons
 
-### Sprint 6 — MDX Components
-**Goal:** Custom MDX components match FumaDocs components visually.
-
-Each = one Gemini Flash task. Paste the FumaDocs component source + ask for the Astro equivalent only.
-
-**Tasks:**
-- [ ] `Callout.astro` — info / warn / error / tip variants with left border + icon
-- [ ] `Card.astro` — icon + title + description card
-- [ ] `Cards.astro` — responsive grid wrapper for cards
-- [ ] `Steps.astro` — numbered step list with vertical connector line
-- [ ] `Tabs.astro` — tab strip with border-bottom active style
-- [ ] `FileTree.astro` — directory tree with icons
-
-**Definition of Done:** Each component renders in a test MDX file and matches the fumadocs.dev equivalent.
+**Definition of Done:** Each component renders in a test MDX file and matches the fumadocs.dev equivalent. ✅
 
 ---
 
@@ -318,6 +460,7 @@ Each = one Gemini Flash task. Paste the FumaDocs component source + ask for the 
 5. **Never hardcode colors.** All colors must use `--sl-*` or `--fuma-*` CSS vars.
 6. **Never hardcode layout dimensions.** All widths, heights, and offsets must use CSS vars.
 7. **Reference the sticky offset map.** Every sticky element must use the correct `--fuma-row-*` top value.
+8. **Check /reference/fumadocs first, always.** Before writing any component, read the matching source file from the cloned repo. Never guess at FumaDocs internals from memory.
 
 ---
 
@@ -329,8 +472,8 @@ Each = one Gemini Flash task. Paste the FumaDocs component source + ask for the 
 | 1 | Color Tokens | ✅ Done |
 | 2 | Typography | ✅ Done |
 | 3 | Code Blocks | ✅ Done |
-| 3B | Layout Blueprint | ⬜ Not started |
-| 4 | Layout Shell Components | ⬜ Not started |
-| 5 | Page Content Components | ⬜ Not started |
-| 6 | MDX Components | ⬜ Not started |
+| 3B | Layout Blueprint | ✅ Done |
+| 4 | Layout Shell Components | ✅ Done (fixes applied 2026-04-30) |
+| 5 | Page Content Components | ✅ Done |
+| 6 | MDX Components | ✅ Done |
 | 7 | Polish & Publish | ⬜ Not started |

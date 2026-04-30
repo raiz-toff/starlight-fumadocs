@@ -8,7 +8,9 @@
   "exports": {
     ".": "./index.ts",
     "./styles": "./src/styles/fumadocs.css",
-    "./overrides/*": "./src/overrides/*"
+    "./middleware": "./src/middleware.ts",
+    "./overrides/*": "./src/overrides/*",
+    "./components/*": "./src/components/*"
   },
   "devDependencies": {
     "@astrojs/starlight": "^0.38.4",

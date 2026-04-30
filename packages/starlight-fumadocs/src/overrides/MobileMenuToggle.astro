@@ -1,0 +1,129 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+---
+
+<starlight-menu-button class="print:hidden">
+	<button
+		aria-expanded="false"
+		aria-label={Astro.locals.t('menuButton.accessibleLabel')}
+		aria-controls="starlight__sidebar"
+		class="fuma-menu-button"
+	>
+		<div class="icon-container open-menu">
+			<svg
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<rect width="18" height="18" x="3" y="3" rx="2"></rect>
+				<path d="M9 3v18"></path>
+			</svg>
+		</div>
+		<div class="icon-container close-menu">
+			<svg
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path d="M18 6 6 18"></path>
+				<path d="m6 6 12 12"></path>
+			</svg>
+		</div>
+	</button>
+</starlight-menu-button>
+
+<script>
+	class StarlightMenuButton extends HTMLElement {
+		btn = this.querySelector('button')!;
+
+		constructor() {
+			super();
+			// Toggle `aria-expanded` state when a user clicks the button.
+			this.btn.addEventListener('click', () => this.toggleExpanded());
+
+			// Close the menu when a user presses the escape key.
+			const parentNav = this.closest('nav');
+			if (parentNav) {
+				parentNav.addEventListener('keyup', (e) => this.closeOnEscape(e as KeyboardEvent));
+			}
+		}
+
+		setExpanded(expanded: boolean) {
+			this.setAttribute('aria-expanded', String(expanded));
+			document.body.toggleAttribute('data-mobile-menu-expanded', expanded);
+		}
+
+		toggleExpanded() {
+			this.setExpanded(this.getAttribute('aria-expanded') !== 'true');
+		}
+
+		closeOnEscape(e: KeyboardEvent) {
+			if (e.code === 'Escape') {
+				this.setExpanded(false);
+				this.btn.focus();
+			}
+		}
+	}
+
+	customElements.define('starlight-menu-button', StarlightMenuButton);
+</script>
+
+<style>
+	.fuma-menu-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 38px;
+		height: 38px;
+		background: transparent;
+		border: 1px solid var(--sl-color-hairline);
+		border-radius: var(--fuma-radius);
+		color: var(--sl-color-gray-2);
+		cursor: pointer;
+		transition: all 0.2s ease;
+		padding: 0;
+	}
+
+	.fuma-menu-button:hover {
+		color: var(--sl-color-text);
+		background-color: var(--sl-color-gray-6);
+		border-color: var(--sl-color-gray-4);
+	}
+
+	.icon-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	[aria-expanded='true'] .fuma-menu-button {
+		background-color: var(--sl-color-gray-6);
+		color: var(--sl-color-text);
+		border-color: var(--sl-color-gray-4);
+	}
+
+	[aria-expanded='true'] .open-menu {
+		display: none;
+	}
+
+	:not([aria-expanded='true']) .close-menu {
+		display: none;
+	}
+
+	@media (min-width: 768px) {
+		/* Hide mobile menu button on desktop as per Header.astro logic */
+		starlight-menu-button {
+			display: none;
+		}
+	}
+</style>

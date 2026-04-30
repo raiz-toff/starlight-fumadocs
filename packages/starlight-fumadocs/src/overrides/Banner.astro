@@ -1,0 +1,73 @@
+---
+const { banner } = Astro.locals.starlightRoute.entry.data;
+const content = banner ? (banner as any).content : '';
+---
+
+{
+  banner && (
+    <>
+      <style is:global>
+        :root {
+          --fuma-banner-height: 2.5rem;
+        }
+      </style>
+      <div class="fumadocs-banner not-prose">
+        <div class="banner-rainbow"></div>
+        <div class="banner-content" set:html={content} />
+      </div>
+    </>
+  )
+}
+
+<style>
+  .fumadocs-banner {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem; /* fd-banner-height */
+    padding-inline: 1rem;
+    background-color: var(--sl-color-bg);
+    border-bottom: 1px solid var(--sl-color-hairline);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    overflow: hidden;
+  }
+
+  .banner-rainbow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    filter: saturate(2);
+    animation: fd-moving-banner 20s linear infinite;
+    mask-image: linear-gradient(to bottom, white, transparent), radial-gradient(circle at top center, white, transparent);
+    mask-composite: intersect;
+    background-image: repeating-linear-gradient(
+      70deg,
+      rgba(0, 149, 255, 0.2) 0%,
+      rgba(231, 77, 255, 0.3) 12.5%,
+      rgba(255, 0, 0, 0.25) 25%,
+      rgba(131, 255, 166, 0.2) 37.5%,
+      rgba(0, 149, 255, 0.2) 50%
+    );
+    background-size: 200% 100%;
+  }
+
+  .banner-content {
+    color: var(--sl-color-text);
+  }
+
+  :global(.banner-content a) {
+    color: var(--sl-color-text-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 600;
+  }
+
+  @keyframes fd-moving-banner {
+    from { background-position: 0% 0; }
+    to { background-position: 100% 0; }
+  }
+</style>

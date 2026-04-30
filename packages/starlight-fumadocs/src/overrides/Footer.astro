@@ -1,0 +1,50 @@
+---
+import type { Props as StarlightProps } from '@astrojs/starlight/props';
+import EditLink from 'virtual:starlight/components/EditLink';
+import LastUpdated from 'virtual:starlight/components/LastUpdated';
+import Pagination from 'virtual:starlight/components/Pagination';
+
+export interface Props extends StarlightProps {}
+
+---
+
+
+<footer class="fumadocs-footer">
+	<Pagination {...Astro.props} />
+	<div class="meta sl-flex">
+		<EditLink {...Astro.props} />
+		<LastUpdated {...Astro.props} />
+	</div>
+</footer>
+
+<style>
+	footer {
+		margin-top: 4rem;
+	}
+
+	.meta {
+		margin-top: 3rem;
+		border-top: 1px solid var(--sl-color-hairline);
+		padding-top: 1.5rem;
+		gap: 0.75rem 3rem;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		width: 100%;
+		font-size: 0.8125rem;
+		color: var(--sl-color-gray-3);
+	}
+
+	.meta > :global(p:only-child) {
+		margin-inline-start: auto;
+	}
+
+	.meta :global(a) {
+		color: var(--sl-color-gray-3);
+		text-decoration: none !important;
+		transition: color 0.2s ease;
+	}
+
+	.meta :global(a:hover) {
+		color: var(--sl-color-text);
+	}
+</style>

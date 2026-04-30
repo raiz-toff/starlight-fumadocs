@@ -1,0 +1,95 @@
+---
+export interface Props {
+  class?: string;
+}
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div class:list={["fumadocs-steps", className]} {...props}>
+  <slot />
+</div>
+
+<style>
+  .fumadocs-steps {
+    counter-reset: step;
+    position: relative;
+    padding-inline-start: 1.5rem;
+    margin-inline-start: 0.5rem;
+    border-inline-start: 1px solid var(--sl-color-hairline);
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .fumadocs-steps {
+      margin-inline-start: 1rem;
+      padding-inline-start: 1.75rem;
+    }
+  }
+
+  /* Support for headings as steps (common in FumaDocs) */
+  .fumadocs-steps :global(h3) {
+    counter-increment: step;
+    position: relative;
+  }
+
+  /* Support for list items as steps */
+  .fumadocs-steps :global(ol) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .fumadocs-steps :global(ol > li) {
+    counter-increment: step;
+    position: relative;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .fumadocs-steps :global(h3::before),
+  .fumadocs-steps :global(ol > li::before) {
+    content: counter(step);
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: var(--sl-color-bg-inline-code);
+    color: var(--sl-color-gray-1);
+    border: 1px solid var(--sl-color-hairline);
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    
+    inset-inline-start: -2.4rem;
+    top: -0.125rem;
+  }
+
+  @media (min-width: 640px) {
+    .fumadocs-steps :global(h3::before),
+    .fumadocs-steps :global(ol > li::before) {
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.875rem;
+      inset-inline-start: -2.75rem;
+      top: -0.25rem;
+    }
+  }
+
+  /* Specific adjustment for li which doesn't have the same line-height as h3 */
+  .fumadocs-steps :global(ol > li::before) {
+    top: 0;
+  }
+
+  /* Remove margin from first child of step to align with number */
+  .fumadocs-steps :global(h3),
+  .fumadocs-steps :global(ol > li > *:first-child) {
+    margin-top: 0 !important;
+  }
+</style>

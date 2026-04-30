@@ -1,0 +1,71 @@
+---
+import { Icon } from '@astrojs/starlight/components';
+
+export interface Props {
+  name: string;
+  defaultOpen?: boolean;
+}
+
+const { name, defaultOpen = false } = Astro.props;
+---
+
+<details class="fumadocs-folder" open={defaultOpen}>
+  <summary class="folder-trigger">
+    <Icon name="open-book" class="folder-icon" />
+    <span class="folder-name">{name}</span>
+  </summary>
+  <div class="folder-content">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .fumadocs-folder {
+    display: block;
+  }
+
+  .folder-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: var(--sl-color-text);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    transition: background-color 0.2s;
+  }
+
+  .folder-trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .folder-trigger:hover {
+    background-color: var(--sl-color-gray-7);
+  }
+
+  .folder-icon {
+    width: 1rem;
+    height: 1rem;
+    color: var(--sl-color-gray-3);
+    flex-shrink: 0;
+  }
+
+  .folder-name {
+    font-weight: 500;
+  }
+
+  .folder-content {
+    margin-inline-start: 1rem;
+    padding-inline-start: 0.5rem;
+    border-inline-start: 1px solid var(--sl-color-hairline);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fumadocs-folder[open] > .folder-trigger .folder-icon {
+    color: var(--sl-color-text-accent);
+  }
+</style>

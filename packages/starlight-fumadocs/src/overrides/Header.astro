@@ -1,10 +1,13 @@
 ---
-import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
+import MobileMenuToggle from 'virtual:starlight/components/MobileMenuToggle';
 import Search from 'virtual:starlight/components/Search';
 import SiteTitle from 'virtual:starlight/components/SiteTitle';
-import SocialIcons from 'virtual:starlight/components/SocialIcons';
-import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
-import { Icon } from '@astrojs/starlight/components';
+
+import type { Props as StarlightProps } from '@astrojs/starlight/props';
+
+export interface Props extends StarlightProps {}
+
+// (locale not needed in this override)
 ---
 
 <header class="header">
@@ -12,28 +15,29 @@ import { Icon } from '@astrojs/starlight/components';
 		<div class="title-wrapper sl-flex">
 			<SiteTitle {...Astro.props} />
 		</div>
-		<div class="sl-flex print:hidden search-wrapper">
-			<Search {...Astro.props} />
-		</div>
-		<div class="sl-hidden md:sl-flex print:hidden right-group">
-			<div class="sl-flex social-icons">
-				<SocialIcons {...Astro.props} />
+		<div class="sl-flex print:hidden right-group">
+			<div class="search-wrapper">
+				<Search {...Astro.props} />
 			</div>
-			<ThemeSelect {...Astro.props} />
-			<LanguageSelect {...Astro.props} />
+			<div class="hamburger-wrapper">
+				<MobileMenuToggle {...Astro.props} />
+			</div>
 		</div>
 	</div>
 </header>
 
 <style>
 	.header {
+		grid-area: header;
 		position: sticky;
-		top: 0;
-		z-index: var(--sl-z-index-navbar);
+		top: var(--fuma-banner-height, 0);
+		z-index: 50;
 		border-bottom: 1px solid var(--sl-color-hairline);
-		background-color: color-mix(in srgb, var(--sl-color-bg-nav), transparent 20%);
-		backdrop-filter: blur(8px);
-		height: var(--sl-nav-height);
+		background-color: hsla(var(--sl-color-bg-nav-base), 0.7);
+		backdrop-filter: blur(12px);
+		height: var(--fuma-header-height);
+		overflow: hidden; /* Collapse when height is 0 */
+		transition: height 0.3s ease;
 	}
 
 	.header-container {
@@ -42,37 +46,65 @@ import { Icon } from '@astrojs/starlight/components';
 		justify-content: space-between;
 		align-items: center;
 		height: 100%;
-		gap: var(--sl-nav-gap);
+		max-width: var(--fuma-layout-width);
+		margin: 0 auto;
 	}
 
 	.title-wrapper {
 		min-width: 0;
+		flex-shrink: 1;
 	}
 
-	.search-wrapper {
-		flex: 1;
-		display: flex;
-		justify-content: center;
-		max-width: 40rem;
-	}
-
-	.right-group,
-	.social-icons {
-		gap: 1rem;
+	.right-group {
+		gap: 0.5rem;
 		align-items: center;
+		flex-shrink: 0;
 	}
 
-	.social-icons::after {
-		content: '';
-		height: 1.5rem;
-		border-inline-end: 1px solid var(--sl-color-gray-5);
-		margin-inline-start: 0.5rem;
+	/* ── MOBILE MENU & SEARCH BUTTONS (SQUARE STYLE) ────────────────── */
+	.search-wrapper :global(button[data-open-modal]),
+	.hamburger-wrapper :global(starlight-menu-button button) {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		width: 32px !important;
+		height: 32px !important;
+		padding: 0 !important;
+		border: 1px solid var(--sl-color-hairline) !important;
+		border-radius: var(--fuma-radius, 8px) !important;
+		background-color: var(--sl-color-gray-6) !important;
+		color: var(--sl-color-text) !important;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		box-sizing: border-box !important;
+    margin: 0 !important;
 	}
 
-	@media (min-width: 50rem) {
-		.header-container {
-			display: grid;
-			grid-template-columns: auto 1fr auto;
+	.hamburger-wrapper :global(starlight-menu-button) {
+		display: contents !important; /* Neutralize the custom element wrapper */
+	}
+
+	.search-wrapper :global(button[data-open-modal]:hover),
+	.hamburger-wrapper :global(button:hover) {
+		background-color: var(--sl-color-gray-5) !important;
+		border-color: var(--sl-color-gray-4) !important;
+	}
+
+	.search-wrapper :global(button[data-open-modal] .sl-hidden),
+	.search-wrapper :global(button[data-open-modal] kbd) {
+		display: none !important;
+	}
+
+	.hamburger-wrapper {
+		display: flex;
+		align-items: center;
+		height: 100%;
+	}
+
+	/* Hide Header on Desktop and Tablet — FumaDocs shows header only at < 1024px */
+	@media (min-width: 1024px) {
+		.header {
+			display: none;
 		}
 	}
 </style>

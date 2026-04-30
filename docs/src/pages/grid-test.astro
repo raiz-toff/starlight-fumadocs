@@ -1,0 +1,76 @@
+---
+import '../styles/tailwind.css';
+import 'starlight-fumadocs/styles';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid Test | FumaDocs Layout</title>
+  </head>
+  <body class="bg-gray-100 text-gray-900 m-0 p-0 font-sans">
+    <div class="fumadocs-layout">
+      
+      <!-- Sidebar -->
+      <aside 
+        class="bg-blue-200 border-r border-blue-400" 
+        style="grid-area: sidebar; position: sticky; top: var(--fuma-docs-row-1); height: calc(var(--fuma-docs-height) - var(--fuma-docs-row-1));"
+      >
+        <div class="p-4 font-bold text-blue-800 hidden md:block">
+          Sidebar (md+)
+        </div>
+      </aside>
+
+      <!-- Header (Mobile Only) -->
+      <header 
+        class="bg-green-200 border-b border-green-400 flex items-center px-4"
+        style="grid-area: header; position: sticky; top: var(--fuma-docs-row-1); height: var(--fuma-header-height);"
+      >
+        <div class="font-bold text-green-800 md:hidden block w-full">
+          Header (max-md)
+        </div>
+      </header>
+
+      <!-- TOC Popover -->
+      <div 
+        class="bg-purple-200 border-b border-purple-400 flex items-center px-4 shadow-sm"
+        style="grid-area: toc-popover; position: sticky; top: var(--fuma-docs-row-2); height: var(--fuma-toc-popover-height); z-index: 10;"
+      >
+        <div class="font-bold text-purple-800 xl:hidden block w-full">
+          TOC Popover (max-xl)
+        </div>
+      </div>
+
+      <!-- TOC Rail -->
+      <aside 
+        class="bg-orange-200 border-l border-orange-400 hidden xl:block"
+        style="grid-area: toc; position: sticky; top: var(--fuma-docs-row-1); height: calc(var(--fuma-docs-height) - var(--fuma-docs-row-1));"
+      >
+        <div class="p-4 font-bold text-orange-800">
+          TOC Rail (xl+)
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="bg-white p-8 min-h-[150vh]" style="grid-area: main;">
+        <h1 class="text-3xl font-bold mb-4">Main Content Area</h1>
+        <p class="mb-4">
+          This simulates a long page. Scroll down to see the sticky behavior of the sidebars, header, and TOC popover.
+        </p>
+        <div class="space-y-4">
+          <div class="h-32 bg-gray-100 rounded-lg"></div>
+          <div class="h-32 bg-gray-100 rounded-lg"></div>
+          <div class="h-32 bg-gray-100 rounded-lg"></div>
+          <div class="h-32 bg-gray-100 rounded-lg"></div>
+          <div class="h-32 bg-gray-100 rounded-lg"></div>
+          <div class="h-32 bg-gray-100 rounded-lg"></div>
+          <div class="h-32 bg-gray-100 rounded-lg"></div>
+          <div class="h-32 bg-gray-100 rounded-lg"></div>
+        </div>
+      </main>
+
+    </div>
+  </body>
+</html>

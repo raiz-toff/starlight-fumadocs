@@ -1,0 +1,113 @@
+---
+import { Icon } from '@astrojs/starlight/components';
+
+const { dir, pagination } = Astro.locals.starlightRoute;
+const { prev, next } = pagination;
+const isRtl = dir === 'rtl';
+---
+
+<div class="pagination-links print:hidden" dir={dir}>
+	{
+		prev && (
+			<a href={prev.href} rel="prev" class="pagination-card prev">
+        <div class="pagination-label">
+          <Icon name={isRtl ? 'right-arrow' : 'left-arrow'} size="1rem" />
+          <span>{Astro.locals.t('page.previousLink')}</span>
+        </div>
+        <span class="link-title">{prev.label}</span>
+			</a>
+		)
+	}
+	{
+		next && (
+			<a href={next.href} rel="next" class="pagination-card next">
+        <div class="pagination-label">
+          <span>{Astro.locals.t('page.nextLink')}</span>
+          <Icon name={isRtl ? 'left-arrow' : 'right-arrow'} size="1rem" />
+        </div>
+        <span class="link-title">{next.label}</span>
+			</a>
+		)
+	}
+</div>
+
+<style>
+	.pagination-links {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+		gap: 1rem;
+		margin-top: 4rem;
+	}
+
+	.pagination-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 1.25rem;
+		border-radius: var(--fuma-radius, 8px);
+		border: 1px solid var(--sl-color-hairline);
+		background-color: var(--sl-color-gray-6); /* bg-fd-secondary */
+		text-decoration: none !important;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 100px;
+    justify-content: center;
+	}
+
+	.pagination-card:hover {
+		border-color: var(--sl-color-accent);
+		background-color: var(--sl-color-gray-7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+	}
+
+	.pagination-label {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--sl-color-gray-3);
+		transition: color 0.2s ease;
+	}
+
+  .next .pagination-label {
+    justify-content: flex-end;
+  }
+
+	.pagination-card:hover .pagination-label {
+		color: var(--sl-color-text);
+	}
+
+	.link-title {
+		color: var(--sl-color-text);
+		font-size: 1.125rem;
+		font-weight: 600;
+		line-height: 1.4;
+    transition: color 0.2s ease;
+	}
+
+  .pagination-card:hover .link-title {
+    color: var(--sl-color-text-accent);
+  }
+
+	.prev {
+		text-align: start;
+    align-items: flex-start;
+	}
+
+	.next {
+		text-align: end;
+    align-items: flex-end;
+	}
+
+  /* Animation for icons on hover */
+  .pagination-card:hover :global(svg) {
+    transform: translateX(var(--move-dist, 0));
+  }
+  .prev:hover :global(svg) { --move-dist: -4px; }
+  .next:hover :global(svg) { --move-dist: 4px; }
+
+  :global(svg) {
+    transition: transform 0.2s ease;
+  }
+</style>

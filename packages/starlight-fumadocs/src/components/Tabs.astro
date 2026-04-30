@@ -1,0 +1,78 @@
+---
+/**
+ * FumaDocs Tabs component wrapper.
+ * Styles Starlight's built-in Tabs to match FumaDocs.
+ */
+---
+
+<div class="fumadocs-tabs-wrapper">
+  <slot />
+</div>
+
+<style is:global>
+  .fumadocs-tabs-wrapper starlight-tabs {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--fuma-radius, 8px);
+    border: 1px solid var(--sl-color-hairline);
+    background-color: var(--sl-color-gray-6);
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .fumadocs-tabs-wrapper ul[role="tablist"] {
+    display: flex;
+    gap: 1rem;
+    padding-inline: 1rem;
+    margin: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--sl-color-hairline);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .fumadocs-tabs-wrapper ul[role="tablist"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fumadocs-tabs-wrapper ul[role="tablist"] li {
+    margin: 0;
+  }
+
+  .fumadocs-tabs-wrapper a[role="tab"] {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    color: var(--sl-color-gray-3);
+    border-bottom: 2px solid transparent;
+    padding-block: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    text-decoration: none !important;
+  }
+
+  .fumadocs-tabs-wrapper a[role="tab"]:hover {
+    color: var(--sl-color-text);
+  }
+
+  .fumadocs-tabs-wrapper a[role="tab"][aria-selected="true"] {
+    border-bottom-color: var(--sl-color-text-accent);
+    color: var(--sl-color-text-accent);
+  }
+
+  .fumadocs-tabs-wrapper section[role="tabpanel"] {
+    padding: 1rem;
+    background-color: var(--sl-color-bg);
+    outline: none;
+  }
+  
+  .fumadocs-tabs-wrapper section[role="tabpanel"] :global(> *:first-child) {
+    margin-top: 0;
+  }
+  
+  .fumadocs-tabs-wrapper section[role="tabpanel"] :global(> *:last-child) {
+    margin-bottom: 0;
+  }
+</style>

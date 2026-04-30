@@ -1,32 +1,29 @@
 ---
-title: Link Buttons
-pagefind: false
+title: Link Buttons & Splash
+description: Testing LinkButton and Splash components.
 ---
 
-import { LinkButton } from '@astrojs/starlight/components'
+import LinkButton from '../../../../../packages/starlight-fumadocs/src/components/LinkButton.astro';
+import Splash from '../../../../../packages/starlight-fumadocs/src/components/Splash.astro';
 
-## No icons
+<Splash>
+  # Starlight Fumadocs
+  
+  The power of Starlight with the beauty of FumaDocs.
+  
+  <div class="actions">
+    <LinkButton href="#">Get Started</LinkButton>
+    <LinkButton href="#" variant="secondary">GitHub</LinkButton>
+  </div>
+</Splash>
 
-Link buttons rendered with the [`<LinkButton>` component](https://starlight.astro.build/components/link-buttons/).
+## Button Variants
 
-<LinkButton href="#_">Primary</LinkButton>
-<LinkButton href="#_" variant="secondary">
-  Secondary
-</LinkButton>
-<LinkButton href="#_" variant="minimal">
-  Minimal
-</LinkButton>
+<LinkButton href="#">Primary Button</LinkButton>
+<LinkButton href="#" variant="secondary">Secondary Button</LinkButton>
+<LinkButton href="#" variant="minimal">Minimal Button</LinkButton>
 
-## With icons
+## Icons
 
-Link buttons rendered with the [`<LinkButton>` component](https://starlight.astro.build/components/link-buttons/) and [an icon](https://starlight.astro.build/components/link-buttons/#add-icons-to-link-buttons).
-
-<LinkButton href="#_" icon="rocket">
-  Primary
-</LinkButton>
-<LinkButton href="#_" variant="secondary" icon="external">
-  Secondary
-</LinkButton>
-<LinkButton href="#_" variant="minimal" icon="external">
-  Minimal
-</LinkButton>
+<LinkButton href="#" icon="rocket">Launch</LinkButton>
+<LinkButton href="#" variant="secondary" icon="external">GitHub</LinkButton>

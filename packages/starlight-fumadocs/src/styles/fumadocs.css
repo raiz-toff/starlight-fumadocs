@@ -18,6 +18,8 @@
 @layer fuma-theme {
   :root {
     --fuma-theme-enabled: true;
+    --fuma-radius: 8px;
+    --sl-border-radius: var(--fuma-radius);
 
     /* Backgrounds */
     --sl-color-bg: hsl(0, 0%, 98.5%); /* FumaDocs default is 96%, but we use a cleaner white */
@@ -71,6 +73,42 @@
     --sl-font-mono: "Geist Mono", "JetBrains Mono", var(--sl-font-system-mono);
     --sl-text-base: 16px;
     --sl-line-height: 1.625;
+
+    /* FumaDocs Layout Blueprint */
+    --fuma-docs-height: 100dvh;
+
+    /* Layout Widths */
+    --fuma-sidebar-width: 0px;
+    --fuma-toc-width: 0px;
+    --fuma-header-height: 0px;
+    --fuma-toc-popover-height: 0px;
+    --fuma-content-width: 1000px; /* Increased to utilize space more seamlessly */
+
+    /* Override Starlight's content width to match our grid-driven layout.
+       The grid track (middle column) IS the content constraint; within it,
+       --fuma-content-width provides a comfortable prose max-width. */
+    --sl-content-width: var(--fuma-content-width);
+    --sl-content-pad-x: 1.5rem;
+    --sl-main-pad: 0;
+
+    /* Row Offsets */
+    --fuma-docs-row-1: var(--fuma-banner-height, 0px);
+    --fuma-docs-row-2: calc(var(--fuma-docs-row-1) + var(--fuma-header-height));
+    --fuma-docs-row-3: calc(var(--fuma-docs-row-2) + var(--fuma-toc-popover-height));
+
+    /* Functional Colors (FumaDocs) */
+    --fuma-color-info: oklch(62.3% 0.214 259.815);
+    --fuma-color-warning: oklch(76.9% 0.188 70.08);
+    --fuma-color-error: oklch(63.7% 0.237 25.331);
+    --fuma-color-success: oklch(72.3% 0.219 149.579);
+    --fuma-color-idea: oklch(70.5% 0.209 60.849);
+  }
+
+  /* Collapsed state (Desktop Rail only) */
+  @media (min-width: 768px) {
+    .fumadocs-layout[data-sidebar-collapsed='true'] {
+      --fuma-sidebar-width: 64px !important;
+    }
   }
 
   :root[data-theme='dark'] {
@@ -122,6 +160,76 @@
     --ec-codeMarkText: inherit;
   }
 
+  /* Breakpoint Definitions
+   * Cutoffs per FumaDocs spec:
+   *   Header + TOC popover appear at ≤1024px
+   *   TOC rail disappears at ≤1024px
+   *   Sidebar drawer activates at ≤767px
+   */
+
+  /* Banner Control: Hide default Starlight placement, only show our top-level one */
+  .fumadocs-banner {
+    display: none;
+  }
+
+  .fuma-banner-wrapper .fumadocs-banner {
+    display: flex;
+  }
+
+  /* Mobile & Tablet (<1024px): sidebar drawer activations, header visible */
+  @media (max-width: 1023px) {
+    :root {
+      --fuma-header-height: 56px;
+      --fuma-toc-popover-height: 40px;
+      --fuma-content-width: 100%; /* Content fills its track on smaller viewports */
+      --sl-content-width: 100%;
+      --fuma-layout-width: 100%;
+      --fuma-sidebar-width: 0px;
+    }
+
+    .fumadocs-layout {
+      grid-template-columns: 0px 1fr 0px !important;
+    }
+  }
+
+  /* Desktop (≥1024px and <1280px): sidebar visible, no header, TOC popover active */
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    :root {
+      --fuma-sidebar-width: 268px;
+      --fuma-toc-popover-height: 40px;
+      --fuma-content-width: 100%; /* Fill the grid track at this breakpoint */
+      --sl-content-width: 100%;
+    }
+  }
+
+  /* Desktop (≥1280px): full layout, no header, TOC rail visible, TOC popover HIDDEN */
+  @media (min-width: 1280px) {
+    :root {
+      --fuma-sidebar-width: 268px;
+      --fuma-toc-width: 268px;
+      /* header-height and toc-popover-height stay at 0px */
+    }
+  }
+
+  /* Master Layout Grid */
+  .fumadocs-layout {
+    display: grid;
+    min-height: var(--fuma-docs-height, 100dvh);
+    background-color: var(--sl-color-bg);
+    overflow-x: clip;
+    grid-template-areas:
+      "banner  banner      banner"
+      "sidebar header      toc"
+      "sidebar toc-popover toc"
+      "sidebar main        toc";
+    grid-template-columns:
+      var(--fuma-sidebar-width, 0px)
+      minmax(0, 1fr)
+      var(--fuma-toc-width, 0px);
+    grid-template-rows: auto auto auto 1fr;
+    transition: grid-template-columns 0.2s ease;
+  }
+
   /* Global Prose Styles */
   .sl-markdown-content {
     h1 {
@@ -161,7 +269,7 @@
       margin-bottom: 1.25rem;
     }
 
-    a:not([data-card]) {
+    a:not([data-card]):not([role="tab"]) {
       color: var(--sl-color-text);
       font-weight: 500;
       text-decoration: underline;
@@ -189,7 +297,7 @@
       padding: 0.2rem 0.3rem;
       border: 1px solid var(--sl-color-hairline);
       font-size: 0.875em;
-      border-radius: 5px;
+      border-radius: var(--fuma-radius);
       font-weight: 400;
       background-color: var(--sl-color-bg-inline-code);
       color: var(--sl-color-text);
@@ -244,7 +352,7 @@
       border-collapse: separate;
       border-spacing: 0;
       background-color: var(--sl-color-bg-sidebar);
-      border-radius: 8px;
+      border-radius: var(--fuma-radius);
       border: 1px solid var(--sl-color-hairline);
       overflow: hidden;
       margin-top: 2rem;
@@ -283,7 +391,7 @@
       margin-top: 1.25rem;
       margin-bottom: 1.25rem;
       border: 1px solid var(--sl-color-hairline);
-      border-radius: 8px;
+      border-radius: var(--fuma-radius);
       overflow: hidden;
 
       summary {
@@ -384,7 +492,7 @@
       opacity: 0;
       transition: opacity 0.2s, background-color 0.2s;
       border: 1px solid var(--sl-color-hairline);
-      border-radius: 6px;
+      border-radius: var(--fuma-radius);
       background: var(--sl-color-bg-nav);
       padding: 0.25rem;
       width: 1.75rem;
@@ -416,6 +524,54 @@
       border-color: var(--ec-codeMarkBrd) !important;
     }
   }
-}
 
+
+
+
+  /* Override Starlight built-in Card components to match FumaDocs */
+  .card, .sl-link-card {
+    border-radius: var(--fuma-radius) !important;
+  }
+
+  /* ── D2 Diagram Styles ───────────────────────────────────
+     Responsive, centered diagrams with FumaDocs-like container. */
+  .astro-d2 {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background-color: var(--sl-color-bg-sidebar);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: var(--fuma-radius);
+    overflow: hidden;
+  }
+
+  .astro-d2 img, .astro-d2 svg {
+    border-radius: calc(var(--fuma-radius) / 2);
+  }
+
+  /* ── Image Styling ────────────────────────────────────── */
+  .sl-markdown-content :is(img, picture img) {
+    border-radius: var(--fuma-radius);
+    border: 1px solid var(--sl-color-hairline);
+    margin: 2rem auto;
+    display: block;
+  }
+
+  /* ── Starlight Image Zoom Tweaks ───────────────────────── */
+  .starlight-image-zoom-control {
+    background-color: var(--sl-color-bg-sidebar) !important;
+    border: 1px solid var(--sl-color-hairline) !important;
+    border-radius: var(--fuma-radius) !important;
+    color: var(--sl-color-gray-3) !important;
+    padding: 8px !important;
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .starlight-image-zoom-control:hover {
+    color: var(--sl-color-text) !important;
+    background-color: var(--sl-color-bg-nav) !important;
+  }
+}
 

@@ -1,0 +1,161 @@
+---
+title: "✨ Premium Features"
+description: A complete showcase of all the advanced interactive features built into the Starlight FumaDocs theme.
+---
+
+import PDF from 'starlight-fumadocs/components/PDF.astro';
+
+This page is a live showcase of every premium feature integrated into the **Starlight FumaDocs** theme. Use it as a reference or copy the snippets below into your own pages.
+
+---
+
+## Breadcrumb Navigation
+
+The breadcrumb trail at the top of every page is automatically generated from your sidebar hierarchy. Parent items are **clickable links** that navigate you to the first page in that section.
+
+No configuration needed — it works out of the box.
+
+---
+
+## Fullscreen Code Blocks
+
+Hover over the code block below. A **fullscreen toggle** icon appears next to the copy button (only on blocks longer than 8 lines). Click it to:
+
+- Read code in a distraction-free fullscreen overlay
+- Use **Zoom In / Zoom Out** buttons to adjust the font size
+- Press `Esc` or click outside to exit
+
+```typescript title="api/fetchUser.ts"
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user' | 'editor';
+  metadata: {
+    lastLogin: Date;
+    preferences: Record<string, unknown>;
+    sessions: { device: string; ip: string; createdAt: Date }[];
+  };
+}
+
+interface ApiResponse<T> {
+  data: T | null;
+  error: string | null;
+  status: number;
+}
+
+/**
+ * Fetches a single user record by ID.
+ * Includes full metadata and session history.
+ */
+export async function fetchUser(
+  id: string,
+  signal?: AbortSignal
+): Promise<ApiResponse<User>> {
+  try {
+    const response = await fetch(`/api/users/${id}`, { signal });
+    if (!response.ok) {
+      return { data: null, error: `HTTP ${response.status}`, status: response.status };
+    }
+    const data: User = await response.json();
+    return { data, error: null, status: 200 };
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      return { data: null, error: 'Request aborted', status: 0 };
+    }
+    return { data: null, error: String(err), status: 500 };
+  }
+}
+```
+
+---
+
+## D2 Diagrams
+
+Write architecture diagrams directly in your Markdown using D2 syntax. Diagrams automatically switch between **light and dark themes**.
+
+```d2
+direction: right
+
+User.shape: person
+
+User -> LoadBalancer: HTTPS
+LoadBalancer -> APIGateway: Route
+
+APIGateway -> AuthService: Verify token
+AuthService -> APIGateway: JWT Claims
+
+APIGateway -> AppServer: Authenticated request
+AppServer -> Database: SQL query
+Database -> AppServer: Result set
+AppServer -> Cache: Set TTL
+
+AppServer -> User: JSON response
+```
+
+### Usage
+
+````md
+```d2
+direction: right
+A -> B: Hello
+B -> C: World
+```
+````
+
+---
+
+## Image Zoom
+
+Click on the image below to open an accessible, **medium-zoom lightbox**. Press `Esc` or click the backdrop to close.
+
+![Modern Cloud Infrastructure Architecture Diagram](/images/cloud-architecture.png)
+
+Images are automatically enhanced with rounded corners and a subtle theme-aware border. Add `data-zoom-off` to any image you want to exclude:
+
+```md
+![No zoom on this one](/images/icon.png)
+<!-- data-zoom-off -->
+```
+
+---
+
+## Inline PDF Viewer
+
+Embed any PDF document directly into your documentation using the `<PDF />` component. It shows a title bar with a download button and renders the document in an `<iframe>`.
+
+```mdx
+import PDF from 'starlight-fumadocs/components/PDF.astro';
+
+<PDF
+  src="/docs/specification.pdf"
+  title="Project Specification v2.1"
+  height="600px"
+/>
+```
+
+**Live example** (using a public sample PDF):
+
+<PDF
+  src="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+  title="Sample W3C PDF Document"
+  height="480px"
+/>
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `src` | `string` | — | Path or URL to the PDF file |
+| `title` | `string` | `"PDF Document"` | Label shown in the header |
+| `height` | `string` | `"600px"` | CSS height of the viewer |
+
+---
+
+## Copy Markdown
+
+The **"Copy Markdown"** button in the page title area converts the entire current page's HTML back to clean Markdown and copies it to your clipboard — including properly fenced code blocks with language tags.
+
+This is powered by the **Turndown** library (loaded from CDN, no extra dependencies).

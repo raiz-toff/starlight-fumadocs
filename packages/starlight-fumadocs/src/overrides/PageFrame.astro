@@ -1,0 +1,90 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Banner from 'virtual:starlight/components/Banner';
+import CodeBlockFullscreen from '../components/CodeBlockFullscreen.astro';
+---
+
+
+<div class="page fumadocs-layout">
+  <div class="fuma-banner-wrapper">
+    <Banner {...Astro.props} />
+  </div>
+  <slot name="header" />
+  <slot name="sidebar" />
+
+  {/* main-frame wraps TwoColumnContent — we use display:contents so its
+      children (PageSidebar via right-sidebar slot, and <main>) can
+      participate as direct grid items of .fumadocs-layout. */}
+  <div class="main-frame">
+    <slot />
+  </div>
+  <CodeBlockFullscreen />
+</div>
+
+
+<style>
+  /* ── Main Frame ─────────────────────────────────────────
+     display:contents makes .main-frame invisible to the grid;
+     its children become direct grid items. TwoColumnContent adds
+     a wrapper div (.lg:sl-flex) that we also neutralize. */
+  .main-frame {
+    display: contents;
+  }
+
+  .fuma-banner-wrapper {
+    grid-area: banner;
+  }
+
+  /* ── Neutralize TwoColumnContent Wrappers ───────────────
+     TwoColumnContent renders: <div class="lg:sl-flex"> wrapping
+     .right-sidebar-container and .main-pane. We undo that flex
+     layout so our CSS Grid takes full control instead. */
+  :global(.fumadocs-layout .lg\:sl-flex) {
+    display: contents !important;
+  }
+
+  /* The right-sidebar-container from TwoColumnContent — neutralize
+     its fixed/absolute positioning so our PageSidebar override can
+     use grid-area and sticky positioning instead. */
+  :global(.fumadocs-layout .right-sidebar-container) {
+    display: contents !important;
+    position: static !important;
+    width: auto !important;
+  }
+
+  :global(.fumadocs-layout .right-sidebar) {
+    display: contents !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    border: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* ── Main Pane ──────────────────────────────────────────
+     This is the <div class="main-pane"> from TwoColumnContent
+     that wraps <main>. It becomes a direct grid participant and
+     fills the 'main' grid area seamlessly. */
+  :global(.fumadocs-layout .main-pane) {
+    grid-area: main;
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* The <main> element fills its parent naturally */
+  :global(.fumadocs-layout .main-pane main) {
+    width: 100%;
+  }
+
+  /* Content panels flow naturally — Starlight's ContentPanel uses
+     --sl-content-width (set in fumadocs.css) for .sl-container max-width.
+     We just ensure the content-panel itself fills the track. */
+  :global(.fumadocs-layout .content-panel) {
+    width: 100%;
+  }
+
+  :global(.fumadocs-layout .content-panel .sl-container) {
+    margin-inline: auto;
+  }
+</style>
