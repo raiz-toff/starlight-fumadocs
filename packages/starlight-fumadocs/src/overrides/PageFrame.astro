@@ -2,10 +2,12 @@
 import type { Props } from '@astrojs/starlight/props';
 import Banner from 'virtual:starlight/components/Banner';
 import CodeBlockFullscreen from '../components/CodeBlockFullscreen.astro';
+const { hasSidebar, toc, entry } = Astro.locals.starlightRoute;
+const hasHero = Boolean(entry.data.hero);
 ---
 
 
-<div class="page fumadocs-layout">
+<div class="page fumadocs-layout" data-has-sidebar={hasSidebar} data-has-toc={Boolean(toc)} data-has-hero={hasHero}>
   <div class="fuma-banner-wrapper">
     <Banner {...Astro.props} />
   </div>

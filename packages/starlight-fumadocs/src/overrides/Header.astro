@@ -101,9 +101,10 @@ export interface Props extends StarlightProps {}
 		height: 100%;
 	}
 
-	/* Hide Header on Desktop and Tablet — FumaDocs shows header only at < 1024px */
+	/* Hide Header on Desktop only when Sidebar Rail is present — 
+	   FumaDocs shows header on Hero/Splash pages without sidebars */
 	@media (min-width: 1024px) {
-		.header {
+		:global(.fumadocs-layout[data-has-sidebar="true"]) .header {
 			display: none;
 		}
 	}

@@ -83,6 +83,7 @@
     --fuma-header-height: 0px;
     --fuma-toc-popover-height: 0px;
     --fuma-content-width: 1000px; /* Increased to utilize space more seamlessly */
+    --fuma-layout-width: 1400px;
 
     /* Override Starlight's content width to match our grid-driven layout.
        The grid track (middle column) IS the content constraint; within it,
@@ -228,6 +229,16 @@
       var(--fuma-toc-width, 0px);
     grid-template-rows: auto auto auto 1fr;
     transition: grid-template-columns 0.2s ease;
+  }
+
+  /* Adjust grid columns when sidebar or TOC are disabled (e.g. splash pages) */
+  .fumadocs-layout[data-has-sidebar="false"] {
+    --fuma-sidebar-width: 0px !important;
+    --fuma-header-height: 64px;
+    --fuma-content-width: 1400px;
+  }
+  .fumadocs-layout[data-has-toc="false"] {
+    --fuma-toc-width: 0px !important;
   }
 
   /* Global Prose Styles */
@@ -691,6 +702,28 @@
     .right-sidebar a:focus-visible {
       border-radius: 4px;
       outline-offset: -2px;
+    }
+    /* ── Utility: Fuma Button ──────────────────────────── */
+    .fuma-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+      background-color: var(--sl-color-accent);
+      color: var(--sl-color-bg) !important;
+      border-radius: var(--fuma-radius);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none !important;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      margin: 1rem 0;
+    }
+    .fuma-button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .fuma-button:active {
+      transform: translateY(0);
     }
   }
 }

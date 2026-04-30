@@ -3,7 +3,7 @@ title: "✨ Premium Features"
 description: A complete showcase of all the advanced interactive features built into the Starlight FumaDocs theme.
 ---
 
-import PDF from 'starlight-fumadocs/components/PDF.astro';
+import PDF from "starlight-fumadocs/components/PDF.astro";
 
 This page is a live showcase of every premium feature integrated into the **Starlight FumaDocs** theme. Use it as a reference or copy the snippets below into your own pages.
 
@@ -26,13 +26,13 @@ Hover over the code block below. A **fullscreen toggle** icon appears next to th
 - Press `Esc` or click outside to exit
 
 ```typescript title="api/fetchUser.ts"
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'user' | 'editor';
+  role: "admin" | "user" | "editor";
   metadata: {
     lastLogin: Date;
     preferences: Record<string, unknown>;
@@ -52,18 +52,22 @@ interface ApiResponse<T> {
  */
 export async function fetchUser(
   id: string,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ): Promise<ApiResponse<User>> {
   try {
     const response = await fetch(`/api/users/${id}`, { signal });
     if (!response.ok) {
-      return { data: null, error: `HTTP ${response.status}`, status: response.status };
+      return {
+        data: null,
+        error: `HTTP ${response.status}`,
+        status: response.status,
+      };
     }
     const data: User = await response.json();
     return { data, error: null, status: 200 };
   } catch (err) {
-    if (err instanceof DOMException && err.name === 'AbortError') {
-      return { data: null, error: 'Request aborted', status: 0 };
+    if (err instanceof DOMException && err.name === "AbortError") {
+      return { data: null, error: "Request aborted", status: 0 };
     }
     return { data: null, error: String(err), status: 500 };
   }
@@ -111,12 +115,13 @@ B -> C: World
 
 Click on the image below to open an accessible, **medium-zoom lightbox**. Press `Esc` or click the backdrop to close.
 
-![Modern Cloud Infrastructure Architecture Diagram](/images/cloud-architecture.png)
+![A moon](/images/illustratedMoon.jpg)
 
 Images are automatically enhanced with rounded corners and a subtle theme-aware border. Add `data-zoom-off` to any image you want to exclude:
 
 ```md
 ![No zoom on this one](/images/icon.png)
+
 <!-- data-zoom-off -->
 ```
 
@@ -127,7 +132,7 @@ Images are automatically enhanced with rounded corners and a subtle theme-aware 
 Embed any PDF document directly into your documentation using the `<PDF />` component. It shows a title bar with a download button and renders the document in an `<iframe>`.
 
 ```mdx
-import PDF from 'starlight-fumadocs/components/PDF.astro';
+import PDF from "starlight-fumadocs/components/PDF.astro";
 
 <PDF
   src="/docs/specification.pdf"
@@ -146,11 +151,11 @@ import PDF from 'starlight-fumadocs/components/PDF.astro';
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `src` | `string` | — | Path or URL to the PDF file |
-| `title` | `string` | `"PDF Document"` | Label shown in the header |
-| `height` | `string` | `"600px"` | CSS height of the viewer |
+| Prop     | Type     | Default          | Description                 |
+| -------- | -------- | ---------------- | --------------------------- |
+| `src`    | `string` | —                | Path or URL to the PDF file |
+| `title`  | `string` | `"PDF Document"` | Label shown in the header   |
+| `height` | `string` | `"600px"`        | CSS height of the viewer    |
 
 ---
 

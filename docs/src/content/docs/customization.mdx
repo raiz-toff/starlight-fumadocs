@@ -1,0 +1,89 @@
+---
+title: Customization
+---
+
+`starlight-fumadocs` is designed to be highly configurable through CSS variables and design tokens. This allows you to fine-tune the "liquid" feel of the theme and match it to your brand.
+
+## Design Tokens
+
+The theme uses a centralized token system. The most important token is `--fuma-radius`, which controls the curvature of almost every component (sidebar buttons, search bar, callouts, etc.).
+
+```css
+/* src/styles/custom.css */
+:root {
+  /* Set a sharper look (e.g., 4px) or a rounder look (e.g., 12px) */
+  --fuma-radius: 8px;
+}
+```
+
+## Elastic Worm Glide (TOC)
+
+The Table of Contents features an asymmetric spring physics engine. You can customize the "lunge and contract" feel by overriding the internal constants used by the physics loop.
+
+### Visual Styling
+Adjust the color and visibility of the TOC rail and the active "snake" indicator:
+
+```css
+:root {
+  /* The vertical rail color */
+  --glide-track-color: var(--sl-color-gray-5);
+  
+  /* The active snake/dot color */
+  --glide-indicator-color: var(--sl-color-accent);
+}
+```
+
+## Sidebar Hierarchy Rails
+
+The sidebar uses a vertical connector system to show nested items. You can customize the track and the active highlight segment:
+
+```css
+/* Customize the sidebar vertical line */
+.sidebar-content ul ul {
+  border-inline-start-color: var(--sl-color-gray-5);
+}
+
+/* Customize the active page indicator bar */
+.sidebar-content a[aria-current="page"]::before {
+  background-color: var(--sl-color-accent);
+  width: 2px;
+}
+```
+
+## Layout Grid
+
+The theme uses a 5-column CSS grid. You can adjust the widths of the sidebars using the following tokens:
+
+```css
+:root {
+  --fuma-sidebar-width: 268px;
+  --fuma-toc-width: 240px;
+  --fuma-content-width: 1000px;
+}
+```
+
+## Cascade Layers
+
+To ensure your overrides work perfectly, `starlight-fumadocs` uses the `@layer fuma-theme` cascade layer. 
+
+Any custom CSS you write outside of a layer will automatically override the theme. If you use layers in your own project, ensure your overrides layer comes after `fuma-theme`:
+
+```css
+/* Define the order of precedence */
+@layer starlight, fuma-theme, my-overrides;
+
+@layer my-overrides {
+  /* Your custom styles here */
+}
+```
+
+## Accessibility
+
+The theme includes a unified focus ring system. You can customize the focus ring's color and thickness globally:
+
+```css
+:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+```

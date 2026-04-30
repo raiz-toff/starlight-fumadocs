@@ -1,0 +1,54 @@
+---
+title: Layout Grid
+description: A visual guide to the FumaDocs 5-column grid architecture.
+---
+
+import BrowserPreview from 'starlight-fumadocs/components/BrowserPreview.astro';
+
+The `starlight-fumadocs` theme is built on a high-performance **5-column CSS Grid**. This architecture ensures that the sidebars have edge-to-edge backgrounds while the content remains perfectly centered and readable.
+
+## Grid Map Visualization
+
+The diagram below visualizes the active grid areas on this page. Note how the **Main Content** is flanked by flexible padding tracks and dedicated navigation rails.
+
+<div class="not-prose" style="padding: 1.5rem; background: var(--sl-color-gray-6); border-radius: var(--fuma-radius); border: 1px dashed var(--sl-color-gray-4); margin: 2rem 0;">
+  <div style="display: grid; grid-template-columns: 0.5fr 1.5fr 3fr 1.5fr 0.5fr; gap: 0.75rem; height: 240px; text-align: center;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--fuma-radius); border: 1px solid var(--sl-color-hairline); background: var(--sl-color-bg); padding: 0.5rem; opacity: 0.6; border-style: dotted;">
+      <span style="font-size: 0.875rem; font-weight: 700; color: var(--sl-color-text); margin-bottom: 0.25rem;">LP</span>
+      <span style="font-size: 0.625rem; color: var(--sl-color-gray-3); font-family: var(--sl-font-mono);">1fr</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--fuma-radius); border: 1px solid var(--sl-color-accent-low); background: var(--sl-color-bg-sidebar); padding: 0.5rem;">
+      <span style="font-size: 0.875rem; font-weight: 700; color: var(--sl-color-text); margin-bottom: 0.25rem;">Sidebar</span>
+      <span style="font-size: 0.625rem; color: var(--sl-color-gray-3); font-family: var(--sl-font-mono);">268px</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--fuma-radius); border: 2px solid var(--sl-color-accent); background: var(--sl-color-accent-low); padding: 0.5rem;">
+      <span style="font-size: 0.875rem; font-weight: 700; color: var(--sl-color-text); margin-bottom: 0.25rem;">Main Content Area</span>
+      <span style="font-size: 0.625rem; color: var(--sl-color-gray-3); font-family: var(--sl-font-mono);">Max 1000px</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--fuma-radius); border: 1px solid var(--sl-color-accent-low); background: var(--sl-color-bg-sidebar); padding: 0.5rem;">
+      <span style="font-size: 0.875rem; font-weight: 700; color: var(--sl-color-text); margin-bottom: 0.25rem;">TOC</span>
+      <span style="font-size: 0.625rem; color: var(--sl-color-gray-3); font-family: var(--sl-font-mono);">240px</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--fuma-radius); border: 1px solid var(--sl-color-hairline); background: var(--sl-color-bg); padding: 0.5rem; opacity: 0.6; border-style: dotted;">
+      <span style="font-size: 0.875rem; font-weight: 700; color: var(--sl-color-text); margin-bottom: 0.25rem;">RP</span>
+      <span style="font-size: 0.625rem; color: var(--sl-color-gray-3); font-family: var(--sl-font-mono);">1fr</span>
+    </div>
+  </div>
+</div>
+import LinkButton from 'starlight-fumadocs/components/LinkButton.astro';
+
+<LinkButton href="/grid-test" icon="external">Open Live Grid Test</LinkButton>
+
+## How it Works
+
+The grid spans the full viewport width (`100vw`). By using `1fr` for the padding tracks (`LP` and `RP`), the content area naturally centers itself while the sidebars remain fixed in width.
+
+- **Responsive Scaling**: As you resize the window, the `1fr` tracks shrink first.
+- **Edge-to-Edge**: The `Sidebar` and `TOC` regions use their grid columns to anchor background colors that extend to the browser edges.
+- **TOC Sync**: The right-hand rail is where the **Worm Glide** indicator lives, perfectly aligned with the `right-sidebar` track.
+
+## Interactive Preview
+
+Toggle between different screen sizes using the device switcher in the preview bar below to see how the grid architecture adapts in real-time.
+
+<BrowserPreview url="/grid-test" height="600px" defaultMode="desktop" />

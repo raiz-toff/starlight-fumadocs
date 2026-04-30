@@ -55,7 +55,7 @@ export default defineConfig({
       social: [
         { href: 'https://github.com/raiz-toff/starlight-fumadocs', icon: 'github', label: 'GitHub' },
       ],
-      title: 'starlight-fumadocs',
+      title: 'Starlight-Fumadocs',
     }),
   ],
 })

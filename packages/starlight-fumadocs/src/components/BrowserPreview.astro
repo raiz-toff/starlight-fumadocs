@@ -1,0 +1,376 @@
+---
+interface Props {
+  url: string;
+  height?: string;
+  defaultMode?: "desktop" | "tablet" | "mobile";
+  title?: string;
+}
+
+const { url, height = "600px", defaultMode = "desktop", title } = Astro.props;
+---
+
+<browser-preview
+  data-mode={defaultMode}
+  class="not-prose"
+  style={`--preview-height: ${height};`}
+>
+  <header class="browser-header">
+    <div class="window-controls">
+      <div class="dots-group">
+        <span class="dot dot-close"></span>
+        <span class="dot dot-min"></span>
+        <span class="dot dot-exp"></span>
+      </div>
+    </div>
+
+    <div class="address-outer">
+      <div class="address-bar">
+        <svg viewBox="0 0 24 24" class="icon-lock" width="10" height="10" stroke="currentColor" fill="none" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span class="url-text">{title || url}</span>
+        <button class="btn-refresh" aria-label="Refresh Preview">
+          <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2.5"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="device-actions">
+      <div class="switcher-pill">
+        <div class="active-pill-bg"></div>
+        
+        <button class="mode-btn" data-target-mode="desktop" aria-label="Desktop">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><path d="M8 21h8m-4-4v4"></path></svg>
+        </button>
+        <button class="mode-btn" data-target-mode="tablet" aria-label="Tablet">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+        </button>
+        <button class="mode-btn" data-target-mode="mobile" aria-label="Mobile">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="browser-viewport">
+    <div class="iframe-scaler">
+      <div class="iframe-canvas">
+        <div class="canvas-inner">
+          <div class="iframe-loader">
+            <svg class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
+          </div>
+          <iframe src={url} class="preview-frame" loading="lazy" title="Theme Preview"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</browser-preview>
+
+<style>
+  browser-preview {
+    --radius: 14px;
+    --header-h: 52px;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --header-bg: rgba(255, 255, 255, 0.8);
+    --viewport-bg: #f8fafc;
+    --address-bg: rgba(0, 0, 0, 0.05);
+    --pill-bg: rgba(0, 0, 0, 0.04);
+    --active-pill: #fff;
+    --text-muted: rgba(0, 0, 0, 0.45);
+
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background: var(--sl-color-bg, #fff);
+    overflow: hidden;
+    margin: 3.5rem 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 12px 24px -10px rgba(0,0,0,0.1);
+  }
+
+  :global([data-theme="dark"]) browser-preview {
+    --border-color: rgba(255, 255, 255, 0.12);
+    --header-bg: rgba(15, 23, 42, 0.7);
+    --viewport-bg: #020617;
+    --address-bg: rgba(255, 255, 255, 0.06);
+    --pill-bg: rgba(255, 255, 255, 0.1);
+    --active-pill: #334155;
+    --text-muted: rgba(255, 255, 255, 0.45);
+  }
+
+  .browser-header {
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    background: var(--header-bg);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border-bottom: 1px solid var(--border-color);
+    gap: 1.5rem;
+    z-index: 20;
+  }
+
+  .window-controls { width: 60px; flex-shrink: 0; }
+  .dots-group { display: flex; gap: 8px; }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .dot-close { background: #ff5f57; }
+  .dot-min { background: #febc2e; }
+  .dot-exp { background: #28c840; }
+
+  .address-outer { flex: 1; display: flex; justify-content: center; overflow: hidden; }
+  .address-bar {
+    width: 100%;
+    max-width: 440px;
+    height: 32px;
+    background: var(--address-bg);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 0.75rem;
+    border: 1px solid var(--border-color);
+  }
+
+  .icon-lock { color: #10b981; opacity: 0.8; flex-shrink: 0; }
+  .url-text {
+    flex: 1;
+    font-size: 0.75rem;
+    color: var(--sl-color-text);
+    opacity: 0.6;
+    font-family: var(--sl-font-mono);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .btn-refresh {
+    all: unset;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    transition: 0.2s;
+  }
+  .btn-refresh:hover { color: var(--sl-color-text); background: rgba(0,0,0,0.05); }
+
+  /* HARD-LOCKED Segmented Switcher */
+  .device-actions { width: 120px; flex-shrink: 0; display: flex; justify-content: flex-end; }
+  .switcher-pill {
+    position: relative;
+    background: var(--pill-bg);
+    height: 34px; /* Locked Height */
+    width: 94px; /* Locked Width (3px + 28px + 2px + 28px + 2px + 28px + 3px) */
+    padding: 3px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    border: 1px solid var(--border-color);
+    box-sizing: border-box;
+  }
+
+  .active-pill-bg {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 28px;
+    height: 26px; /* Slightly shorter for vertical balance */
+    background: var(--active-pill);
+    border-radius: 7px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+  }
+
+  /* Pixel-Perfect Active Logic */
+  browser-preview[data-mode="desktop"] .active-pill-bg { transform: translate3d(0, 0, 0); }
+  browser-preview[data-mode="tablet"] .active-pill-bg { transform: translate3d(30px, 0, 0); }
+  browser-preview[data-mode="mobile"] .active-pill-bg { transform: translate3d(60px, 0, 0); }
+
+  .mode-btn {
+    all: unset; /* Complete Reset */
+    position: relative;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    border-radius: 7px;
+    color: var(--text-muted);
+    transition: color 0.2s, transform 0.1s;
+  }
+
+  .mode-btn:active { transform: scale(0.92); }
+  .mode-btn:hover { color: var(--sl-color-text); }
+
+  browser-preview[data-mode="desktop"] .mode-btn[data-target-mode="desktop"],
+  browser-preview[data-mode="tablet"] .mode-btn[data-target-mode="tablet"],
+  browser-preview[data-mode="mobile"] .mode-btn[data-target-mode="mobile"] {
+    color: var(--sl-color-accent);
+  }
+
+  .browser-viewport {
+    background: var(--viewport-bg);
+    height: var(--preview-height);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+
+  .iframe-scaler {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+  }
+
+  .iframe-canvas {
+    position: relative;
+    height: 100%;
+    transform-origin: center center;
+    will-change: transform;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .canvas-inner {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 0 1px var(--border-color), 0 20px 40px -10px rgba(0,0,0,0.2);
+  }
+
+  .iframe-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    color: var(--sl-color-accent);
+    z-index: 1;
+    transition: opacity 0.4s ease;
+  }
+
+  .spinner { width: 24px; height: 24px; animation: spin 1s linear infinite; }
+  .preview-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .preview-frame.loaded { opacity: 1; }
+  .preview-frame.loaded + .iframe-loader { opacity: 0; pointer-events: none; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  browser-preview[data-mode="desktop"] .iframe-canvas { width: 1200px; }
+  browser-preview[data-mode="tablet"] .iframe-canvas { width: 800px; }
+  browser-preview[data-mode="mobile"] .iframe-canvas { width: 375px; }
+</style>
+
+<script>
+  class BrowserPreview extends HTMLElement {
+    private scaler: HTMLElement | null;
+    private canvas: HTMLElement | null;
+    private iframe: HTMLIFrameElement | null;
+    private resizeObserver: ResizeObserver | null = null;
+    private rafId: number | null = null;
+
+    constructor() {
+      super();
+      this.scaler = this.querySelector(".iframe-scaler");
+      this.canvas = this.querySelector(".iframe-canvas");
+      this.iframe = this.querySelector("iframe");
+    }
+
+    connectedCallback() {
+      this.setupEventListeners();
+      this.setupResizeObserver();
+      this.handleIframeLoad();
+    }
+
+    disconnectedCallback() {
+      if (this.resizeObserver && this.scaler) {
+        this.resizeObserver.unobserve(this.scaler);
+      }
+      if (this.rafId) cancelAnimationFrame(this.rafId);
+    }
+
+    private setupEventListeners() {
+      this.querySelectorAll(".mode-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const mode = btn.getAttribute("data-target-mode");
+          if (mode) this.setAttribute("data-mode", mode);
+          this.calculateScale();
+        });
+      });
+
+      this.querySelector(".btn-refresh")?.addEventListener("click", () => {
+        if (this.iframe) {
+          this.iframe.classList.remove("loaded");
+          const src = this.iframe.src;
+          this.iframe.src = "";
+          this.iframe.src = src;
+        }
+      });
+    }
+
+    private handleIframeLoad() {
+      if (!this.iframe) return;
+      
+      this.iframe.addEventListener("load", () => {
+        this.iframe?.classList.add("loaded");
+      });
+
+      // Check if already loaded (same-origin only)
+      try {
+        if (this.iframe.contentDocument?.readyState === "complete") {
+          this.iframe.classList.add("loaded");
+        }
+      } catch (e) {
+        // Ignore cross-origin security errors
+      }
+    }
+
+    private setupResizeObserver() {
+      if (!this.scaler) return;
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.rafId) cancelAnimationFrame(this.rafId);
+        this.rafId = requestAnimationFrame(() => this.calculateScale());
+      });
+      this.resizeObserver.observe(this.scaler);
+    }
+
+    private calculateScale() {
+      if (!this.scaler || !this.canvas) return;
+      const mode = this.getAttribute("data-mode") || "desktop";
+      const availableWidth = this.scaler.offsetWidth - 96; 
+      let targetWidth = 1200;
+      if (mode === "tablet") targetWidth = 800;
+      if (mode === "mobile") targetWidth = 375;
+      let scale = Math.min(availableWidth / targetWidth, 1);
+      this.canvas.style.transform = `scale(${scale})`;
+    }
+  }
+
+  if (!customElements.get("browser-preview")) {
+    customElements.define("browser-preview", BrowserPreview);
+  }
+</script>
