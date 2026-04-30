@@ -14,13 +14,23 @@ const { toc } = Astro.locals.starlightRoute;
 		<nav aria-labelledby="starlight__on-this-page--mobile">
 			<details id="starlight__mobile-toc">
 				<summary id="starlight__on-this-page--mobile" class="sl-flex">
-					<span class="toggle sl-flex">
+					<div class="toc-progress-circle">
+						<svg width="20" height="20" viewBox="0 0 20 20">
+							<circle cx="10" cy="10" r="8.5" stroke="var(--sl-color-gray-4)" stroke-width="2" fill="none" opacity="0.5"></circle>
+							<circle class="progress-ring" cx="10" cy="10" r="8.5" stroke="var(--sl-color-accent)" stroke-width="2" fill="none" stroke-dasharray="53.4" stroke-dashoffset="53.4" stroke-linecap="round"></circle>
+						</svg>
+					</div>
+					<span class="display-current">
 						{Astro.locals.t('tableOfContents.onThisPage')}
-						<Icon name={'right-caret'} class="caret" size="1rem" />
 					</span>
-					<span class="display-current" />
+					<Icon name={'right-caret'} class="caret" size="1.25rem" />
 				</summary>
 				<div class="dropdown">
+					<svg class="toc-svg-track" aria-hidden="true">
+						<path class="toc-path-track"></path>
+						<path class="toc-path-snake"></path>
+						<circle class="toc-dot" r="3"></circle>
+					</svg>
 					<TableOfContentsList toc={toc.items} isMobile />
 				</div>
 			</details>
@@ -64,7 +74,7 @@ const { toc } = Astro.locals.starlightRoute;
 	summary {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.75rem;
 		width: 100%;
 		height: 100%;
 		padding: 0 1rem;
@@ -79,18 +89,24 @@ const { toc } = Astro.locals.starlightRoute;
 		display: none;
 	}
 
-	.toggle {
-		flex-shrink: 0;
-		gap: 0.5rem;
+	.toc-progress-circle {
+		display: flex;
 		align-items: center;
-		font-weight: 500;
-		color: var(--sl-color-text);
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.progress-ring {
+		transition: stroke-dashoffset 0.1s linear;
+		transform: rotate(-90deg);
+		transform-origin: 50% 50%;
 	}
 
 	.caret {
 		color: var(--sl-color-gray-3);
 		transition: transform 0.2s ease;
 		flex-shrink: 0;
+		margin-inline-start: auto;
 	}
 
 	details[open] .caret {
@@ -102,21 +118,23 @@ const { toc } = Astro.locals.starlightRoute;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		overflow: hidden;
-		color: var(--sl-color-gray-3);
+		color: var(--sl-color-text);
 		font-size: 0.8125rem;
+		font-weight: 500;
 	}
 
 	.dropdown {
 		position: absolute;
 		inset-inline: 0;
 		top: 100%;
-		background-color: var(--sl-color-bg);
+		background-color: color-mix(in srgb, var(--sl-color-bg-nav) 75%, transparent);
+		backdrop-filter: blur(16px) saturate(180%);
+		-webkit-backdrop-filter: blur(16px) saturate(180%);
 		border: 1px solid var(--sl-color-hairline);
 		border-top: none;
 		max-height: calc(85vh - var(--fuma-docs-row-2, 0px) - var(--fuma-toc-popover-height, 40px));
 		overflow-y: auto;
 		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-		overscroll-behavior: contain;
 		z-index: 31;
 	}
 
@@ -132,11 +150,12 @@ const { toc } = Astro.locals.starlightRoute;
 
 	.dropdown :global(a) {
 		display: block;
-		padding: 0.4rem 1.25rem;
+		padding: 0.4rem 1.25rem 0.4rem 1.75rem;
 		font-size: 0.8125rem;
 		color: var(--sl-color-gray-2);
 		text-decoration: none;
 		transition: color 0.15s ease, background-color 0.15s ease;
+		position: relative;
 	}
 
 	.dropdown :global(a:hover) {
@@ -150,23 +169,77 @@ const { toc } = Astro.locals.starlightRoute;
 	}
 
 	.dropdown :global(ul ul a) {
-		padding-inline-start: 2rem;
+		padding-inline-start: 2.75rem;
 		color: var(--sl-color-gray-3);
 	}
 
 	.dropdown :global(ul ul ul a) {
-		padding-inline-start: 2.75rem;
+		padding-inline-start: 3.5rem;
+	}
+
+	/* ── Mobile Glide Track ────────────────────────────── */
+	.toc-svg-track {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 60px;
+		height: 100%;
+		pointer-events: none;
+		overflow: visible;
+	}
+
+	.toc-path-track {
+		fill: none;
+		stroke: var(--sl-color-gray-4);
+		stroke-width: 1.25;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		opacity: 0.45;
+	}
+
+	.toc-path-snake {
+		fill: none;
+		stroke: var(--sl-color-accent);
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.toc-dot {
+		fill: var(--sl-color-accent);
+		pointer-events: none;
 	}
 </style>
 
 <script>
 	const PAGE_TITLE_ID = '_top';
 
-	// We copy the base logic for highlighting current heading
 	class StarlightTOC extends HTMLElement {
+		protected isAtBottom = false;
 		protected _current = this.querySelector<HTMLAnchorElement>('a[aria-current="true"]');
 		private minH = parseInt(this.dataset.minH || '2', 10);
 		private maxH = parseInt(this.dataset.maxH || '3', 10);
+
+		protected tocLinks: HTMLAnchorElement[] = [];
+		protected activeIndex = -1;
+		protected points: Array<{ x: number, y: number, h: number, hidden?: boolean }> = [];
+		protected depthOffsets = [12, 12, 12];
+		
+		protected svg: SVGSVGElement | null = null;
+		protected trackPath: SVGPathElement | null = null;
+		protected snakePath: SVGPathElement | null = null;
+		protected dot: SVGCircleElement | null = null;
+
+		protected currentStart = 0;
+		protected currentEnd = 0;
+		protected targetStart = 0;
+		protected targetEnd = 0;
+		protected physicsRaf: number | null = null;
+		protected scrollDirection = 0;
+
+		private readonly HEAD_K = 0.22;
+		private readonly TAIL_K = 0.05;
+		private readonly IDLE_K = 0.14;
 
 		private tocHeadingSelector =
 			`h1#${PAGE_TITLE_ID},` +
@@ -177,6 +250,12 @@ const { toc } = Astro.locals.starlightRoute;
 			if (this._current) this._current.removeAttribute('aria-current');
 			link.setAttribute('aria-current', 'true');
 			this._current = link;
+
+			const index = this.tocLinks.indexOf(link);
+			if (index !== -1) {
+				this.activeIndex = index;
+				this.repositionSnake(index, true);
+			}
 		}
 
 		private onIdle = (cb: IdleRequestCallback) =>
@@ -188,7 +267,11 @@ const { toc } = Astro.locals.starlightRoute;
 		}
 
 		private init = (): void => {
-			const links = [...this.querySelectorAll('a')];
+			this.tocLinks = [...this.querySelectorAll('a')];
+			if (this.tocLinks.length === 0) return;
+
+			this.initGlide();
+
 			const isHeading = (el: Element): el is HTMLHeadingElement => el.matches(this.tocHeadingSelector);
 
 			const getElementHeading = (el: Element | null): HTMLHeadingElement | null => {
@@ -216,7 +299,7 @@ const { toc } = Astro.locals.starlightRoute;
 					if (!isIntersecting) continue;
 					const heading = getElementHeading(target);
 					if (!heading) continue;
-					const link = links.find((link) => link.hash === '#' + encodeURIComponent(heading.id));
+					const link = this.tocLinks.find((link) => link.hash === '#' + encodeURIComponent(heading.id));
 					if (link) {
 						this.current = link;
 						break;
@@ -241,6 +324,135 @@ const { toc } = Astro.locals.starlightRoute;
 			};
 			observe();
 		};
+
+		protected initGlide() {
+			this.svg = this.querySelector('.toc-svg-track');
+			if (!this.svg) return;
+			this.trackPath = this.svg.querySelector('.toc-path-track');
+			this.snakePath = this.svg.querySelector('.toc-path-snake');
+			this.dot = this.svg.querySelector('.toc-dot');
+
+			// Initial redraw
+			requestAnimationFrame(() => this.redraw());
+		}
+
+		protected buildPoints() {
+			const container = this.querySelector('.dropdown') || this;
+			const rect = container.getBoundingClientRect();
+			return this.tocLinks.map(link => {
+				const r = link.getBoundingClientRect();
+				const depth = this.getLinkDepth(link);
+				const x = this.depthOffsets[depth] ?? 12;
+				if (!r.height || r.width === 0) return { x, y: 0, h: 0, hidden: true };
+				return {
+					x,
+					y: r.top - rect.top + r.height / 2 + container.scrollTop,
+					h: r.height
+				};
+			});
+		}
+
+		protected getLinkDepth(link: HTMLAnchorElement) {
+			let depth = 0, el = link.parentElement;
+			while (el && el !== this) {
+				if (el.tagName === 'UL') depth++;
+				el = el.parentElement;
+			}
+			return Math.min(depth, this.depthOffsets.length - 1);
+		}
+
+		protected redraw() {
+			if (!this.trackPath || !this.snakePath) return;
+			this.points = this.buildPoints();
+			const d = this.pointsToPath(this.points);
+			if (!d) return;
+			this.trackPath.setAttribute('d', d);
+			this.snakePath.setAttribute('d', d);
+			if (this.dot) this.dot.style.offsetPath = `path("${d}")`;
+			if (this.activeIndex !== -1) this.repositionSnake(this.activeIndex, false);
+		}
+
+		protected pointsToPath(pts: any[]) {
+			const valid = pts.filter(p => !p.hidden);
+			if (valid.length < 2) return '';
+			const first = valid[0];
+			let d = `M ${first.x} ${first.y}`;
+
+			for (let i = 1; i < valid.length; i++) {
+				const p1 = valid[i];
+				d += ` L ${p1.x} ${p1.y}`;
+			}
+			return d;
+		}
+
+		protected repositionSnake(index: number, animate = true) {
+			if (!this.trackPath) return;
+			const pt = this.points[index];
+			if (!pt || pt.hidden) return;
+			const total = this.trackPath.getTotalLength();
+			const centerLen = this.getPathLengthAtPoint(this.trackPath, pt.x, pt.y);
+			const halfH = pt.h / 2 + 4;
+			this.targetStart = Math.max(0, centerLen - halfH);
+			this.targetEnd = Math.min(total, centerLen + halfH);
+			if (!animate) {
+				this.currentStart = this.targetStart;
+				this.currentEnd = this.targetEnd;
+				this.updateSnakePath();
+			} else if (!this.physicsRaf) {
+				this.physicsRaf = requestAnimationFrame(this.physicsLoop);
+			}
+		}
+
+		protected physicsLoop = () => {
+			let startK, endK;
+			if (this.scrollDirection > 0) { startK = this.TAIL_K; endK = this.HEAD_K; }
+			else if (this.scrollDirection < 0) { startK = this.HEAD_K; endK = this.TAIL_K; }
+			else { startK = endK = this.IDLE_K; }
+
+			this.currentStart += (this.targetStart - this.currentStart) * startK;
+			this.currentEnd += (this.targetEnd - this.currentEnd) * endK;
+
+			const MIN_LEN = 8;
+			const len = this.currentEnd - this.currentStart;
+			if (len < MIN_LEN) {
+				const mid = (this.currentStart + this.currentEnd) / 2;
+				this.currentStart = mid - MIN_LEN / 2;
+				this.currentEnd = mid + MIN_LEN / 2;
+			}
+
+			this.updateSnakePath();
+			const diff = Math.abs(this.currentStart - this.targetStart) + Math.abs(this.currentEnd - this.targetEnd);
+			if (diff > 0.05) this.physicsRaf = requestAnimationFrame(this.physicsLoop);
+			else {
+				this.currentStart = this.targetStart; this.currentEnd = this.targetEnd;
+				this.updateSnakePath(); this.physicsRaf = null; this.scrollDirection = 0;
+			}
+		}
+
+		protected updateSnakePath() {
+			if (!this.snakePath || !this.trackPath) return;
+			const total = this.trackPath.getTotalLength();
+			const segLen = Math.max(2, this.currentEnd - this.currentStart);
+			this.snakePath.setAttribute('stroke-dasharray', `${segLen} ${total}`);
+			this.snakePath.setAttribute('stroke-dashoffset', `${-this.currentStart}`);
+			if (this.dot) {
+				const center = (this.currentStart + this.currentEnd) / 2;
+				this.dot.style.offsetDistance = `${(center / total) * 100}%`;
+			}
+		}
+
+		protected getPathLengthAtPoint(pathEl: SVGPathElement, tx: number, ty: number) {
+			const total = pathEl.getTotalLength();
+			let lo = 0, hi = total;
+			for (let i = 0; i < 10; i++) {
+				const mid = (lo + hi) / 2;
+				const ptLo = pathEl.getPointAtLength(lo + (mid - lo) / 2);
+				const ptHi = pathEl.getPointAtLength(mid + (hi - mid) / 2);
+				if (Math.hypot(ptLo.x - tx, ptLo.y - ty) < Math.hypot(ptHi.x - tx, ptHi.y - ty)) hi = mid;
+				else lo = mid;
+			}
+			return (lo + hi) / 2;
+		}
 
 		private getRootMargin(): `-${number}px 0% ${number}px` {
 			const navBarHeight = document.querySelector('header')?.getBoundingClientRect().height || 0;
@@ -278,6 +490,57 @@ const { toc } = Astro.locals.starlightRoute;
 					(details.querySelector('summary') as HTMLElement)?.focus();
 				}
 			});
+
+			// Progress ring logic
+			const ring = this.querySelector('.progress-ring') as SVGCircleElement;
+
+			const updateProgress = () => {
+				const scrollY = window.scrollY;
+				const delta = scrollY - (this as any).lastScrollY;
+				(this as any).lastScrollY = scrollY;
+
+				const scrollPct = scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+				if (ring) {
+					const offset = 53.4 - (Math.max(0, Math.min(1, scrollPct)) * 53.4);
+					ring.style.strokeDashoffset = offset.toString();
+				}
+
+				// Apply scroll impulse to mobile glide
+				if (delta !== 0 && this.activeIndex !== -1) {
+					this.scrollDirection = delta > 0 ? 1 : -1;
+					const impulse = Math.min(Math.abs(delta) * 0.7, 28);
+					if (this.scrollDirection === 1) {
+						this.currentEnd = Math.min(this.currentEnd + impulse, this.targetEnd + 28);
+					} else {
+						this.currentStart = Math.max(this.currentStart - impulse, this.targetStart - 28);
+					}
+					if (!this.physicsRaf) this.physicsRaf = requestAnimationFrame(this.physicsLoop);
+				}
+
+				// ─── Edge Clipping (Bottom of Page) ───────────────────────────
+				const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50;
+				if (atBottom && !this.isAtBottom) {
+					this.isAtBottom = true;
+					const lastIndex = this.tocLinks.length - 1;
+					if (this.tocLinks[lastIndex]) {
+						this.activeIndex = lastIndex;
+						this.repositionSnake(lastIndex, true);
+					}
+				} else if (!atBottom && this.isAtBottom) {
+					this.isAtBottom = false;
+					if (this._current) {
+						const index = this.tocLinks.indexOf(this._current);
+						if (index !== -1) {
+							this.activeIndex = index;
+							this.repositionSnake(index, true);
+						}
+					}
+				}
+			};
+
+			(this as any).lastScrollY = window.scrollY;
+			window.addEventListener('scroll', updateProgress, { passive: true });
+			updateProgress();
 		}
 	}
 

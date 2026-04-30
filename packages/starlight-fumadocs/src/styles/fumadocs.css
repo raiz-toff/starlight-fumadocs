@@ -573,5 +573,125 @@
     color: var(--sl-color-text) !important;
     background-color: var(--sl-color-bg-nav) !important;
   }
+
+  /* ── Glide TOC Styles (Infused) ───────────────────────── */
+  :root {
+    --glide-indicator-color: var(--sl-color-accent);
+    --glide-track-color: var(--sl-color-gray-4);
+  }
+
+  .right-sidebar nav,
+  starlight-toc nav {
+    position: relative;
+  }
+
+  @media (min-width: 1280px) {
+    starlight-toc nav ul,
+    starlight-toc nav ul li {
+      border: none !important;
+      list-style: none !important;
+      padding-inline-start: 0 !important;
+      margin: 0 !important;
+      position: relative;
+    }
+
+    starlight-toc nav ul::before {
+      display: none !important;
+    }
+
+    /* Hide the default Starlight TOC header — each preset injects its own or we use the default */
+    starlight-toc nav h2:not(.desktop-toc-header) {
+      display: none;
+    }
+
+    .desktop-toc-header {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--sl-color-gray-3);
+      margin: 0 0 0.75rem;
+      padding-inline-start: 0;
+    }
+
+    starlight-toc nav a {
+      display: block;
+      text-decoration: none;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      color: var(--sl-color-gray-3);
+      border-inline-start: none !important;
+      transition: color 0.15s ease;
+      padding: 0.25rem 0.875rem;
+      padding-inline-start: 1.5rem !important;
+    }
+
+    starlight-toc nav ul ul a { padding-inline-start: 2.25rem !important; }
+    starlight-toc nav ul ul ul a { padding-inline-start: 3rem !important; }
+
+    starlight-toc nav a:hover {
+      color: var(--sl-color-text);
+    }
+
+    starlight-toc nav a[aria-current="true"] {
+      color: var(--sl-color-text) !important;
+      font-weight: 500 !important;
+    }
+
+    /* SVG Glide Track */
+    .toc-svg-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 60px;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+      will-change: contents;
+    }
+
+    .toc-path-track {
+      fill: none;
+      stroke: var(--glide-track-color);
+      stroke-width: 1.25;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.75;
+    }
+
+    .toc-path-snake {
+      fill: none;
+      stroke: var(--glide-indicator-color);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .toc-dot {
+      fill: var(--glide-indicator-color);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), offset-distance 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    /* ── Accessibility & Focus Rings ──────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--sl-color-accent);
+      outline-offset: 2px;
+    }
+
+    /* Round elements like the theme toggle or collapse button */
+    button:focus-visible,
+    .fuma-close-btn:focus-visible,
+    .collapse-toggle:focus-visible {
+      border-radius: var(--fuma-radius);
+    }
+
+    /* Sidebar and TOC links should have a tighter focus ring */
+    .sidebar-content a:focus-visible,
+    .right-sidebar a:focus-visible {
+      border-radius: 4px;
+      outline-offset: -2px;
+    }
+  }
 }
 

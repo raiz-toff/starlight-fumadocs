@@ -313,7 +313,7 @@ const { sidebar } = Astro.locals.starlightRoute;
     pointer-events: none;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     .sidebar-overlay {
       display: block;
     }
@@ -404,9 +404,33 @@ const { sidebar } = Astro.locals.starlightRoute;
     color: var(--sl-color-text);
   }
   :global(.sidebar-content a[aria-current="page"]) {
-    background: var(--sl-color-gray-6);
-    color: var(--sl-color-text);
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-accent-high);
     font-weight: 500;
+  }
+
+  /* ── Sidebar Hierarchy Connectors ─────────────────── */
+  :global(.sidebar-content ul ul) {
+    margin-inline-start: 0.75rem;
+    padding-inline-start: 0.5rem;
+    border-inline-start: 1px solid var(--sl-color-gray-5);
+  }
+
+  :global(.sidebar-content li) {
+    position: relative;
+  }
+
+  /* Active Indicator Segment */
+  :global(.sidebar-content a[aria-current="page"]::before) {
+    content: "";
+    position: absolute;
+    left: -0.55rem; /* Aligns with the border-inline-start of the parent ul */
+    top: 0.4rem;
+    bottom: 0.4rem;
+    width: 2px;
+    background-color: var(--sl-color-accent);
+    border-radius: 1px;
+    z-index: 1;
   }
   :global(.sidebar-content summary) {
     display: flex;
@@ -422,62 +446,61 @@ const { sidebar } = Astro.locals.starlightRoute;
 </style>
 
 <script>
-  // Mobile drawer close logic
-  const overlay = document.getElementById("sidebar-overlay");
-  const closeBtn = document.getElementById("fuma-mobile-close");
-  const close = () => {
-    // Corrected selector: Starlight tracks the expanded state on the <starlight-menu-button> custom element itself.
-    const menuButtonEl = document.querySelector(
-      'starlight-menu-button[aria-expanded="true"]',
-    );
-    if (menuButtonEl) {
-      const btn = menuButtonEl.querySelector("button");
-      if (btn) {
-        // Clicking the internal button triggers Starlight's logic to close the menu and reset the icon.
-        btn.click();
-        return;
+  const initSidebar = () => {
+    // Mobile drawer close logic
+    const overlay = document.getElementById("sidebar-overlay");
+    const closeBtn = document.getElementById("fuma-mobile-close");
+    const close = () => {
+      const menuButtonEl = document.querySelector(
+        'starlight-menu-button[aria-expanded="true"]',
+      );
+      if (menuButtonEl) {
+        const btn = menuButtonEl.querySelector("button");
+        if (btn) {
+          btn.click();
+          return;
+        }
       }
+      document.body.removeAttribute("data-mobile-menu-expanded");
+    };
+
+    overlay?.addEventListener("click", close);
+    closeBtn?.addEventListener("click", close);
+
+    // Desktop collapse logic
+    const layout = document.querySelector(".fumadocs-layout");
+    const toggle = document.getElementById("sidebar-collapse-toggle");
+    const STORAGE_KEY = "fuma-sidebar-collapsed";
+
+    if (layout && toggle) {
+      const isDesktop = () => window.innerWidth >= 768;
+
+      if (isDesktop() && localStorage.getItem(STORAGE_KEY) === "true") {
+        layout.setAttribute("data-sidebar-collapsed", "true");
+      }
+
+      toggle.addEventListener("click", () => {
+        const isCollapsed =
+          layout.getAttribute("data-sidebar-collapsed") === "true";
+        layout.setAttribute("data-sidebar-collapsed", String(!isCollapsed));
+        localStorage.setItem(STORAGE_KEY, String(!isCollapsed));
+      });
+
+      const mql = window.matchMedia("(min-width: 768px)");
+      mql.addEventListener("change", (e) => {
+        if (e.matches) {
+          if (localStorage.getItem(STORAGE_KEY) === "true") {
+            layout.setAttribute("data-sidebar-collapsed", "true");
+          }
+        } else {
+          layout.removeAttribute("data-sidebar-collapsed");
+          close();
+        }
+      });
     }
-    // Fallback if the Starlight component is not found or already closed
-    document.body.removeAttribute("data-mobile-menu-expanded");
   };
 
-  overlay?.addEventListener("click", close);
-  closeBtn?.addEventListener("click", close);
-
-  // Desktop collapse logic
-  const layout = document.querySelector(".fumadocs-layout");
-  const toggle = document.getElementById("sidebar-collapse-toggle");
-  const STORAGE_KEY = "fuma-sidebar-collapsed";
-
-  if (layout && toggle) {
-    const isDesktop = () => window.innerWidth >= 768;
-
-    // Initialize state
-    if (isDesktop() && localStorage.getItem(STORAGE_KEY) === "true") {
-      layout.setAttribute("data-sidebar-collapsed", "true");
-    }
-
-    toggle.addEventListener("click", () => {
-      const isCollapsed =
-        layout.getAttribute("data-sidebar-collapsed") === "true";
-      layout.setAttribute("data-sidebar-collapsed", String(!isCollapsed));
-      localStorage.setItem(STORAGE_KEY, String(!isCollapsed));
-    });
-
-    // Handle breakpoint transitions
-    const mql = window.matchMedia("(min-width: 768px)");
-    mql.addEventListener("change", (e) => {
-      if (e.matches) {
-        // Entering Desktop: restore collapsed state if needed
-        if (localStorage.getItem(STORAGE_KEY) === "true") {
-          layout.setAttribute("data-sidebar-collapsed", "true");
-        }
-      } else {
-        // Entering Mobile: completely remove collapse attribute and close drawer
-        layout.removeAttribute("data-sidebar-collapsed");
-        close();
-      }
-    });
-  }
+  // Run on initial load and on every page navigation
+  initSidebar();
+  document.addEventListener("astro:page-load", initSidebar);
 </script>
