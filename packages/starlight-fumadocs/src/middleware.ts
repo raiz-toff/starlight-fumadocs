@@ -1,13 +1,10 @@
 import { defineRouteMiddleware, type StarlightRouteData } from '@astrojs/starlight/route-data';
 
-export const onRequest = defineRouteMiddleware((context) => {
-  console.log('[FumaDocs Middleware] Running...');
+export const onRequest = defineRouteMiddleware(async (context) => {
   const { sidebar } = context.locals.starlightRoute;
-  console.log('[FumaDocs Middleware] Sidebar entries:', sidebar.length);
 
   // 1. Identify all top-level groups
   const groups = sidebar.filter((entry: StarlightRouteData['sidebar'][number]) => entry.type === 'group');
-  console.log('[FumaDocs Middleware] Groups found:', groups.length);
 
   if (groups.length === 0) return;
 
@@ -50,10 +47,15 @@ export const onRequest = defineRouteMiddleware((context) => {
 
 
   // 4. Store active group info for components (like RootNav and Breadcrumb)
+  // @ts-ignore
+  const { getPluginConfig } = await import('starlight-fumadocs');
+  const config = getPluginConfig?.() ?? {};
+
   context.locals.starlightFumadocs = {
     activeGroup,
     allGroups: groups,
     breadcrumbs,
+    config,
   };
 
   // 4. Transform the sidebar to ONLY show the items within the active group

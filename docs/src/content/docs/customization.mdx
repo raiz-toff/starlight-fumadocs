@@ -21,13 +21,14 @@ The theme uses a centralized token system. The most important token is `--fuma-r
 The Table of Contents features an asymmetric spring physics engine. You can customize the "lunge and contract" feel by overriding the internal constants used by the physics loop.
 
 ### Visual Styling
+
 Adjust the color and visibility of the TOC rail and the active "snake" indicator:
 
 ```css
 :root {
   /* The vertical rail color */
   --glide-track-color: var(--sl-color-gray-5);
-  
+
   /* The active snake/dot color */
   --glide-indicator-color: var(--sl-color-accent);
 }
@@ -64,7 +65,7 @@ The theme uses a 5-column CSS grid. You can adjust the widths of the sidebars us
 
 ## Cascade Layers
 
-To ensure your overrides work perfectly, `starlight-fumadocs` uses the `@layer fuma-theme` cascade layer. 
+To ensure your overrides work perfectly, `starlight-fumadocs` uses the `@layer fuma-theme` cascade layer.
 
 Any custom CSS you write outside of a layer will automatically override the theme. If you use layers in your own project, ensure your overrides layer comes after `fuma-theme`:
 
@@ -74,6 +75,132 @@ Any custom CSS you write outside of a layer will automatically override the them
 
 @layer my-overrides {
   /* Your custom styles here */
+}
+```
+
+## Icons & Root Navigation
+
+The theme features a premium Root Navigation switcher (breadcrumb-style) at the top of the sidebar. You can customize the icons and colors for each documentation group.
+
+### Optional: Sidebar Icons
+
+`starlight-fumadocs` is compatible with `starlight-plugin-icons`. If you want to use icons in your sidebar items (folders and files), you can install the plugin:
+
+1. Install the plugin: `npm install starlight-plugin-icons`
+2. Configure it in `astro.config.mjs`:
+
+   ```ts
+   import {
+     starlightIconsPlugin,
+     starlightIconsIntegration,
+   } from "starlight-plugin-icons";
+
+   export default defineConfig({
+     integrations: [
+       starlightIconsIntegration(),
+       starlight({
+         plugins: [starlightIconsPlugin()],
+       }),
+     ],
+   });
+   ```
+
+### Root Navigation Configuration
+
+You can specify icons and colors for your top-level groups in the `starlightFumadocs` plugin options.
+
+```ts
+starlightFumadocs({
+  rootNav: {
+    groups: {
+      "Getting Started": {
+        icon: "open-book", // Starlight built-in icon
+        color: "#facc15", // Custom theme color for this group
+        description: "New to the project?",
+      },
+      Advanced: {
+        icon: "i-ph:palette-duotone", // Plugin-based icon (optional)
+        color: "#3b82f6",
+      },
+    },
+  },
+});
+```
+
+### Automatic Fallbacks
+
+The theme is designed to look premium out-of-the-box without any manual configuration:
+
+- **Text Icons**: If no icon is provided, the switcher automatically renders the first letter of the group's label.
+- **Theme Colors**: If no color is provided, a curated color from the FumaDocs palette is automatically assigned.
+- **Plugin Integration**: If you have `starlight-plugin-icons` installed, you can use any CSS-based icon in the `icon` field.
+
+## Key Features & Components
+
+`starlight-fumadocs` includes several advanced features that bring the full FumaDocs experience to your Starlight site.
+
+### Sidebar Filtering
+The theme automatically transforms your sidebar based on the current page. It identifies the top-level folder (group) and filters the sidebar to show **only** the items within that group. This creates a "sub-site" feel where each major section of your docs has its own dedicated navigation context.
+
+### Interactive Breadcrumbs
+A custom breadcrumb system is automatically injected at the top of your pages. 
+- It maps your sidebar hierarchy into a clickable trail.
+- It supports deep-linking back to top-level folder groups.
+
+### Adaptive Header
+The sticky, glassmorphic header has intelligent visibility logic:
+- **Landing Pages**: On Hero or Splash pages (where no sidebar is present), the header remains visible on desktop for branding and search access.
+- **Documentation Pages**: On pages with a sidebar, the header hides on desktop and merges into the sidebar rail for a cleaner, focused reading experience.
+
+### Fullscreen Code Blocks
+All code blocks (powered by Expressive Code) automatically receive a fullscreen toggle button.
+- **Zoom Controls**: Use the on-screen buttons or your mouse wheel to adjust the code font size (60% to 500%).
+- **State Persistence**: Your preferred zoom level is saved in local storage.
+
+### Browser Preview Component
+Use the `<BrowserPreview />` component to showcase live demos or website previews with desktop, tablet, and mobile toggles.
+
+```tsx
+import { BrowserPreview } from 'starlight-fumadocs/components';
+
+<BrowserPreview url="https://example.com" title="My App" height="500px" />
+```
+
+### D2 Diagrams
+The theme includes native support for D2 diagrams via `astro-d2`.
+- **Theme Awareness**: Diagrams automatically adjust their colors based on light/dark mode.
+- **Responsive Layout**: Centered and padded containers that match the FumaDocs aesthetic.
+
+### Custom Callouts
+Use the `<Callout />` component for highlighted notes.
+- **Types**: `info`, `warning`, `error`, `success`, `idea`.
+- **Design**: Minimalist indicators and theme-aware functional colors.
+
+```tsx
+import { Callout } from 'starlight-fumadocs/components';
+
+<Callout type="idea">This is a cool idea!</Callout>
+```
+
+## Advanced Customization
+
+### Functional Colors
+You can override the FumaDocs functional color palette in your CSS:
+
+```css
+:root {
+  --fuma-color-info: oklch(62.3% 0.214 259.815);
+  --fuma-color-success: oklch(72.3% 0.219 149.579);
+}
+```
+
+### Geist Typography
+The theme is optimized for **Geist Sans** and **Geist Mono**. If you wish to use them, ensure they are installed in your project:
+
+```css
+:root {
+  --sl-font: "Geist Sans", var(--sl-font-system);
+  --sl-font-mono: "Geist Mono", var(--sl-font-system-mono);
 }
 ```
 

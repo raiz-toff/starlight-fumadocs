@@ -13,9 +13,55 @@ import type { Props } from '@astrojs/starlight/props';
 import { Icon } from '@astrojs/starlight/components';
 
 const { starlightFumadocs } = Astro.locals;
+const { config } = starlightFumadocs;
 const groups = starlightFumadocs?.allGroups ?? [];
 const activeGroup = starlightFumadocs?.activeGroup;
-const label = activeGroup?.label ?? 'Documentation';
+
+const rootNavConfig = config?.rootNav;
+const groupsOverrides = rootNavConfig?.groups ?? {};
+
+
+const DEFAULT_COLORS = [
+  '#facc15', // Yellow
+  '#3b82f6', // Blue
+  '#8b5cf6', // Purple
+  '#ec4899', // Pink
+  '#10b981', // Green
+];
+
+const getGroupTheme = (label: string, index: number) => {
+  const override = groupsOverrides[label];
+  if (override) {
+    return {
+      icon: override.icon,
+      iconSvg: override.iconSvg,
+      color: override.color ?? DEFAULT_COLORS[index % DEFAULT_COLORS.length],
+      description: override.description,
+    };
+  }
+  return {
+    icon: undefined,
+    iconSvg: undefined,
+    color: DEFAULT_COLORS[index % DEFAULT_COLORS.length],
+    description: undefined,
+  };
+};
+
+const defaultTitle = rootNavConfig?.title ?? 'Documentation';
+const label = activeGroup?.label ?? defaultTitle;
+
+// Find index of active group
+const activeGroupIndex = groups.findIndex((g: any) => g.label === label);
+const activeTheme = activeGroupIndex !== -1 
+  ? getGroupTheme(label, activeGroupIndex)
+  : {
+      icon: rootNavConfig?.icon,
+      iconSvg: rootNavConfig?.iconSvg,
+      color: 'var(--sl-color-accent-high)',
+      description: rootNavConfig?.description,
+    };
+
+const fontFamily = rootNavConfig?.fontFamily;
 
 // Helper to find the first link in a group for navigation
 const getFirstLink = (entry: any): string | undefined => {
@@ -31,7 +77,7 @@ const getFirstLink = (entry: any): string | undefined => {
 ---
 
 {groups.length > 0 && (
-  <div class="root-nav" id="root-nav">
+  <div class="root-nav" id="root-nav" style={fontFamily ? `--root-nav-font: ${fontFamily}` : undefined}>
     <button
       class="root-nav-trigger sl-flex"
       aria-haspopup="listbox"
@@ -39,15 +85,30 @@ const getFirstLink = (entry: any): string | undefined => {
       aria-controls="root-nav-dropdown"
       id="root-nav-button"
     >
-      <!-- Left: book icon + text -->
-      <span class="root-nav-icon" aria-hidden="true">
-        <Icon name="open-book" size="1rem" />
-      </span>
-      <span class="root-nav-label">
-        <span class="root-nav-title">{label}</span>
-      </span>
-      <!-- Right: double-chevron ⇅ -->
-      <span class="root-nav-chevrons" aria-hidden="true">⇅</span>
+      <div class="trigger-inner sl-flex">
+        <!-- Left: icon -->
+        <span class="root-nav-icon" aria-hidden="true" style={`--icon-color: ${activeTheme.color}`}>
+          {activeTheme.iconSvg ? (
+            <Fragment set:html={activeTheme.iconSvg} />
+          ) : activeTheme.icon?.startsWith('i-') ? (
+            <span class={activeTheme.icon} style="font-size: 1rem;"></span>
+          ) : activeTheme.icon ? (
+            <Icon name={activeTheme.icon as any} size="1rem" />
+          ) : (
+            <span class="text-icon">{label.charAt(0).toUpperCase()}</span>
+          )}
+        </span>
+        <!-- Middle: text -->
+        <span class="root-nav-label">
+          <span class="root-nav-title">{label}</span>
+        </span>
+        <!-- Right: selective chevrons -->
+        <span class="root-nav-chevrons" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/>
+          </svg>
+        </span>
+      </div>
     </button>
 
     <ul
@@ -57,20 +118,40 @@ const getFirstLink = (entry: any): string | undefined => {
       aria-labelledby="root-nav-button"
       hidden
     >
-      {groups.map((group: any) => {
+      {groups.map((group: any, idx: number) => {
         const href = getFirstLink(group);
+        const theme = getGroupTheme(group.label, idx);
+        const groupDesc = group.description ?? theme.description;
+        
         return (
           <li role="option" aria-selected={group.label === label}>
             <a
               href={href}
               class:list={['root-nav-option sl-flex', { 'is-active': group.label === label }]}
             >
-              <span class="option-icon" aria-hidden="true">
-                <Icon name="open-book" size="0.875rem" />
+              <span class="option-icon" aria-hidden="true" style={`--icon-color: ${theme.color}`}>
+                {theme.iconSvg ? (
+                  <Fragment set:html={theme.iconSvg} />
+                ) : theme.icon?.startsWith('i-') ? (
+                  <span class={theme.icon} style="font-size: 1rem;"></span>
+                ) : theme.icon ? (
+                  <Icon name={theme.icon as any} size="1rem" />
+                ) : (
+                  <span class="text-icon" style="font-size: 0.875rem;">{group.label.charAt(0).toUpperCase()}</span>
+                )}
               </span>
-              <span class="option-label">{group.label}</span>
+              <span class="option-content">
+                <span class="option-label">{group.label}</span>
+                {groupDesc && (
+                  <span class="option-description">{groupDesc}</span>
+                )}
+              </span>
               {group.label === label && (
-                <span class="option-check" aria-hidden="true">✓</span>
+                <span class="option-check" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
               )}
             </a>
           </li>
@@ -84,43 +165,71 @@ const getFirstLink = (entry: any): string | undefined => {
   .root-nav {
     position: relative;
     width: 100%;
+    font-family: var(--root-nav-font, var(--sl-font-system-sans));
   }
 
   /* ── Trigger button ────────────────────────────────── */
   .root-nav-trigger {
     width: 100%;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    background: none;
+    min-width: 0;
+    padding: 0;
+    background: color-mix(in srgb, var(--sl-color-gray-6) 60%, transparent);
     border: 1px solid var(--sl-color-hairline);
-    border-radius: var(--fuma-radius);
+    border-radius: var(--fuma-radius, 8px);
     cursor: pointer;
     color: var(--sl-color-text);
     text-align: start;
-    transition: background-color 0.15s ease, border-color 0.15s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    outline: none;
+    overflow: hidden;
+  }
+
+  :global([data-theme="light"]) .root-nav-trigger {
+    background-color: rgba(0, 0, 0, 0.03);
   }
 
   .root-nav-trigger:hover {
-    background-color: var(--sl-color-gray-7);
+    background-color: color-mix(in srgb, var(--sl-color-gray-6) 90%, transparent);
     border-color: var(--sl-color-gray-4);
   }
 
-  .root-nav-trigger:focus {
-    outline: none;
+  :global([data-theme="light"]) .root-nav-trigger:hover {
+    background-color: rgba(0, 0, 0, 0.05);
   }
 
-  .root-nav-trigger:focus-visible {
-    outline: none;
-    border-color: var(--sl-color-accent);
-    box-shadow: 0 0 0 2px hsla(var(--sl-color-accent-base), 0.2);
+  .root-nav-trigger:active {
+    transform: scale(0.985);
+  }
+
+  .trigger-inner {
+    width: 100%;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.375rem 0.625rem;
+    min-width: 0;
   }
 
   .root-nav-icon {
     display: flex;
     align-items: center;
-    color: var(--sl-color-gray-3);
+    justify-content: center;
+    color: var(--icon-color, var(--sl-color-accent-high));
     flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: color-mix(in srgb, var(--icon-color, var(--sl-color-accent-high)) 12%, transparent);
+    border-radius: calc(var(--fuma-radius, 8px) - 2px);
+    border: 1px solid color-mix(in srgb, var(--icon-color, var(--sl-color-accent-high)) 20%, transparent);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .root-nav-icon :global(svg) {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .root-nav-trigger:hover .root-nav-icon {
+    transform: scale(1.05);
   }
 
   .root-nav-label {
@@ -132,34 +241,62 @@ const getFirstLink = (entry: any): string | undefined => {
   .root-nav-title {
     display: block;
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--sl-color-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.4;
   }
+  
+  .text-icon {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--icon-color, var(--sl-color-accent-high));
+  }
+
 
   .root-nav-chevrons {
     flex-shrink: 0;
-    font-size: 0.75rem;
+    width: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--sl-color-gray-3);
-    letter-spacing: -0.05em;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .root-nav-trigger:hover .root-nav-chevrons {
+    opacity: 1;
   }
 
   /* ── Dropdown ──────────────────────────────────────── */
   .root-nav-dropdown {
     position: absolute;
-    inset-inline: 0;
-    top: calc(100% + 0.25rem);
-    z-index: 50;
+    left: 0;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    z-index: 1000;
     list-style: none;
     margin: 0;
-    padding: 0.25rem;
+    padding: 0.5rem;
     background-color: var(--sl-color-bg-sidebar);
     border: 1px solid var(--sl-color-hairline);
-    border-radius: var(--fuma-radius);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    min-width: 12rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    animation: dropdown-fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+  }
+
+  :global([data-theme="dark"]) .root-nav-dropdown {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  @keyframes dropdown-fade-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .root-nav-dropdown[hidden] {
@@ -168,45 +305,102 @@ const getFirstLink = (entry: any): string | undefined => {
 
   /* ── Dropdown option ───────────────────────────────── */
   .root-nav-option {
-    width: 100%;
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.4rem 0.75rem;
-    background: none;
+    gap: 0.625rem;
+    padding: 0.375rem 0.625rem;
+    background: transparent;
     border: none;
-    border-radius: var(--fuma-radius);
+    border-radius: calc(var(--fuma-radius, 8px) - 2px);
     cursor: pointer;
     color: var(--sl-color-gray-2);
-    font-size: 0.8125rem;
     text-align: start;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+    box-sizing: border-box;
+    margin-bottom: 0.125rem;
+  }
+
+  .root-nav-option:last-child {
+    margin-bottom: 0;
   }
 
   .root-nav-option:hover {
-    background-color: var(--sl-color-gray-7);
+    background-color: var(--sl-color-gray-6);
     color: var(--sl-color-text);
   }
 
+  :global([data-theme="light"]) .root-nav-option:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
   .root-nav-option.is-active {
-    color: var(--sl-color-text);
-    font-weight: 500;
+    background-color: color-mix(in srgb, var(--sl-color-accent-low) 15%, transparent);
+  }
+
+  :global([data-theme="light"]) .root-nav-option.is-active {
+    background-color: color-mix(in srgb, var(--sl-color-accent-low) 30%, transparent);
+  }
+
+  /* When hovering the active item, make it slightly more distinct than just active */
+  .root-nav-option.is-active:hover {
+    background-color: color-mix(in srgb, var(--sl-color-accent-low) 25%, transparent);
   }
 
   .option-icon {
     display: flex;
     align-items: center;
-    color: var(--sl-color-gray-3);
+    justify-content: center;
+    color: var(--icon-color, var(--sl-color-gray-3));
     flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    background-color: color-mix(in srgb, var(--icon-color) 12%, transparent);
+    border-radius: calc(var(--fuma-radius, 8px) - 2px);
+    border: 1px solid color-mix(in srgb, var(--icon-color) 18%, transparent);
+  }
+
+  .option-icon :global(svg) {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .option-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 0.125rem;
   }
 
   .option-label {
-    flex: 1;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--sl-color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+  }
+
+  .option-description {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
   }
 
   .option-check {
     flex-shrink: 0;
+    width: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--sl-color-accent);
-    font-size: 0.75rem;
+    opacity: 0.9;
   }
 </style>
 

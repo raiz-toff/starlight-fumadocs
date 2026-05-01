@@ -8,6 +8,7 @@ declare namespace App {
       activeGroup: any;
       allGroups: any[];
       breadcrumbs: any[];
+      config: import('./types').StarlightFumadocsConfig;
     };
 
   }
