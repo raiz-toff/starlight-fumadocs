@@ -744,5 +744,556 @@
       transform: translateY(0);
     }
   }
+
+:root,
+:root[data-theme='dark'] {
+  --sl-font-system: 'Figtree', 'Helvetica Neue', system-ui, sans-serif;
+  --sl-font-heading: 'Bricolage Grotesque', 'Figtree', system-ui, sans-serif;
+  --sl-font: var(--sl-font-system); /* Override theme default */
+
+  --sl-text-h1: 2.25rem;
+  --sl-text-h2: 1.5rem;
+  --sl-text-h3: 1.2rem;
+  --sl-text-body: 1rem;
+
+  letter-spacing: -0.012em;
+  line-height: 1.75;
+
+  /* Indigo accent — Mintlify's signature */
+  --sl-hue-accent: 250;
+  --sl-color-accent-low: oklch(20% 0.06 250);
+  --sl-color-accent: oklch(62% 0.22 250);
+  --sl-color-accent-high: oklch(76% 0.18 250);
+
+  /* Surface palette */
+  --sl-color-bg: #0e0e10;
+  --sl-color-bg-nav: #0a0a0c;
+  --sl-color-bg-sidebar: #0a0a0c;
+  --sl-color-text: #e2e2e8;
+  --sl-color-text-accent: #a0a0b8;
+
+  /* Custom tokens */
+  --mint-border: rgba(255, 255, 255, 0.07);
+  --mint-border-strong: rgba(255, 255, 255, 0.12);
+  --mint-surface: rgba(255, 255, 255, 0.03);
+  --mint-surface-hover: rgba(255, 255, 255, 0.06);
+  --mint-radius: 8px;
+  --mint-radius-lg: 12px;
+  --mint-glow: oklch(62% 0.22 250 / 0.15);
 }
+
+:root[data-theme='light'] {
+  --sl-hue-accent: 250;
+  --sl-color-accent-low: oklch(94% 0.04 250);
+  --sl-color-accent: oklch(52% 0.22 250);
+  --sl-color-accent-high: oklch(40% 0.2 250);
+
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-nav: #f9f9fb;
+  --sl-color-bg-sidebar: #f9f9fb;
+  --sl-color-text: #111114;
+
+  --mint-border: rgba(0, 0, 0, 0.07);
+  --mint-border-strong: rgba(0, 0, 0, 0.12);
+  --mint-surface: rgba(0, 0, 0, 0.025);
+  --mint-surface-hover: rgba(0, 0, 0, 0.05);
+  --mint-radius: 8px;
+  --mint-radius-lg: 12px;
+  --mint-glow: transparent;
+}
+
+/* ── BASE LAYOUT ────────────────────────────────────────────── */
+
+/* Subtle dot-grid background — Mintlify's signature texture */
+:root[data-theme='dark'] body {
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.045) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+  background-position: 0 0;
+}
+:root[data-theme='light'] body {
+  background-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.055) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+/* Ambient hero glow — top center */
+:root[data-theme='dark'] body::before {
+  content: '';
+  position: fixed;
+  top: -180px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    oklch(40% 0.18 250 / 0.2) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(20px);
+}
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+
+:root header.header {
+  background: var(--sl-color-bg-nav) !important;
+  border-bottom: 1px solid var(--mint-border) !important;
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+}
+
+:root[data-theme='dark'] header.header {
+  background: rgba(10, 10, 12, 0.82) !important;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────────── */
+
+:root .sidebar-pane {
+  border-right: 1px solid var(--mint-border) !important;
+  background: var(--sl-color-bg-sidebar) !important;
+}
+
+/* Section labels (Sidebar Groups) */
+:root .sidebar-content summary,
+:root .sidebar-content .group-label,
+:root .sidebar-group-label {
+  font-family: var(--sl-font-system) !important;
+  font-size: 0.725rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase;
+  color: var(--sl-color-text-accent) !important;
+  opacity: 0.8;
+}
+
+/* Nav links */
+:root .sidebar-content a {
+  border-radius: var(--mint-radius) !important;
+  font-size: 0.875rem;
+  font-weight: 450;
+  color: var(--sl-color-text-accent);
+  padding: 6px 10px !important;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+:root .sidebar-content a:hover {
+  background: var(--mint-surface-hover) !important;
+  color: var(--sl-color-text) !important;
+}
+
+/* Active nav pill — Mintlify style (Sidebar only) */
+:root .sidebar-content a[aria-current='page'],
+:root .sidebar-content a[aria-current='true'] {
+  background: var(--sl-color-accent-low) !important;
+  color: var(--sl-color-accent-high) !important;
+  font-weight: 600 !important;
+  border-radius: var(--mint-radius) !important;
+  border-left: none !important;
+  box-shadow: inset 0 0 0 1px var(--sl-color-accent-low);
+}
+
+/* ── CONTENT AREA ────────────────────────────────────────────── */
+
+/* Page fade-in */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+:root .sl-markdown-content {
+  animation: pageIn 0.35s ease forwards;
+}
+
+/* ── TYPOGRAPHY ─────────────────────────────────────────────── */
+
+:root h1, :root h2, :root h3, :root h4 {
+  font-family: var(--sl-font-heading) !important;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* H1: gradient text — Target both page titles and markdown headings */
+:root[data-theme='dark'] :is(.page-title-block, .sl-markdown-content) h1 {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    oklch(82% 0.12 250) 45%,
+    oklch(68% 0.22 250) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2.375rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+:root[data-theme='light'] :is(.page-title-block, .sl-markdown-content) h1 {
+  background: linear-gradient(
+    135deg,
+    #0a0a14 0%,
+    oklch(42% 0.2 250) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2.375rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* H2: with subtle top border rule */
+:root .sl-markdown-content h2 {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--mint-border);
+  margin-top: 2rem;
+  color: var(--sl-color-text);
+}
+
+:root[data-theme='dark'] .sl-markdown-content h3 {
+  color: oklch(80% 0.08 250);
+}
+
+/* Body text */
+:root .sl-markdown-content p {
+  color: var(--sl-color-text);
+  font-size: 0.9375rem;
+}
+
+/* ── LINKS ───────────────────────────────────────────────────── */
+
+:root .sl-markdown-content a:not(.sl-link-button) {
+  color: var(--sl-color-accent-high);
+  text-decoration: underline;
+  text-decoration-color: oklch(62% 0.22 250 / 0.35);
+  text-underline-offset: 3px;
+  transition: color 0.1s ease, text-decoration-color 0.1s ease;
+}
+:root[data-theme='dark'] .sl-markdown-content a:not(.sl-link-button):hover {
+  color: #fff;
+  text-decoration-color: var(--sl-color-accent);
+}
+:root[data-theme='light'] .sl-markdown-content a:not(.sl-link-button):hover {
+  color: #000;
+  text-decoration-color: var(--sl-color-accent);
+}
+
+/* Link Buttons (Hero & Markdown) */
+:root .sl-link-button {
+  border-radius: var(--mint-radius) !important;
+  padding: 0.4rem 0.875rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: transform 0.1s ease, opacity 0.1s ease !important;
+}
+
+:root .sl-link-button.primary {
+  background: var(--sl-color-accent) !important;
+  color: #000 !important;
+  border: 1px solid var(--sl-color-accent) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+:root .sl-link-button.secondary {
+  background: var(--mint-surface) !important;
+  color: var(--sl-color-text) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+}
+
+:root .sl-link-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ── CODE BLOCKS ─────────────────────────────────────────────── */
+
+/* Inline code */
+:root :not(pre) > code {
+  font-family: 'Fira Code', 'Cascadia Code', ui-monospace, monospace !important;
+  font-size: 0.82em !important;
+  padding: 0.15em 0.45em !important;
+  border-radius: 5px !important;
+  background: var(--mint-surface) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  color: oklch(75% 0.14 250) !important;
+  font-variant-ligatures: normal;
+}
+:root[data-theme='light'] :not(pre) > code {
+  color: oklch(42% 0.2 250) !important;
+  background: oklch(94% 0.04 250) !important;
+}
+
+/* Block code */
+:root pre {
+  font-family: 'Fira Code', 'Cascadia Code', ui-monospace, monospace !important;
+  font-size: 0.875rem !important;
+  line-height: 1.65 !important;
+  border-radius: var(--mint-radius-lg) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  padding: 1.25rem 1.5rem !important;
+  position: relative;
+  overflow: hidden;
+}
+:root[data-theme='dark'] pre {
+  background: #0c0c0f !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 4px 24px rgba(0,0,0,0.4);
+}
+:root[data-theme='light'] pre {
+  background: #f6f7f9 !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* Copy button refinement */
+:root pre .copy {
+  border-radius: 6px !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  background: var(--sl-color-bg) !important;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+:root pre:hover .copy {
+  opacity: 1;
+}
+
+/* ── CALLOUT / ASIDE BLOCKS ──────────────────────────────────── */
+
+:root .starlight-aside {
+  border-radius: var(--mint-radius-lg) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  background: var(--mint-surface) !important;
+  padding: 1rem 1.25rem !important;
+}
+:root[data-theme='dark'] .starlight-aside--note {
+  border-color: oklch(62% 0.22 250 / 0.3) !important;
+  background: oklch(20% 0.06 250 / 0.5) !important;
+}
+:root[data-theme='dark'] .starlight-aside--tip {
+  border-color: oklch(65% 0.2 150 / 0.3) !important;
+  background: oklch(20% 0.06 150 / 0.5) !important;
+}
+:root[data-theme='dark'] .starlight-aside--caution {
+  border-color: oklch(70% 0.18 50 / 0.3) !important;
+  background: oklch(20% 0.06 50 / 0.5) !important;
+}
+:root[data-theme='dark'] .starlight-aside--danger {
+  border-color: oklch(62% 0.22 15 / 0.3) !important;
+  background: oklch(20% 0.07 15 / 0.5) !important;
+}
+
+/* ── TABLES ──────────────────────────────────────────────────── */
+
+:root table {
+  border-radius: var(--mint-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--mint-border-strong);
+  border-spacing: 0;
+  width: 100%;
+  font-size: 0.875rem;
+}
+:root th {
+  background: var(--mint-surface) !important;
+  font-family: var(--sl-font-heading);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--sl-color-text-accent) !important;
+  border-bottom: 1px solid var(--mint-border-strong) !important;
+  padding: 10px 16px !important;
+}
+:root td {
+  border-bottom: 1px solid var(--mint-border) !important;
+  padding: 10px 16px !important;
+}
+:root tr:last-child td { border-bottom: none !important; }
+:root tr:hover td {
+  background: var(--mint-surface-hover);
+  transition: background 0.1s ease;
+}
+
+/* ── BLOCKQUOTE ──────────────────────────────────────────────── */
+
+:root blockquote {
+  border-left: 3px solid var(--sl-color-accent) !important;
+  background: var(--mint-surface) !important;
+  border-radius: 0 var(--mint-radius) var(--mint-radius) 0 !important;
+  padding: 0.9rem 1.25rem !important;
+  margin: 1.5rem 0 !important;
+  font-style: normal !important;
+  color: var(--sl-color-text-accent) !important;
+}
+
+/* ── PAGINATION FOOTER ───────────────────────────────────────── */
+
+:root .pagination-links a {
+  border: 1px solid var(--mint-border-strong) !important;
+  border-radius: var(--mint-radius-lg) !important;
+  background: var(--mint-surface) !important;
+  padding: 1rem 1.25rem !important;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  text-decoration: none !important;
+}
+:root .pagination-links a:hover {
+  border-color: oklch(62% 0.22 250 / 0.5) !important;
+  background: var(--sl-color-accent-low) !important;
+}
+
+/* ── SEARCH ──────────────────────────────────────────────────── */
+
+:root site-search button[data-open-modal] {
+  border: 1px solid var(--mint-border-strong) !important;
+  border-radius: var(--mint-radius) !important;
+  background: var(--mint-surface) !important;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+:root site-search button[data-open-modal]:hover {
+  border-color: oklch(62% 0.22 250 / 0.4) !important;
+  background: var(--mint-surface-hover) !important;
+}
+
+/* ── TABLE OF CONTENTS ───────────────────────────────────────── */
+
+/* Removed duplicate TOC styles from user CSS as it might break our curved glide TOC */
+/* We keep the active item text color since it doesn't break the layout */
+:root starlight-toc a {
+  font-size: 0.8125rem !important;
+  color: var(--sl-color-text-accent) !important;
+  transition: color 0.1s ease, border-color 0.1s ease;
+}
+:root starlight-toc a:hover,
+:root starlight-toc a[aria-current='true'] {
+  color: var(--sl-color-accent-high) !important;
+}
+
+/* ── HR ──────────────────────────────────────────────────────── */
+
+:root hr {
+  border: none !important;
+  border-top: 1px solid var(--mint-border) !important;
+  margin: 2.5rem 0 !important;
+}
+
+/* ── SCROLLBAR ───────────────────────────────────────────────── */
+
+:root[data-theme='dark'] * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+:root[data-theme='dark'] *::-webkit-scrollbar { width: 6px; height: 6px; }
+:root[data-theme='dark'] *::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 99px;
+}
+:root[data-theme='dark'] *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+/* ── TABS ────────────────────────────────────────────────────── */
+
+:root starlight-tabs {
+  border: 1px solid var(--mint-border) !important;
+  border-radius: var(--mint-radius-lg) !important;
+  overflow: hidden;
+  background: var(--mint-surface) !important;
+}
+
+:root .tablist {
+  border-bottom: 1px solid var(--mint-border) !important;
+  background: var(--sl-color-bg-nav) !important;
+}
+
+:root [role="tab"] {
+  font-family: var(--sl-font-system) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: var(--sl-color-text-accent) !important;
+  transition: color 0.15s ease, background 0.15s ease !important;
+}
+
+:root [role="tab"]:hover {
+  color: var(--sl-color-text) !important;
+  background: var(--mint-surface-hover) !important;
+}
+
+:root [role="tab"][aria-selected="true"] {
+  color: var(--sl-color-accent-high) !important;
+  font-weight: 600 !important;
+}
+/* ── IMAGE ZOOM ──────────────────────────────────────────────── */
+
+:root .starlight-image-zoom-control {
+  background-color: var(--mint-surface) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  border-radius: var(--mint-radius) !important;
+  color: var(--sl-color-text-accent) !important;
+  padding: 8px !important;
+  width: 38px !important;
+  height: 38px !important;
+  backdrop-filter: blur(8px);
+  transition: background 0.15s ease, color 0.15s ease !important;
+}
+
+:root .starlight-image-zoom-control:hover {
+  color: var(--sl-color-text) !important;
+  background-color: var(--mint-surface-hover) !important;
+}
+
+/* Hide image zoom controls for badges */
+:root .sl-markdown-content img[src*="shields.io"] + .starlight-image-zoom-control,
+:root .sl-markdown-content img[src*="badge"] + .starlight-image-zoom-control {
+  display: none !important;
+}
+/* ── IMAGE STYLING ───────────────────────────────────────────── */
+
+:root .sl-markdown-content :is(img, picture img):not(.badge, [height], [width]) {
+  border-radius: var(--mint-radius-lg) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  margin: 3rem auto !important;
+  display: block !important;
+  max-width: 100%;
+  height: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* Keep badges/shields inline */
+:root .sl-markdown-content :is(img, picture img)[src*="shields.io"],
+:root .sl-markdown-content :is(img, picture img)[src*="badge"] {
+  display: inline-block !important;
+  margin: 0 4px !important;
+  border: none !important;
+  box-shadow: none !important;
+  vertical-align: middle;
+  border-radius: 0 !important;
+}
+
+/* ── MERMAID DIAGRAMS ───────────────────────────────────────── */
+
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--mint-surface);
+  border: 1px solid var(--mint-border);
+  border-radius: var(--mint-radius-lg);
+  overflow-x: auto;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+}
+
 
