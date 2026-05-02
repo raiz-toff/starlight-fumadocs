@@ -69,6 +69,9 @@ export default defineConfig({
         { href: 'https://github.com/raiz-toff/starlight-fumadocs', icon: 'github', label: 'GitHub' },
       ],
       title: 'Starlight-Fumadocs',
+      components: {
+        TableOfContents: './src/components/ConnectTOC.astro',
+      },
     }),
   ],
 })

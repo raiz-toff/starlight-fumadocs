@@ -618,19 +618,33 @@
       display: none !important;
     }
 
-    /* Hide the default Starlight TOC header — each preset injects its own or we use the default */
-    starlight-toc nav h2:not(.desktop-toc-header) {
-      display: none;
-    }
-
-    .desktop-toc-header {
+    /* Style the default Starlight TOC header to match FumaDocs */
+    starlight-toc nav > h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
       font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--sl-color-gray-3);
-      margin: 0 0 0.75rem;
+      margin: 0 0 1rem;
       padding-inline-start: 0;
+      border: none !important;
+    }
+
+    starlight-toc nav > h2::before {
+      content: '';
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      background-color: currentColor;
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='21' x2='3' y1='6' y2='6'/%3E%3Cline x1='15' x2='3' y1='12' y2='12'/%3E%3Cline x1='17' x2='3' y1='18' y2='18'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='21' x2='3' y1='6' y2='6'/%3E%3Cline x1='15' x2='3' y1='12' y2='12'/%3E%3Cline x1='17' x2='3' y1='18' y2='18'/%3E%3C/svg%3E");
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
     }
 
     starlight-toc nav a {
@@ -1031,38 +1045,108 @@
   background: oklch(94% 0.04 250) !important;
 }
 
-/* Block code */
-:root pre {
+/* Block code / Expressive Code */
+:root .expressive-code .frame {
+  border-radius: var(--mint-radius-lg) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+:root[data-theme='dark'] .expressive-code .frame {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+:root .expressive-code pre {
   font-family: 'Fira Code', 'Cascadia Code', ui-monospace, monospace !important;
   font-size: 0.875rem !important;
   line-height: 1.65 !important;
-  border-radius: var(--mint-radius-lg) !important;
-  border: 1px solid var(--mint-border-strong) !important;
   padding: 1.25rem 1.5rem !important;
-  position: relative;
-  overflow: hidden;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
-:root[data-theme='dark'] pre {
+
+:root[data-theme='dark'] .expressive-code pre {
   background: #0c0c0f !important;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04) inset,
-    0 4px 24px rgba(0,0,0,0.4);
 }
-:root[data-theme='light'] pre {
+:root[data-theme='light'] .expressive-code pre {
   background: #f6f7f9 !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* Minimal Header Layout */
+:root .expressive-code .header {
+  border-bottom: 1px solid var(--mint-border-strong) !important;
+  background: var(--mint-surface) !important;
+  padding: 0.6rem 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: 2.5rem !important;
+}
+
+/* Custom monochrome macOS window buttons for Terminal frames */
+:root .expressive-code.is-terminal .header::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background-color: var(--sl-color-text-accent) !important;
+  box-shadow: 16px 0 0 var(--sl-color-text-accent), 32px 0 0 var(--sl-color-text-accent) !important;
+  margin-right: 2rem !important;
+  opacity: 0.35 !important;
+}
+
+/* Clean Typography for the Title */
+:root .expressive-code .title {
+  font-family: var(--sl-font-system) !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  color: var(--sl-color-text-accent) !important;
+  border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  letter-spacing: 0.02em !important;
+  position: relative !important;
+  top: 0 !important;
 }
 
 /* Copy button refinement */
-:root pre .copy {
+:root .expressive-code .copy button {
   border-radius: 6px !important;
   border: 1px solid var(--mint-border-strong) !important;
-  background: var(--sl-color-bg) !important;
+  background: var(--mint-surface) !important;
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, background 0.15s ease;
 }
-:root pre:hover .copy {
+:root .expressive-code:hover .copy button {
   opacity: 1;
+}
+:root .expressive-code .copy button:hover {
+  background: var(--mint-surface-hover) !important;
+}
+
+/* ── CARDS ───────────────────────────────────────────────────── */
+:root .card,
+:root .sl-link-card {
+  border-radius: var(--mint-radius-lg) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  background: var(--mint-surface) !important;
+  padding: 1.5rem !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+:root[data-theme='dark'] .card,
+:root[data-theme='dark'] .sl-link-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%) !important;
+}
+
+:root .sl-link-card:hover {
+  transform: translateY(-2px);
+  border-color: oklch(62% 0.22 250 / 0.4) !important;
+  background-color: var(--mint-surface-hover) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 /* ── CALLOUT / ASIDE BLOCKS ──────────────────────────────────── */
@@ -1092,33 +1176,78 @@
 
 /* ── TABLES ──────────────────────────────────────────────────── */
 
-:root table {
-  border-radius: var(--mint-radius-lg);
-  overflow: hidden;
-  border: 1px solid var(--mint-border-strong);
-  border-spacing: 0;
-  width: 100%;
-  font-size: 0.875rem;
+/* Starlight defaults to display: block for mobile scrolling. 
+   On desktop, we switch to display: table so it perfectly stretches 
+   to 100% width without leaving empty background voids. */
+:root .sl-markdown-content table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: var(--mint-radius-lg) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  background: transparent !important; /* Erase FumaDocs solid dark background */
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  margin: 2rem 0 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
 }
-:root th {
+
+/* On mobile, prevent text from wrapping so the table becomes scrollable instead of crushing columns */
+@media (max-width: 767px) {
+  :root .sl-markdown-content table {
+    display: block !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (min-width: 768px) {
+  :root .sl-markdown-content table {
+    display: table !important;
+    white-space: normal !important;
+  }
+}
+
+/* Erase old FumaDocs vertical dividers */
+:root .sl-markdown-content th,
+:root .sl-markdown-content td {
+  border-inline-start: none !important;
+  border-inline-end: none !important;
+  padding: 12px 16px !important;
+  text-align: left !important;
+}
+
+:root .sl-markdown-content th {
   background: var(--mint-surface) !important;
-  font-family: var(--sl-font-heading);
-  font-weight: 600;
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  font-family: var(--sl-font-heading) !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
   color: var(--sl-color-text-accent) !important;
   border-bottom: 1px solid var(--mint-border-strong) !important;
-  padding: 10px 16px !important;
 }
-:root td {
+
+:root .sl-markdown-content td {
   border-bottom: 1px solid var(--mint-border) !important;
-  padding: 10px 16px !important;
+  background: transparent !important;
 }
-:root tr:last-child td { border-bottom: none !important; }
-:root tr:hover td {
-  background: var(--mint-surface-hover);
-  transition: background 0.1s ease;
+
+/* Very subtle zebra striping for large data readability */
+:root .sl-markdown-content tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.015) !important;
+}
+:root[data-theme='light'] .sl-markdown-content tbody tr:nth-child(even) td {
+  background: rgba(0, 0, 0, 0.015) !important;
+}
+
+:root .sl-markdown-content tr:last-child td { 
+  border-bottom: none !important; 
+}
+
+:root .sl-markdown-content tr:hover td {
+  background: var(--mint-surface-hover) !important;
+  transition: background 0.15s ease !important;
 }
 
 /* ── BLOCKQUOTE ──────────────────────────────────────────────── */
@@ -1236,11 +1365,12 @@
   border: 1px solid var(--mint-border-strong) !important;
   border-radius: var(--mint-radius) !important;
   color: var(--sl-color-text-accent) !important;
-  padding: 8px !important;
-  width: 38px !important;
-  height: 38px !important;
+  padding: 8px 12px !important;
   backdrop-filter: blur(8px);
   transition: background 0.15s ease, color 0.15s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 :root .starlight-image-zoom-control:hover {
@@ -1255,14 +1385,19 @@
 }
 /* ── IMAGE STYLING ───────────────────────────────────────────── */
 
+:root starlight-image-zoom {
+  margin: 3rem auto !important;
+  display: block;
+}
+
 :root .sl-markdown-content :is(img, picture img):not(.badge, [height], [width]) {
   border-radius: var(--mint-radius-lg) !important;
   border: 1px solid var(--mint-border-strong) !important;
-  margin: 3rem auto !important;
   display: block !important;
   max-width: 100%;
   height: auto;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  margin: 0 auto !important; /* Reset margin since wrapper handles it */
 }
 
 /* Keep badges/shields inline */
@@ -1292,6 +1427,133 @@
 .mermaid svg {
   max-width: 100%;
   height: auto;
+}
+
+/* ── STARLIGHT UI COMPONENTS ─────────────────────────────────── */
+
+/* Select menus (Theme / Language) */
+:root select {
+  background-color: var(--mint-surface) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  border-radius: var(--mint-radius) !important;
+  color: var(--sl-color-text-accent) !important;
+  padding-block: 0.25rem !important;
+  outline: none !important;
+}
+
+:root select:hover, :root select:focus-visible {
+  background-color: var(--mint-surface-hover) !important;
+  border-color: oklch(62% 0.22 250 / 0.4) !important;
+}
+
+/* Social Icons */
+:root .social-icons a {
+  color: var(--sl-color-text-accent) !important;
+  background-color: transparent !important;
+  border-radius: var(--mint-radius) !important;
+  padding: 0.5em !important;
+  transition: color 0.15s ease, background-color 0.15s ease !important;
+}
+:root .social-icons a:hover {
+  color: var(--sl-color-text) !important;
+  background-color: var(--mint-surface) !important;
+}
+
+/* Edit Link / Last Updated */
+:root .edit-link a {
+  color: var(--sl-color-text-accent) !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease !important;
+  border-radius: var(--mint-radius);
+  padding: 0.25rem 0.5rem;
+  margin-left: -0.5rem;
+}
+:root .edit-link a:hover {
+  color: var(--sl-color-accent-high) !important;
+  background-color: var(--mint-surface);
+}
+
+:root .last-updated {
+  color: var(--sl-color-text-accent) !important;
+  font-size: 0.875rem !important;
+}
+
+/* Badges */
+:root .sl-badge {
+  border-radius: 4px !important;
+  padding: 0.125rem 0.375rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem !important;
+}
+
+:root .sl-badge.success {
+  background-color: oklch(72.3% 0.219 149.579 / 0.15) !important;
+  color: oklch(72.3% 0.219 149.579) !important;
+  border: 1px solid oklch(72.3% 0.219 149.579 / 0.3) !important;
+}
+
+:root .sl-badge.danger {
+  background-color: oklch(63.7% 0.237 25.331 / 0.15) !important;
+  color: oklch(63.7% 0.237 25.331) !important;
+  border: 1px solid oklch(63.7% 0.237 25.331 / 0.3) !important;
+}
+
+:root .sl-badge.note {
+  background-color: oklch(62.3% 0.214 259.815 / 0.15) !important;
+  color: oklch(62.3% 0.214 259.815) !important;
+  border: 1px solid oklch(62.3% 0.214 259.815 / 0.3) !important;
+}
+
+:root .sl-badge.default {
+  background-color: rgba(160, 160, 184, 0.1) !important;
+  color: var(--sl-color-text-accent) !important;
+  border: 1px solid rgba(160, 160, 184, 0.2) !important;
+}
+
+/* ── STEPS COMPONENT ─────────────────────────────────────────── */
+:root .sl-steps > li {
+  border-left: 2px solid var(--mint-border-strong) !important;
+  padding-left: 2.25rem !important;
+  padding-bottom: 2rem !important;
+  margin-top: 0 !important;
+}
+:root .sl-steps > li:last-of-type {
+  border-left-color: transparent !important;
+}
+
+:root .sl-steps > li::before {
+  background-color: var(--sl-color-bg) !important;
+  background-image: linear-gradient(var(--mint-surface), var(--mint-surface)) !important;
+  border: 1px solid var(--mint-border-strong) !important;
+  color: var(--sl-color-text) !important;
+  box-shadow: 0 0 0 6px var(--sl-color-bg) !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  letter-spacing: 0 !important;
+  border-radius: 50% !important;
+  inset-inline-start: calc(-1rem - 1px) !important;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease, background-image 0.2s ease !important;
+  z-index: 1;
+}
+
+/* Hide Starlight's default vertical line since we use border-left */
+:root .sl-steps > li::after {
+  display: none !important;
+}
+
+:root .sl-steps > li:hover::before {
+  border-color: var(--sl-color-accent) !important;
+  color: var(--sl-color-accent-high) !important;
+  background-color: var(--sl-color-bg) !important;
+  background-image: linear-gradient(var(--mint-surface-hover), var(--mint-surface-hover)) !important;
 }
 
 }

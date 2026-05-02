@@ -27,7 +27,6 @@ export default function starlightFumadocs(options?: StarlightFumadocsConfig): St
         updateConfig({
           customCss: [...(config.customCss ?? []), 'starlight-fumadocs/styles'],
           components: {
-            ...config.components,
             Header: 'starlight-fumadocs/overrides/Header.astro',
             PageFrame: 'starlight-fumadocs/overrides/PageFrame.astro',
             SiteTitle: 'starlight-fumadocs/overrides/SiteTitle.astro',
@@ -42,6 +41,7 @@ export default function starlightFumadocs(options?: StarlightFumadocsConfig): St
             Footer: 'starlight-fumadocs/overrides/Footer.astro',
             MobileMenuToggle: 'starlight-fumadocs/overrides/MobileMenuToggle.astro',
             Banner: 'starlight-fumadocs/overrides/Banner.astro',
+            ...config.components,
           },
         })
       },
