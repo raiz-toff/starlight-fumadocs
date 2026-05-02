@@ -15,8 +15,7 @@
   },
   "workspaces": [
     "docs",
-    "packages/*",
-    "reference/starlight-plugin-icons/packages/*"
+    "packages/*"
   ],
   "homepage": "https://github.com/raiz-toff/starlight-fumadocs",
   "repository": {
