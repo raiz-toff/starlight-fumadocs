@@ -1,451 +1,281 @@
+/**
+ * FumaDocs Clerk-style TOC — curved track with clip-path indicator
+ * ─────────────────────────────────────────────────────────────────
+ * Ported from fumadocs/packages/base-ui/src/components/toc/clerk.tsx
+ *
+ * Architecture:
+ * 1. Per-item gray track decorations (vertical lines + curve SVGs) injected into each <a>
+ * 2. Full-path colored SVG overlaid on the container, clipped with clip-path to reveal active section
+ */
+
 const PAGE_TITLE_ID = '_top';
 
+// Line x-positions per depth (matches FumaDocs getLineOffset)
+const LINE_X = [8, 16, 24];
+
+function buildHeadingSelector(minH: number, maxH: number): string {
+	const levels = Array.from({ length: maxH - minH + 1 }, (_, i) => `h${minH + i}[id]`);
+	return [`h1#${PAGE_TITLE_ID}`, ...levels].join(',');
+}
+
+function getLineX(depth: number): number {
+	return LINE_X[Math.min(depth, LINE_X.length - 1)] ?? 8;
+}
+
 export class StarlightTOC extends HTMLElement {
-	private _current = this.querySelector<HTMLAnchorElement>('a[aria-current="true"]');
-	private minH = parseInt(this.dataset.minH || '2', 10);
-	private maxH = parseInt(this.dataset.maxH || '3', 10);
+	private _current: HTMLAnchorElement | null = this.querySelector<HTMLAnchorElement>('a[aria-current="true"]');
+	private minH = parseInt(this.dataset.minH ?? '2', 10);
+	private maxH = parseInt(this.dataset.maxH ?? '3', 10);
+	private tocSelector = buildHeadingSelector(this.minH, this.maxH);
 
-	private tocHeadingSelector =
-		`h1#${PAGE_TITLE_ID},` +
-		`:where(${[...Array.from({ length: 1 + this.maxH - this.minH }).map((_, index) => `h${this.minH + index}`)].join()})[id]`;
-
-	// Glide-specific properties
-	private svg: SVGSVGElement | null = null;
-	private trackPath: SVGPathElement | null = null;
-	private snakePath: SVGPathElement | null = null;
 	private tocLinks: HTMLAnchorElement[] = [];
-	private points: Array<{ x: number, y: number, h: number, hidden?: boolean }> = [];
-	private activeIndex = -1;
-	private depthOffsets = [8, 24, 40];
-	private isAtBottom = false;
-	private dot: SVGCircleElement | null = null;
-	private currentStart = 0;
-	private currentEnd = 0;
-	private targetStart = 0;
-	private targetEnd = 0;
-	private lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-	private physicsRaf: number | null = null;
 
-	// ─── Worm physics additions ───────────────────────────────────────────────
-	/**
-	 *  1 = scrolling down  (end   is the head → moves fast)
-	 * -1 = scrolling up    (start is the head → moves fast)
-	 *  0 = settled / idle
-	 */
-	private scrollDirection = 0;
+	// Computed layout data
+	private positions: [top: number, bottom: number, x: number][] = [];
+	private pathD = '';
 
-	/**
-	 * Maximum impulse stretch in path-length pixels we'll push
-	 * the leading edge ahead of its resting target per scroll event.
-	 */
-	private readonly MAX_IMPULSE = 28;
+	// DOM element for the active indicator
+	private thumbWrapper: HTMLDivElement | null = null;
+	private thumbSvg: SVGSVGElement | null = null;
 
-	/**
-	 * Spring constants.
-	 *   HEAD_K  – leading edge snaps quickly (the "lunge")
-	 *   TAIL_K  – trailing edge drags slowly (the "body following")
-	 *   IDLE_K  – equal pull when the worm has settled
-	 */
-	private readonly HEAD_K = 0.22;
-	private readonly TAIL_K = 0.05;
-	private readonly IDLE_K = 0.14;
-	// ─────────────────────────────────────────────────────────────────────────
+	// Snake movement state
+	private prevTop = 0;
+	private prevBottom = 0;
+	private stretchTimer: ReturnType<typeof setTimeout> | null = null;
 
 	protected set current(link: HTMLAnchorElement) {
 		if (link === this._current) return;
-		if (this._current) this._current.removeAttribute('aria-current');
+		this._current?.removeAttribute('aria-current');
 		link.setAttribute('aria-current', 'true');
 		this._current = link;
-
-		const index = this.tocLinks.indexOf(link);
-		if (index !== -1 && !this.isAtBottom) {
-			this.activeIndex = index;
-			this.repositionSnake(index, true);
-		}
+		this.updateThumb();
 	}
 
-	private onIdle = (cb: IdleRequestCallback) =>
-		(window.requestIdleCallback || ((cb) => setTimeout(cb, 1)))(cb);
-
-	constructor() {
-		super();
-		this.onIdle(() => this.init());
+	connectedCallback() {
+		this.tocLinks = [...this.querySelectorAll<HTMLAnchorElement>('a')];
+		if (!this.tocLinks.length) return;
+		if (window.innerWidth >= 1280) requestAnimationFrame(() => this.mount());
+		this.initIntersectionObserver();
 	}
 
-	private init = (): void => {
-		this.tocLinks = [...this.querySelectorAll('a')];
-		if (this.tocLinks.length === 0) return;
+	private getDepth(link: HTMLAnchorElement): number {
+		return Math.min(parseInt(link.dataset.depth ?? '0', 10), LINE_X.length - 1);
+	}
 
-		if (window.innerWidth >= 1280) {
-			this.initGlide();
-		}
+	// ── Mount ──────────────────────────────────────────────
 
-		const isHeading = (el: Element): el is HTMLHeadingElement =>
-			el.matches(this.tocHeadingSelector);
+	private mount() {
+		const container = this.querySelector<HTMLElement>('.toc-list');
+		if (!container) return;
 
-		const getElementHeading = (el: Element | null): HTMLHeadingElement | null => {
-			if (!el) return null;
-			const origin = el;
-			while (el) {
-				if (el.matches('.sl-markdown-content, main > *')) {
-					return document.getElementById(PAGE_TITLE_ID) as HTMLHeadingElement;
-				}
-				if (isHeading(el)) return el;
-				const childHeading = el.querySelector<HTMLHeadingElement>(this.tocHeadingSelector);
-				if (childHeading) return childHeading;
-				el = el.previousElementSibling;
-				while (el?.lastElementChild) {
-					el = el.lastElementChild;
-				}
-				const h = getElementHeading(el);
-				if (h) return h;
-			}
-			return getElementHeading(origin.parentElement);
-		};
+		this.injectTrackDecorations();
+		this.computeAndBuild(container);
+		this.updateThumb(true); // snap on first render, no snake
 
-		const setCurrent: IntersectionObserverCallback = (entries) => {
-			for (const { isIntersecting, target } of entries) {
-				if (!isIntersecting) continue;
-				const heading = getElementHeading(target);
-				if (!heading) continue;
-				const link = this.tocLinks.find(
-					(link) => link.hash === '#' + encodeURIComponent(heading.id)
-				);
-				if (link) {
-					this.current = link;
-					break;
-				}
-			}
-		};
-
-		// ─── Scroll handler ──────────────────────────────────────────────────
-		const onScroll = () => {
-			const currentScrollY = window.scrollY;
-			const delta = currentScrollY - this.lastScrollY;
-			this.lastScrollY = currentScrollY;
-
-			if (delta !== 0 && this.activeIndex !== -1) {
-				const newDir = delta > 0 ? 1 : -1;
-				this.scrollDirection = newDir;
-
-				/**
-				 * IMPULSE: immediately push the leading edge ahead of its
-				 * resting target.  The physics loop then pulls it back,
-				 * creating the "lunge → contract" worm feel.
-				 *
-				 * We cap the impulse so rapid scrolling doesn't look broken.
-				 */
-				const impulse = Math.min(Math.abs(delta) * 0.7, this.MAX_IMPULSE);
-				if (newDir === 1) {
-					// Head = end edge; push it forward (down the path)
-					this.currentEnd = Math.min(
-						this.currentEnd + impulse,
-						this.targetEnd + this.MAX_IMPULSE
-					);
-				} else {
-					// Head = start edge; push it backward (up the path)
-					this.currentStart = Math.max(
-						this.currentStart - impulse,
-						this.targetStart - this.MAX_IMPULSE
-					);
-				}
-
-				if (!this.physicsRaf) {
-					this.physicsRaf = requestAnimationFrame(this.physicsLoop);
-				}
-			}
-
-			// ── Bottom-of-page edge case ─────────────────────────────────
-			const atBottom =
-				window.innerHeight + window.scrollY >=
-				document.documentElement.scrollHeight - 50;
-
-			if (atBottom && !this.isAtBottom) {
-				this.isAtBottom = true;
-				const lastIndex = this.tocLinks.length - 1;
-				const lastLink = this.tocLinks[lastIndex];
-				if (lastLink) {
-					this.activeIndex = lastIndex;
-					this.repositionSnake(lastIndex, true);
-				}
-			} else if (!atBottom && this.isAtBottom) {
-				this.isAtBottom = false;
-				if (this._current) {
-					const index = this.tocLinks.indexOf(this._current);
-					if (index !== -1) {
-						this.activeIndex = index;
-						this.repositionSnake(index, true);
-					}
-				}
-			}
-		};
-		// ────────────────────────────────────────────────────────────────────
-
-		const toObserve = document.querySelectorAll(
-			[
-				`main :where(${this.tocHeadingSelector})`,
-				`main :where(${this.tocHeadingSelector}, .sl-heading-wrapper) ~ *:not(:has(${this.tocHeadingSelector}))`,
-				`main .sl-markdown-content > *:not(:has(${this.tocHeadingSelector}))`,
-				`main > *:not(:has(${this.tocHeadingSelector}))`,
-			].join()
-		);
-
-		let observer: IntersectionObserver | undefined;
-		const observe = () => {
-			if (observer) return;
-			observer = new IntersectionObserver(setCurrent, { rootMargin: this.getRootMargin() });
-			toObserve.forEach((h) => observer!.observe(h));
-		};
-		observe();
-
-		window.addEventListener('scroll', onScroll, { passive: true });
-		requestAnimationFrame(onScroll);
-
-		let timeout: number;
-		window.addEventListener('resize', () => {
-			if (observer) {
-				observer.disconnect();
-				observer = undefined;
-			}
-			window.clearTimeout(timeout);
-			timeout = window.setTimeout(() => {
-				this.onIdle(observe);
-				if (window.innerWidth >= 1280) {
-					if (!this.svg) this.initGlide();
-					this.redraw();
-				} else if (this.svg) {
-					this.svg.remove();
-					this.svg = null;
-				}
-			}, 200);
+		const ro = new ResizeObserver(() => {
+			this.computeAndBuild(container);
+			this.updateThumb(true);
 		});
-	};
-
-	private initGlide() {
-		const sidebar = this.querySelector('nav ul');
-		if (!sidebar || sidebar.querySelector('.toc-svg-track')) return;
-
-		this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-		this.svg.classList.add('toc-svg-track');
-		this.svg.setAttribute('aria-hidden', 'true');
-
-		this.trackPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		this.trackPath.classList.add('toc-path-track');
-
-		this.snakePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		this.snakePath.classList.add('toc-path-snake');
-
-		this.dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-		this.dot.classList.add('toc-dot');
-		this.dot.setAttribute('r', '3');
-
-		this.svg.append(this.trackPath, this.snakePath, this.dot);
-		sidebar.insertBefore(this.svg, sidebar.firstChild);
-
-		requestAnimationFrame(() => this.redraw());
+		ro.observe(container);
 	}
 
-	private getLinkDepth(link: HTMLAnchorElement) {
-		const sidebar = this.querySelector('nav ul');
-		let depth = 0, el = link.parentElement;
-		while (el && el !== sidebar) {
-			if (el.tagName === 'UL') depth++;
-			el = el.parentElement;
-		}
-		return Math.min(depth, this.depthOffsets.length - 1);
-	}
+	// ── Per-item gray track decorations ────────────────────
 
-	private buildPoints(): Array<{ x: number, y: number, h: number, hidden?: boolean }> {
-		const sidebar = this.querySelector('nav ul');
-		if (!sidebar) return [];
-		const ulRect = sidebar.getBoundingClientRect();
+	private injectTrackDecorations() {
+		const NS = 'http://www.w3.org/2000/svg';
 
-		return this.tocLinks.map(link => {
-			const r = link.getBoundingClientRect();
-			const depth = this.getLinkDepth(link);
-			const x = this.depthOffsets[depth] ?? 0;
-			if (!r.height || r.width === 0) {
-				return { x, y: 0, h: 0, hidden: true };
+		for (let i = 0; i < this.tocLinks.length; i++) {
+			const link = this.tocLinks[i]!;
+			// Attach to the <a>, NOT the <li> — the <li> wraps nested children too
+			link.style.position = 'relative';
+
+			const depth = this.getDepth(link);
+			const x = getLineX(depth);
+			const prevX = i > 0 ? getLineX(this.getDepth(this.tocLinks[i - 1]!)) : x;
+			const nextX = i < this.tocLinks.length - 1 ? getLineX(this.getDepth(this.tocLinks[i + 1]!)) : x;
+
+			// Vertical line segment
+			const line = document.createElement('div');
+			line.classList.add('toc-track-line');
+			line.style.insetInlineStart = `${x}px`;
+			if (x !== prevX) line.style.top = '6px';
+			if (x !== nextX) line.style.bottom = '6px';
+			link.prepend(line);
+
+			// Curve SVG when depth changes from previous item
+			if (i > 0 && x !== prevX) {
+				const minX = Math.min(x, prevX);
+				const w = Math.abs(x - prevX) + 1;
+
+				const svg = document.createElementNS(NS, 'svg');
+				svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+				svg.setAttribute('viewBox', `${minX} 0 ${w} 12`);
+				svg.classList.add('toc-curve-svg');
+				svg.style.width = `${w}px`;
+				svg.style.height = '12px';
+				svg.style.insetInlineStart = `${minX}px`;
+				svg.setAttribute('aria-hidden', 'true');
+
+				const path = document.createElementNS(NS, 'path');
+				path.setAttribute('d', `M ${prevX} 0 C ${prevX} 8 ${x} 4 ${x} 12`);
+				path.classList.add('toc-curve-path');
+				svg.appendChild(path);
+				link.prepend(svg);
 			}
-			return {
-				x,
-				y: r.top - ulRect.top + r.height / 2 + sidebar.scrollTop,
-				h: r.height,
-			};
-		});
+		}
 	}
 
-	private pointsToPath(pts: Array<{ x: number, y: number, hidden?: boolean }>) {
-		const validPts = pts.filter(p => !p.hidden);
-		if (validPts.length < 2) return '';
+	// ── Compute positions + build thumb overlay ────────────
 
-		const first = validPts[0]!;
-		const rootStyles = getComputedStyle(document.documentElement);
-		const globalRadius = parseInt(rootStyles.getPropertyValue('--fuma-radius')) || 8;
-		const CURVE_SIZE = globalRadius * 2;
-		let d = `M ${first.x} ${first.y}`;
+	private computeAndBuild(container: HTMLElement) {
+		const containerRect = container.getBoundingClientRect();
 
-		for (let i = 1; i < validPts.length; i++) {
-			const p0 = validPts[i - 1]!;
-			const p1 = validPts[i]!;
-			if (p0.x === p1.x) {
-				d += ` L ${p1.x} ${p1.y}`;
+		// 1. Compute positions for each link
+		this.positions = [];
+		for (const link of this.tocLinks) {
+			const styles = getComputedStyle(link);
+			const rect = link.getBoundingClientRect();
+			const x = getLineX(this.getDepth(link)) + 0.5;
+			const pt = parseFloat(styles.paddingTop);
+			const pb = parseFloat(styles.paddingBottom);
+			const top = rect.top - containerRect.top + pt;
+			const bottom = rect.top - containerRect.top + rect.height - pb;
+			this.positions.push([top, bottom, x]);
+		}
+
+		if (!this.positions.length) return;
+
+		// 2. Build the full SVG path with cubic bezier curves between depth changes
+		//    (Same formula as FumaDocs clerk.tsx line 61-67)
+		let d = '';
+		for (let i = 0; i < this.positions.length; i++) {
+			const [top, bottom, x] = this.positions[i]!;
+			if (i === 0) {
+				d += `M${x} ${top} L${x} ${bottom}`;
 			} else {
-				const midY = (p0.y + p1.y) / 2;
-				const offset = Math.min(Math.abs(p1.y - p0.y) / 3, CURVE_SIZE);
-				d += ` L ${p0.x} ${midY - offset}`;
-				d += ` C ${p0.x} ${midY}, ${p1.x} ${midY}, ${p1.x} ${midY + offset}`;
-				d += ` L ${p1.x} ${p1.y}`;
+				const [, upperBottom, upperX] = this.positions[i - 1]!;
+				d += ` C ${upperX} ${top - 4} ${x} ${upperBottom + 4} ${x} ${top} L${x} ${bottom}`;
 			}
 		}
-		return d;
+		this.pathD = d;
+
+		// 3. Create/update the thumb overlay
+		this.ensureThumb(container);
 	}
 
-	private getPathLengthAtPoint(pathEl: SVGPathElement, tx: number, ty: number) {
-		const total = pathEl.getTotalLength();
-		let lo = 0, hi = total;
-		for (let i = 0; i < 10; i++) {
-			const mid = (lo + hi) / 2;
-			const ptLo = pathEl.getPointAtLength(lo + (mid - lo) / 2);
-			const ptHi = pathEl.getPointAtLength(mid + (hi - mid) / 2);
-			if (Math.hypot(ptLo.x - tx, ptLo.y - ty) < Math.hypot(ptHi.x - tx, ptHi.y - ty))
-				hi = mid;
-			else lo = mid;
+	private ensureThumb(container: HTMLElement) {
+		const lastPos = this.positions[this.positions.length - 1];
+		if (!lastPos) return;
+		const w = Math.max(...this.positions.map(p => p[2])) + 8;
+		const h = lastPos[1];
+		const NS = 'http://www.w3.org/2000/svg';
+
+		if (!this.thumbWrapper) {
+			this.thumbWrapper = document.createElement('div');
+			this.thumbWrapper.classList.add('toc-thumb-track');
+
+			const svg = document.createElementNS(NS, 'svg');
+			svg.classList.add('toc-thumb-svg');
+			const path = document.createElementNS(NS, 'path');
+			path.classList.add('toc-thumb-path');
+			svg.appendChild(path);
+			this.thumbSvg = svg;
+
+			this.thumbWrapper.append(svg);
+			container.prepend(this.thumbWrapper);
 		}
-		return (lo + hi) / 2;
+
+		// Update dimensions
+		this.thumbWrapper.style.width = `${w}px`;
+		this.thumbWrapper.style.height = `${h}px`;
+
+		const svg = this.thumbSvg!;
+		svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+		svg.style.width = `${w}px`;
+		svg.style.height = `${h}px`;
+		svg.querySelector('path')!.setAttribute('d', this.pathD);
 	}
 
-	private redraw() {
-		if (!this.trackPath || !this.snakePath) return;
-		this.points = this.buildPoints();
-		const d = this.pointsToPath(this.points);
-		if (!d) return;
-		this.trackPath.setAttribute('d', d);
-		this.snakePath.setAttribute('d', d);
+	// ── Snake movement ─────────────────────────────────────
+	//
+	// Phase 1: The leading edge (head) moves to target immediately.
+	//          The trailing edge (tail) stays where it was → the snake "stretches."
+	// Phase 2: After ~100ms, the trailing edge catches up → the snake "contracts."
+	//
+	// Both phases use CSS transition for smooth interpolation.
+	// No rAF loops, no physics, no jitter.
 
-		if (this.dot) {
-			this.dot.style.offsetPath = `path("${d}")`;
-		}
-
-		if (this.activeIndex !== -1) {
-			this.repositionSnake(this.activeIndex, false);
-		}
+	private setClip(top: number, bottom: number) {
+		if (!this.thumbSvg) return;
+		this.thumbSvg.style.clipPath = `polygon(0 ${top}px, 100% ${top}px, 100% ${bottom}px, 0 ${bottom}px)`;
 	}
 
-	private repositionSnake(index: number, animate = true) {
-		if (!this.snakePath || !this.trackPath) return;
-		const pt = this.points[index];
-		if (!pt || pt.hidden) return;
+	private updateThumb(snap = false) {
+		if (!this._current || !this.thumbSvg) return;
 
-		const total = this.trackPath.getTotalLength();
-		const centerLen = this.getPathLengthAtPoint(this.trackPath, pt.x, pt.y);
-		const halfH = pt.h / 2 + 4;
+		const idx = this.tocLinks.indexOf(this._current);
+		if (idx === -1 || !this.positions[idx]) return;
 
-		this.targetStart = Math.max(0, centerLen - halfH);
-		this.targetEnd   = Math.min(total, centerLen + halfH);
+		const [top, bottom] = this.positions[idx];
 
-		if (!animate) {
-			this.currentStart = this.targetStart;
-			this.currentEnd   = this.targetEnd;
-			this.updateSnakePath();
+		// Cancel any pending phase-2 contraction
+		if (this.stretchTimer) {
+			clearTimeout(this.stretchTimer);
+			this.stretchTimer = null;
+		}
+
+		// First render or resize — snap immediately, no animation
+		if (snap || (this.prevTop === 0 && this.prevBottom === 0)) {
+			this.setClip(top, bottom);
+			this.prevTop = top;
+			this.prevBottom = bottom;
 			return;
 		}
 
-		if (!this.physicsRaf) {
-			this.physicsRaf = requestAnimationFrame(this.physicsLoop);
+		const movingDown = top > this.prevTop;
+
+		// Phase 1: Stretch — head leads, tail stays
+		if (movingDown) {
+			this.setClip(this.prevTop, bottom); // bottom (head) jumps, top (tail) stays
+		} else {
+			this.setClip(top, this.prevBottom); // top (head) jumps, bottom (tail) stays
 		}
+
+		// Phase 2: Contract — tail catches up after a delay
+		this.stretchTimer = setTimeout(() => {
+			this.setClip(top, bottom);
+			this.stretchTimer = null;
+		}, 100);
+
+		this.prevTop = top;
+		this.prevBottom = bottom;
 	}
 
-	// ─── Worm physics loop ────────────────────────────────────────────────────
-	private physicsLoop = () => {
-		/**
-		 * Asymmetric spring constants driven by scroll direction:
-		 *
-		 *  Scrolling DOWN  → end   is the head (HEAD_K), start is the tail (TAIL_K)
-		 *  Scrolling UP    → start is the head (HEAD_K), end   is the tail (TAIL_K)
-		 *  Settled / idle  → both edges pull with IDLE_K
-		 *
-		 * This makes the leading edge lunge to the target quickly while the
-		 * trailing edge drags behind, exactly like a worm/snake crawling.
-		 */
-		let startK: number;
-		let endK: number;
+	// ── Intersection Observer ──────────────────────────────
 
-		if (this.scrollDirection > 0) {
-			// Moving down: end = head (fast lunge), start = tail (slow drag)
-			endK   = this.HEAD_K;
-			startK = this.TAIL_K;
-		} else if (this.scrollDirection < 0) {
-			// Moving up: start = head (fast lunge), end = tail (slow drag)
-			startK = this.HEAD_K;
-			endK   = this.TAIL_K;
-		} else {
-			// Settled: symmetric gentle pull
-			startK = endK = this.IDLE_K;
-		}
-
-		this.currentStart += (this.targetStart - this.currentStart) * startK;
-		this.currentEnd   += (this.targetEnd   - this.currentEnd)   * endK;
-
-		// ── Length constraints ─────────────────────────────────────────────
-		// Enforce a minimum so the dot never disappears,
-		// but allow generous stretching — don't cap the max during motion.
-		const MIN_LEN = 8;
-		const len = this.currentEnd - this.currentStart;
-
-		if (len < MIN_LEN) {
-			const mid = (this.currentStart + this.currentEnd) / 2;
-			this.currentStart = mid - MIN_LEN / 2;
-			this.currentEnd   = mid + MIN_LEN / 2;
-		}
-		// ──────────────────────────────────────────────────────────────────
-
-		this.updateSnakePath();
-
-		const diff =
-			Math.abs(this.currentStart - this.targetStart) +
-			Math.abs(this.currentEnd   - this.targetEnd);
-
-		if (diff > 0.05) {
-			this.physicsRaf = requestAnimationFrame(this.physicsLoop);
-		} else {
-			// Snap exactly to target and reset
-			this.currentStart = this.targetStart;
-			this.currentEnd   = this.targetEnd;
-			this.updateSnakePath();
-			this.physicsRaf    = null;
-			this.scrollDirection = 0; // ← clear direction; next scroll sets it fresh
-		}
-	};
-	// ─────────────────────────────────────────────────────────────────────────
-
-	private updateSnakePath() {
-		if (!this.snakePath || !this.trackPath) return;
-		const total  = this.trackPath.getTotalLength();
-		const segLen = Math.max(2, this.currentEnd - this.currentStart);
-
-		this.snakePath.style.transition = 'none';
-		this.snakePath.setAttribute('stroke-dasharray',  `${segLen} ${total}`);
-		this.snakePath.setAttribute('stroke-dashoffset', `${-this.currentStart}`);
-		this.snakePath.style.opacity = '1';
-
-		if (this.dot) {
-			this.dot.style.transition = 'none';
-			const center          = (this.currentStart + this.currentEnd) / 2;
-			const distancePercent = (center / total) * 100;
-			this.dot.style.offsetDistance = `${distancePercent}%`;
-			this.dot.style.opacity = '1';
-		}
-	}
-
-	private getRootMargin(): `-${number}px 0% ${number}px` {
-		const navBarHeight    = document.querySelector('header')?.getBoundingClientRect().height ?? 0;
-		const mobileTocHeight = this.querySelector('summary')?.getBoundingClientRect().height  ?? 0;
-		const top    = navBarHeight + mobileTocHeight + 32;
-		const bottom = top + 53;
-		const height = document.documentElement.clientHeight;
-		return `-${top}px 0% ${bottom - height}px`;
+	private initIntersectionObserver() {
+		const headings = document.querySelectorAll<HTMLElement>(this.tocSelector);
+		if (!headings.length) return;
+		const linkByHref = new Map(this.tocLinks.map(a => [a.getAttribute('href'), a]));
+		const visible = new Set<string>();
+		const pickActive = () => {
+			if (!visible.size) return;
+			for (const heading of headings) {
+				if (visible.has(heading.id)) {
+					const link = linkByHref.get(`#${heading.id}`);
+					if (link) { this.current = link; return; }
+				}
+			}
+		};
+		const io = new IntersectionObserver(entries => {
+			for (const entry of entries) {
+				const id = (entry.target as HTMLElement).id;
+				if (entry.isIntersecting) visible.add(id);
+				else visible.delete(id);
+			}
+			pickActive();
+		}, { rootMargin: '-5% 0px -70% 0px', threshold: 0 });
+		headings.forEach(h => io.observe(h));
 	}
 }
-
 customElements.define('starlight-toc', StarlightTOC);

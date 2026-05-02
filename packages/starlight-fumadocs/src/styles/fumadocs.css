@@ -595,10 +595,9 @@
     background-color: var(--sl-color-bg-nav) !important;
   }
 
-  /* ── Glide TOC Styles (Infused) ───────────────────────── */
+  /* ── TOC Indicator Styles ──────────────────────────────── */
   :root {
     --glide-indicator-color: #facc15;
-    --glide-track-color: var(--sl-color-gray-4);
   }
 
   .right-sidebar nav,
@@ -613,7 +612,6 @@
       list-style: none !important;
       padding-inline-start: 0 !important;
       margin: 0 !important;
-      position: relative;
     }
 
     starlight-toc nav ul::before {
@@ -659,40 +657,50 @@
       font-weight: 500 !important;
     }
 
-    /* SVG Glide Track */
-    .toc-svg-track {
+    /* ── Per-item gray track decorations ─────────────────── */
+    .toc-track-line {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 60px;
-      height: 100%;
+      inset-block: 0;
+      width: 1px;
+      background: var(--sl-color-hairline);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .toc-curve-svg {
+      position: absolute;
+      top: -6px;
+      z-index: -1;
       pointer-events: none;
       overflow: visible;
-      will-change: contents;
     }
 
-    .toc-path-track {
+    .toc-curve-path {
+      stroke: var(--sl-color-hairline);
+      stroke-width: 1;
       fill: none;
-      stroke: var(--glide-track-color);
-      stroke-width: 1.25;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      opacity: 0.75;
     }
 
-    .toc-path-snake {
-      fill: none;
-      stroke: var(--glide-indicator-color);
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .toc-dot {
-      fill: var(--glide-indicator-color);
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), offset-distance 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    /* ── Active indicator: clip-path masked SVG + dot ──── */
+    .toc-thumb-track {
+      position: absolute;
+      top: 0;
+      inset-inline-start: 0;
       pointer-events: none;
     }
+
+    .toc-thumb-svg {
+      position: absolute;
+      /* Smooth glide: slightly longer duration + ease-out for natural deceleration */
+      transition: clip-path 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .toc-thumb-path {
+      stroke: var(--glide-indicator-color);
+      stroke-width: 1;
+      fill: none;
+    }
+
 
     /* ── Accessibility & Focus Rings ──────────────────────── */
     :focus-visible {

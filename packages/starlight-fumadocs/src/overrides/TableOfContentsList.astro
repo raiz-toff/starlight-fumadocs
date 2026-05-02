@@ -19,7 +19,7 @@ const { toc, isMobile = false, depth = 0 } = Astro.props;
 	{
 		toc.map((heading) => (
 			<li>
-				<a href={'#' + heading.slug} aria-current={depth === 0 && heading.slug === '_top' ? 'true' : undefined}>
+				<a href={'#' + heading.slug} data-depth={depth} aria-current={depth === 0 && heading.slug === '_top' ? 'true' : undefined}>
 					<span>{heading.text}</span>
 				</a>
 				{heading.children.length > 0 && (
