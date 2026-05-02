@@ -597,7 +597,7 @@
 
   /* ── TOC Indicator Styles ──────────────────────────────── */
   :root {
-    --glide-indicator-color: #facc15;
+    --glide-indicator-color: var(--sl-color-accent);
   }
 
   .right-sidebar nav,
@@ -662,7 +662,7 @@
       position: absolute;
       inset-block: 0;
       width: 1px;
-      background: var(--sl-color-hairline);
+      background: var(--mint-border);
       z-index: -1;
       pointer-events: none;
     }
@@ -676,7 +676,7 @@
     }
 
     .toc-curve-path {
-      stroke: var(--sl-color-hairline);
+      stroke: var(--mint-border);
       stroke-width: 1;
       fill: none;
     }
