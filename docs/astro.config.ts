@@ -10,6 +10,12 @@ export default defineConfig({
   vite: {
     plugins: [],
   },
+  prefetch: {
+    defaultStrategy: 'viewport'
+  },
+  experimental: {
+    clientPrerender: true,
+  },
   integrations: [
     astroD2({
       experimental: {

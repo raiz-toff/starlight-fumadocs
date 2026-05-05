@@ -13,125 +13,241 @@ const pagefindTranslations = {
 
 const dataAttributes: DOMStringMap = { 'data-translations': JSON.stringify(pagefindTranslations) };
 if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash'] = '';
-
-const isMac = typeof navigator !== 'undefined' && navigator.platform.indexOf('Mac') > -1;
-const shortcutLabel = isMac ? '⌘' : 'Ctrl';
 ---
 
 <site-search class={Astro.props.class} {...dataAttributes}>
+	<!-- ═══ SVG Gooey Filter (hidden, referenced by CSS) ═══ -->
+	<svg class="gooey-filter-svg" aria-hidden="true">
+		<defs>
+			<filter id="gooey-filter">
+				<feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+				<feColorMatrix
+					in="blur"
+					mode="matrix"
+					values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+					result="gooey"
+				/>
+				<feBlend in="SourceGraphic" in2="gooey" />
+			</filter>
+		</defs>
+	</svg>
+
+	<!-- ═══ Trigger Button (Gooey-inspired) ═══ -->
 	<button
 		data-open-modal
 		disabled
-		class="search-trigger sl-flex"
+		class="search-trigger"
 		aria-label={Astro.locals.t('search.label')}
 		aria-keyshortcuts="Control+K Meta+K"
 	>
-		<svg
-			width="16"
-			height="16"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="2"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			class="search-icon"
-		>
-			<circle cx="11" cy="11" r="8"></circle>
-			<path d="m21 21-4.3-4.3"></path>
-		</svg>
-		<span class="placeholder sl-hidden md:sl-inline-block">{Astro.locals.t('search.label')}</span>
-		<div class="shortcut sl-hidden md:sl-flex">
-			<kbd>{shortcutLabel}</kbd>
-			<kbd>K</kbd>
+		<div class="trigger-gooey-wrap">
+			<div class="trigger-pill">
+				<svg
+					width="15"
+					height="15"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="search-icon"
+				>
+					<circle cx="11" cy="11" r="8"></circle>
+					<path d="m21 21-4.3-4.3"></path>
+				</svg>
+				<span class="trigger-label">{Astro.locals.t('search.label')}</span>
+				<div class="trigger-shortcut">
+					<kbd class="shortcut-key">⌘</kbd>
+					<kbd class="shortcut-key">K</kbd>
+				</div>
+			</div>
 		</div>
 	</button>
 
+	<!-- ═══ Search Modal ═══ -->
 	<dialog style="padding:0" aria-label={Astro.locals.t('search.label')}>
-		<div class="dialog-frame sl-flex">
-			<button data-close-modal class="sl-flex md:sl-hidden">
-				{Astro.locals.t('search.cancelLabel')}
-			</button>
-			{
-				import.meta.env.DEV ? (
-					<div style="margin: auto; text-align: center; white-space: pre-line;" dir="ltr">
-						<p>{Astro.locals.t('search.devWarning')}</p>
-					</div>
-				) : (
-					<div class="search-container">
-						<div id="starlight__search" />
-					</div>
-				)
-			}
+		<div class="dialog-frame">
+			<!-- Modal Header -->
+			<div class="modal-header">
+				<div class="modal-search-icon-wrap">
+					<svg
+						width="18"
+						height="18"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="modal-search-icon"
+					>
+						<circle cx="11" cy="11" r="8"></circle>
+						<path d="m21 21-4.3-4.3"></path>
+					</svg>
+				</div>
+				<span class="modal-title">Search documentation</span>
+				<button data-close-modal class="modal-close-btn" aria-label="Close search">
+					<kbd>Esc</kbd>
+				</button>
+			</div>
+
+			<!-- Search Body -->
+			<div class="modal-body">
+				{
+					import.meta.env.DEV ? (
+						<div class="dev-warning" dir="ltr">
+							<div class="dev-warning-icon">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="12" cy="12" r="10"></circle>
+									<path d="M12 16v-4"></path>
+									<path d="M12 8h.01"></path>
+								</svg>
+							</div>
+							<p class="dev-warning-text">{Astro.locals.t('search.devWarning')}</p>
+						</div>
+					) : (
+						<div class="search-container">
+							<div class="starlight__search-ui" />
+						</div>
+					)
+				}
+			</div>
+
+			<!-- Modal Footer -->
+			<div class="modal-footer">
+				<div class="footer-hints">
+					<span class="hint"><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+					<span class="hint"><kbd>↵</kbd> Open</span>
+					<span class="hint"><kbd>Esc</kbd> Close</span>
+				</div>
+				<span class="footer-brand">Search by Pagefind</span>
+			</div>
 		</div>
 	</dialog>
 </site-search>
 
+
 <style>
+	/* ── Hidden SVG filter ─────────────────────────── */
+	.gooey-filter-svg {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
 	site-search {
 		display: contents;
 	}
 
+	/* ═══ TRIGGER BUTTON ═══════════════════════════════ */
 	.search-trigger {
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.375rem 0.75rem;
-		border: 1px solid var(--sl-color-gray-5);
-		border-radius: var(--fuma-radius);
-		background-color: hsla(var(--sl-color-bg-base), 0.4);
-		color: var(--sl-color-gray-3);
-		font-size: 0.875rem;
+		all: unset;
 		cursor: pointer;
+		display: block;
 		width: 100%;
 		max-width: 24rem;
+	}
+
+	.trigger-gooey-wrap {
+		filter: url(#gooey-filter);
+	}
+
+	.trigger-pill {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 0.75rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: var(--fuma-radius, 8px);
+		background-color: var(--sl-color-bg-nav);
+		color: var(--sl-color-gray-3);
+		font-size: 0.8125rem;
 		transition: all 0.2s ease;
 	}
 
-	.search-trigger:hover {
-		border-color: var(--sl-color-gray-2);
-		background-color: hsla(var(--sl-color-bg-base), 0.6);
-		color: var(--sl-color-white);
+	.search-trigger:hover .trigger-pill {
+		border-color: var(--sl-color-gray-4);
+		color: var(--sl-color-text);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+	}
+
+	.search-trigger:focus-visible .trigger-pill {
+		outline: 2px solid var(--sl-color-accent);
+		outline-offset: 2px;
 	}
 
 	.search-icon {
-		width: 0.875rem;
-		height: 0.875rem;
-		color: var(--sl-color-gray-3);
+		flex-shrink: 0;
+		opacity: 0.6;
+		transition: opacity 0.2s ease;
 	}
 
-	.placeholder {
+	.search-trigger:hover .search-icon {
+		opacity: 1;
+	}
+
+	.trigger-label {
 		flex: 1;
 		text-align: left;
-		font-size: 0.8125rem;
+		white-space: nowrap;
 	}
 
-	.shortcut {
-		gap: 0.25rem;
+	.trigger-shortcut {
+		display: flex;
+		gap: 3px;
 		align-items: center;
 	}
 
-	kbd {
+	.shortcut-key {
 		font-family: inherit;
 		font-size: 0.625rem;
-		background-color: var(--sl-color-gray-6);
-		border: 1px solid var(--sl-color-gray-5);
+		font-weight: 500;
+		background-color: var(--sl-color-bg-sidebar);
+		border: 1px solid var(--sl-color-hairline);
 		border-radius: 4px;
-		padding: 0.125rem 0.25rem;
-		color: var(--sl-color-gray-3);
-		line-height: 1;
+		padding: 1px 5px;
+		color: var(--sl-color-gray-4);
+		line-height: 1.4;
 	}
 
+	/* ── Mobile: icon-only trigger ─────────────────── */
 	@media (max-width: 50rem) {
 		.search-trigger {
-			padding: 0.5rem;
 			width: auto;
+			max-width: none;
+		}
+		.trigger-gooey-wrap {
+			filter: none;
+		}
+		.trigger-pill {
+			padding: 0.5rem;
 			border: none;
-			background: none;
+			background: transparent;
+			gap: 0;
+		}
+		.trigger-label,
+		.trigger-shortcut {
+			display: none;
+		}
+		.search-icon {
+			opacity: 0.8;
 		}
 	}
 
-	/* ── Collapsed Sidebar Style ────────────────────── */
+	/* ── Collapsed Sidebar: icon-only trigger ──────── */
 	:global([data-sidebar-collapsed="true"]) .search-trigger {
+		width: auto !important;
+		max-width: none !important;
+	}
+
+	:global([data-sidebar-collapsed="true"]) .trigger-gooey-wrap {
+		filter: none !important;
+	}
+
+	:global([data-sidebar-collapsed="true"]) .trigger-pill {
 		width: 32px !important;
 		height: 32px !important;
 		padding: 0 !important;
@@ -143,71 +259,397 @@ const shortcutLabel = isMac ? '⌘' : 'Ctrl';
 	}
 
 	:global([data-sidebar-collapsed="true"]) .search-icon {
-		width: 1.25rem !important;
-		height: 1.25rem !important;
-		color: var(--sl-color-gray-2) !important;
-		margin: 0 !important;
+		width: 1.125rem !important;
+		height: 1.125rem !important;
+		opacity: 0.7 !important;
 	}
 
-	:global([data-sidebar-collapsed="true"]) .placeholder,
-	:global([data-sidebar-collapsed="true"]) .shortcut {
+	:global([data-sidebar-collapsed="true"]) .trigger-label,
+	:global([data-sidebar-collapsed="true"]) .trigger-shortcut {
 		display: none !important;
 	}
 
-	/* Dialog Styles */
+	/* ═══ DIALOG / MODAL ═══════════════════════════════ */
 	dialog {
 		margin: 0;
-		background-color: var(--sl-color-bg-sidebar);
-		border: 1px solid var(--sl-color-gray-5);
+		background-color: transparent;
+		border: none;
 		width: 100%;
 		max-width: 100%;
 		height: 100%;
 		max-height: 100%;
-		box-shadow: var(--sl-shadow-lg);
-		backdrop-filter: blur(12px);
+		box-shadow: none;
 	}
 
 	dialog[open] {
 		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		padding-top: 8vh;
 	}
 
 	dialog::backdrop {
-		background-color: hsla(var(--sl-color-bg-base), 0.8);
-		backdrop-filter: blur(8px);
+		background-color: hsla(var(--sl-color-bg-base), 0.55);
+		backdrop-filter: blur(16px) saturate(150%);
+		animation: backdrop-in 0.2s ease;
 	}
 
+	@keyframes backdrop-in {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
+	/* ── Dialog Frame ──────────────────────────────── */
 	.dialog-frame {
-		position: relative;
-		overflow: auto;
+		display: flex;
 		flex-direction: column;
-		flex-grow: 1;
-		gap: 1rem;
-		padding: 1rem;
+		width: 95%;
+		max-width: 44rem;
+		max-height: 80vh;
+		border-radius: 12px;
+		background-color: var(--sl-color-bg);
+		border: 1px solid var(--sl-color-hairline);
+		box-shadow:
+			0 4px 6px -1px rgba(0, 0, 0, 0.08),
+			0 16px 40px -4px rgba(0, 0, 0, 0.15);
+		animation: modal-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		overflow: hidden;
 	}
 
-	@media (min-width: 50rem) {
-		dialog {
-			margin: 4rem auto auto;
-			border-radius: 0.75rem;
-			width: 90%;
-			max-width: 40rem;
-			height: max-content;
-			min-height: 15rem;
-			max-height: calc(100% - 8rem);
-			border: 1px solid var(--sl-color-gray-5);
+	@keyframes modal-enter {
+		from {
+			opacity: 0;
+			transform: scale(0.96) translateY(12px);
 		}
+		to {
+			opacity: 1;
+			transform: scale(1) translateY(0);
+		}
+	}
+
+	/* ── Modal Header ──────────────────────────────── */
+	.modal-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1rem 1.25rem;
+		border-bottom: 1px solid var(--sl-color-hairline);
+	}
+
+	.modal-search-icon-wrap {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--sl-color-accent);
+	}
+
+	.modal-title {
+		flex: 1;
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: var(--sl-color-gray-3);
+	}
+
+	.modal-close-btn {
+		all: unset;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+	}
+
+	.modal-close-btn kbd {
+		font-family: inherit;
+		font-size: 0.625rem;
+		font-weight: 500;
+		background-color: var(--sl-color-bg-sidebar);
+		border: 1px solid var(--sl-color-hairline);
+		border-radius: 4px;
+		padding: 2px 6px;
+		color: var(--sl-color-gray-4);
+		transition: all 0.15s ease;
+	}
+
+	.modal-close-btn:hover kbd {
+		background-color: var(--sl-color-gray-6);
+		color: var(--sl-color-text);
+	}
+
+	/* ── Modal Body ────────────────────────────────── */
+	.modal-body {
+		flex: 1;
+		overflow-y: auto;
+		min-height: 280px;
+		scrollbar-width: thin;
+		scrollbar-color: var(--sl-color-gray-5) transparent;
+	}
+
+	.dev-warning {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+		padding: 3rem 2rem;
+		text-align: center;
+		min-height: 200px;
+	}
+
+	.dev-warning-icon {
+		color: var(--sl-color-gray-4);
+	}
+
+	.dev-warning-text {
+		color: var(--sl-color-gray-3);
+		font-size: 0.875rem;
+		line-height: 1.6;
+		max-width: 28rem;
+		white-space: pre-line;
+	}
+
+	/* ── Modal Footer ──────────────────────────────── */
+	.modal-footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.75rem 1.25rem;
+		border-top: 1px solid var(--sl-color-hairline);
+		background-color: var(--sl-color-bg-sidebar);
+	}
+
+	.footer-hints {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.hint {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		font-size: 0.6875rem;
+		color: var(--sl-color-gray-4);
+	}
+
+	.hint kbd {
+		font-family: inherit;
+		font-size: 0.5625rem;
+		font-weight: 500;
+		background-color: var(--sl-color-bg);
+		border: 1px solid var(--sl-color-hairline);
+		border-radius: 3px;
+		padding: 1px 4px;
+		color: var(--sl-color-gray-4);
+		line-height: 1.3;
+	}
+
+	.footer-brand {
+		font-size: 0.625rem;
+		color: var(--sl-color-gray-4);
+		font-weight: 500;
+		letter-spacing: 0.02em;
+	}
+
+	/* ── Mobile: Full-screen modal ────────────────── */
+	@media (max-width: 50rem) {
+		dialog[open] {
+			padding-top: 0;
+			align-items: stretch;
+		}
+
+		.dialog-frame {
+			width: 100%;
+			max-width: 100%;
+			max-height: 100%;
+			height: 100%;
+			border-radius: 0;
+			border: none;
+			animation: modal-enter-mobile 0.25s ease;
+		}
+
+		@keyframes modal-enter-mobile {
+			from { opacity: 0; transform: translateY(20px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		.footer-hints {
+			display: none;
+		}
+
+		.modal-close-btn kbd {
+			font-size: 0.75rem;
+			padding: 4px 10px;
+		}
+	}
+
+	/* ═══ PAGEFIND UI OVERRIDES ════════════════════════ */
+	:global(.starlight__search-ui) {
+		--pagefind-ui-primary: var(--sl-color-accent);
+		--pagefind-ui-text: var(--sl-color-text);
+		--pagefind-ui-background: transparent;
+		--pagefind-ui-border: var(--sl-color-hairline);
+		--pagefind-ui-tag: var(--sl-color-gray-6);
+		--pagefind-ui-border-radius: 10px;
+		--pagefind-ui-font: var(--sl-font-system);
+
+		padding: 0;
+	}
+
+	/* Search Form Container */
+	:global(.pagefind-ui__form) {
+		position: relative;
+	}
+
+	/* Search Input */
+	:global(.pagefind-ui__search-input) {
+		width: 100% !important;
+		background-color: transparent !important;
+		border: none !important;
+		border-bottom: 1px solid var(--sl-color-hairline) !important;
+		border-radius: 0 !important;
+		font-size: 1rem !important;
+		font-weight: 400 !important;
+		padding: 1rem 1.25rem 1rem 3.25rem !important;
+		color: var(--sl-color-text) !important;
+		transition: all 0.2s ease !important;
+	}
+
+	:global(.pagefind-ui__search-input::placeholder) {
+		color: var(--sl-color-gray-4) !important;
+	}
+
+	:global(.pagefind-ui__search-input:focus) {
+		outline: none !important;
+		box-shadow: none !important;
+		border-bottom-color: var(--sl-color-accent) !important;
+	}
+
+	/* Search Clear Button */
+	:global(.pagefind-ui__search-clear) {
+		right: 1rem !important;
+		top: 50% !important;
+		transform: translateY(-50%) !important;
+		color: var(--sl-color-gray-4) !important;
+		background: var(--sl-color-bg-sidebar) !important;
+		border: 1px solid var(--sl-color-hairline) !important;
+		border-radius: 6px !important;
+		font-size: 0.75rem !important;
+		padding: 2px 8px !important;
+		transition: all 0.15s ease !important;
+	}
+
+	:global(.pagefind-ui__search-clear:hover) {
+		background: var(--sl-color-gray-6) !important;
+		color: var(--sl-color-text) !important;
+	}
+
+	/* Results Drawer */
+	:global(.pagefind-ui__drawer) {
+		margin-top: 0 !important;
+		padding: 0.5rem 0 !important;
+	}
+
+	/* Individual Result */
+	:global(.pagefind-ui__result) {
+		border: none !important;
+		border-bottom: none !important;
+		padding: 0.75rem 1.25rem !important;
+		margin: 0 !important;
+		transition: background-color 0.15s ease !important;
+		border-radius: 0 !important;
+	}
+
+	:global(.pagefind-ui__result:hover) {
+		background-color: var(--sl-color-gray-6) !important;
+	}
+
+	/* Result title link */
+	:global(.pagefind-ui__result-link) {
+		color: var(--sl-color-text) !important;
+		font-weight: 600 !important;
+		font-size: 0.9375rem !important;
+		text-decoration: none !important;
+		transition: color 0.15s ease !important;
+	}
+
+	:global(.pagefind-ui__result:hover .pagefind-ui__result-link) {
+		color: var(--sl-color-accent) !important;
+	}
+
+	/* Result excerpt */
+	:global(.pagefind-ui__result-excerpt) {
+		color: var(--sl-color-gray-3) !important;
+		font-size: 0.8125rem !important;
+		line-height: 1.65 !important;
+		margin-top: 0.25rem !important;
+	}
+
+	/* Highlighted text in results */
+	:global(.pagefind-ui__result-excerpt mark) {
+		background-color: hsla(var(--sl-color-accent-base), 0.15) !important;
+		color: var(--sl-color-accent) !important;
+		font-weight: 500 !important;
+		padding: 1px 3px !important;
+		border-radius: 3px !important;
+	}
+
+	/* No results message */
+	:global(.pagefind-ui__message) {
+		color: var(--sl-color-gray-3) !important;
+		font-size: 0.875rem !important;
+		padding: 2rem 1.25rem !important;
+		text-align: center !important;
+	}
+
+	/* Load more button */
+	:global(.pagefind-ui__button) {
+		background-color: transparent !important;
+		border: 1px solid var(--sl-color-hairline) !important;
+		color: var(--sl-color-gray-3) !important;
+		font-weight: 500 !important;
+		font-size: 0.8125rem !important;
+		margin: 0.75rem 1.25rem !important;
+		padding: 0.5rem 1rem !important;
+		border-radius: var(--fuma-radius, 8px) !important;
+		transition: all 0.2s ease !important;
+		width: calc(100% - 2.5rem) !important;
+	}
+
+	:global(.pagefind-ui__button:hover) {
+		background-color: var(--sl-color-bg-sidebar) !important;
+		border-color: var(--sl-color-gray-4) !important;
+		color: var(--sl-color-text) !important;
+	}
+
+	/* Sub-results */
+	:global(.pagefind-ui__result-nested) {
+		padding-left: 1rem !important;
+		border-left: 2px solid var(--sl-color-hairline) !important;
+		margin-left: 0.5rem !important;
+	}
+
+	/* Result thumbnail / image (hide) */
+	:global(.pagefind-ui__result-thumb) {
+		display: none !important;
+	}
+
+	/* Result tags */
+	:global(.pagefind-ui__result-tag) {
+		font-size: 0.6875rem !important;
+		background-color: var(--sl-color-bg-sidebar) !important;
+		border: 1px solid var(--sl-color-hairline) !important;
+		color: var(--sl-color-gray-4) !important;
+		border-radius: 4px !important;
+		padding: 1px 6px !important;
 	}
 </style>
 
+<!-- Platform-detect shortcut label -->
 <script is:inline>
 	(() => {
-		const openBtn = document.querySelector('button[data-open-modal]');
-		const shortcut = openBtn?.querySelector('.shortcut');
-		if (!openBtn || !(shortcut instanceof HTMLElement)) return;
-		const platformKey = shortcut.querySelector('kbd');
-		if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
-			platformKey.textContent = '⌘';
-			openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
+		const trigger = document.querySelector('.search-trigger');
+		if (!trigger) return;
+		const keys = trigger.querySelectorAll('.shortcut-key');
+		if (keys.length > 0 && !/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+			keys[0].textContent = 'Ctrl';
 		}
 	})();
 </script>
@@ -223,6 +665,8 @@ const shortcutLabel = isMac ? '⌘' : 'Ctrl';
 			const dialog = this.querySelector('dialog')!;
 			const dialogFrame = this.querySelector('.dialog-frame')!;
 
+			const closeModal = () => dialog.close();
+
 			const onClick = (event: MouseEvent) => {
 				const isLink = 'href' in (event.target || {});
 				if (
@@ -235,14 +679,20 @@ const shortcutLabel = isMac ? '⌘' : 'Ctrl';
 			};
 
 			const openModal = (event?: MouseEvent) => {
+				// Prevent opening if the trigger itself is hidden
+				const rect = openBtn.getBoundingClientRect();
+				if (rect.width === 0 && rect.height === 0) return;
+
 				dialog.showModal();
 				document.body.toggleAttribute('data-search-modal-open', true);
-				this.querySelector('input')?.focus();
+				// Focus the pagefind input if available
+				setTimeout(() => {
+					const input = dialog.querySelector<HTMLInputElement>('.pagefind-ui__search-input');
+					if (input) input.focus();
+				}, 100);
 				event?.stopPropagation();
 				window.addEventListener('click', onClick);
 			};
-
-			const closeModal = () => dialog.close();
 
 			openBtn.addEventListener('click', openModal);
 			openBtn.disabled = false;
@@ -255,7 +705,11 @@ const shortcutLabel = isMac ? '⌘' : 'Ctrl';
 
 			window.addEventListener('keydown', (e) => {
 				if ((e.metaKey === true || e.ctrlKey === true) && e.key === 'k') {
-					dialog.open ? closeModal() : openModal();
+					if (dialog.open) {
+						closeModal();
+					} else {
+						openModal();
+					}
 					e.preventDefault();
 				}
 			});
@@ -269,14 +723,17 @@ const shortcutLabel = isMac ? '⌘' : 'Ctrl';
 			const stripTrailingSlash = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2');
 			const formatURL = shouldStrip ? stripTrailingSlash : (path: string) => path;
 
-			window.addEventListener('DOMContentLoaded', () => {
-				if (import.meta.env.DEV) return;
-				const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
-				onIdle(async () => {
+			const searchUI = this.querySelector('.starlight__search-ui');
+			if (searchUI) {
+				const uniqueId = 'starlight__search__' + Math.random().toString(36).slice(2, 11);
+				searchUI.id = uniqueId;
+
+				const initPagefind = async () => {
+					if (import.meta.env.DEV) return;
 					const { PagefindUI } = await import('@pagefind/default-ui');
 					new PagefindUI({
 						...pagefindUserConfig,
-						element: '#starlight__search',
+						element: `#${uniqueId}`,
 						baseUrl: import.meta.env.BASE_URL,
 						bundlePath: import.meta.env.BASE_URL.replace(/\/$/, '') + '/pagefind/',
 						showImages: false,
@@ -290,8 +747,15 @@ const shortcutLabel = isMac ? '⌘' : 'Ctrl';
 							});
 						},
 					});
-				});
-			});
+				};
+
+				if (document.readyState === 'complete') {
+					initPagefind();
+				} else {
+					window.addEventListener('DOMContentLoaded', initPagefind);
+				}
+				document.addEventListener('astro:page-load', initPagefind);
+			}
 		}
 	}
 	customElements.define('site-search', SiteSearch);

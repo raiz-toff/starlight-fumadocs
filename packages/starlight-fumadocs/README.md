@@ -4,13 +4,21 @@ A premium, high-fidelity Starlight theme that brings the modern, architectural l
 
 ## Features
 
-- **Elastic Worm TOC Glide**: A sophisticated Table of Contents navigation indicator with asymmetric physics that lunges and contracts as you scroll.
+- **Fluid Spring-Based TOC**: A high-performance Table of Contents indicator using spring-physics for a "stretchy" natural feel. Includes directional "lead dots" that intelligently switch positions based on scroll direction.
+- **Premium Search UI**: A custom-engineered search interface with Astro-inspired aesthetics, smooth transitions, and theme-aware styling.
 - **Architectural Sidebar Rails**: Vertical hierarchy connectors with active-state accent bars for a clean, structural navigation experience.
-- **Unified Design System**: All components are mathematically linked to a global `--fuma-radius` design token (defaulting to 8px).
-- **Responsive "Worm" Dropdown**: A custom mobile TOC with circular progress tracking and its own vertical "tracker" line.
-- **Matte Focal Dot**: A precision-engineered active section indicator without distracting glows, ensuring sub-pixel smoothness.
+- **Minimal Mobile Popover**: A streamlined mobile TOC bar with circular scroll-progress tracking and a clean, responsive dropdown.
+- **Compact Architectural Layout**: Optimized vertical whitespace and reduced gaps between title, breadcrumbs, and content for a professional, high-density reading experience.
+- **Unified Design System**: All components are mathematically linked to global design tokens like `--fuma-radius` and leverage Tailwind CSS for styling.
 - **Full Theme Support**: Pixel-perfect parity across both Light and Dark modes with curated, high-contrast color palettes.
-- **Accessibility First**: Unified `2px` focus ring system across all interactive elements for total keyboard navigability.
+
+## Prerequisites
+
+This theme requires **Tailwind CSS** to be installed and configured in your Astro project.
+
+```bash
+npx astro add tailwind
+```
 
 ## Installation
 

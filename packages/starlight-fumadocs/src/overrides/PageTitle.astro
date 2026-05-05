@@ -5,7 +5,7 @@ import Breadcrumb from './Breadcrumb.astro';
 const { entry } = Astro.locals.starlightRoute;
 ---
 
-<div class="page-title-block">
+<div class="page-title-block animate" id="starlight-fumadocs-content-header">
   <Breadcrumb />
   
   <h1 id="_top">{entry.data.title}</h1>
@@ -76,8 +76,8 @@ const { entry } = Astro.locals.starlightRoute;
 
 <style>
   .page-title-block {
-    margin-top: 1rem;
-    margin-bottom: 2rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
   }
 
   h1 {
@@ -98,7 +98,7 @@ const { entry } = Astro.locals.starlightRoute;
   }
 
   .page-actions {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     gap: 0.5rem;
     align-items: center;
   }

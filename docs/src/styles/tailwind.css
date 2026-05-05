@@ -1,3 +1,79 @@
 @import "tailwindcss";
 @import "@fontsource/geist/index.css";
 @import "@fontsource/geist-mono/index.css";
+
+@theme {
+  --font-geist: "Geist", sans-serif;
+  --font-geist-mono: "Geist Mono", monospace;
+}
+
+/* [Animation] */
+@keyframes fade-in-up {
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate {
+  opacity: 0;
+  animation: 400ms fade-in-up cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+
+@media (prefers-reduced-motion) {
+  .animate {
+    opacity: 0;
+    animation: 100ms fade-in-up;
+    animation-fill-mode: forwards;
+  }
+}
+
+/* Staggered delays for specific sections */
+#starlight-fumadocs-content-header {
+  animation-delay: 50ms;
+}
+.fumadocs-layout .main-pane main {
+  animation-delay: 100ms;
+}
+#starlight-fumadocs-sidebar {
+  animation-delay: 150ms;
+}
+
+
+/* [Global Smoothness] */
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Scroll bar */
+:root {
+  --scrollbar-thumb: color-mix(in srgb, var(--sl-color-gray-5), transparent 70%);
+}
+
+.dark {
+  --scrollbar-thumb: color-mix(in srgb, var(--sl-color-gray-4), transparent 70%);
+}
+
+:not(html) {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 999px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--scrollbar-thumb), white 20%);
+  }
+}
+

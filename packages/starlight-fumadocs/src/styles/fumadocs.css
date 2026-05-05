@@ -5,6 +5,7 @@
  * @see https://starlight.astro.build/guides/css-and-tailwind/#cascade-layers
  * @see https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Cascade_layers
  */
+@import "./starwind.css";
 @layer starlight, fuma-theme;
 
 /**
@@ -37,10 +38,10 @@
     --sl-color-bg-sidebar: hsl(0, 0%, 96.1%);
     --sl-color-bg-inline-code: hsl(0, 0%, 93.1%);
 
-    /* Accents (FumaDocs Neutral Palette) */
-    --sl-color-accent-low: hsl(0, 0%, 90%);
-    --sl-color-accent: hsl(0, 0%, 9%);
-    --sl-color-accent-high: hsl(0, 0%, 0%);
+    /* Accents (Premium Blue Palette) */
+    --sl-color-accent-low: hsl(224, 100%, 96%);
+    --sl-color-accent: hsl(224, 89%, 55%);
+    --sl-color-accent-high: hsl(224, 89%, 40%);
 
     /* Gray Scale (Mapped to FumaDocs functional colors) */
     --sl-color-gray-1: hsl(0, 0%, 3.9%);       /* Foreground */
@@ -107,15 +108,37 @@
     --fuma-docs-row-2: calc(var(--fuma-docs-row-1) + var(--fuma-header-height));
     --fuma-docs-row-3: calc(var(--fuma-docs-row-2) + var(--fuma-toc-popover-height));
 
-    /* Functional Colors (FumaDocs) */
-    --fuma-color-info: oklch(62.3% 0.214 259.815);
-    --fuma-color-warning: oklch(76.9% 0.188 70.08);
-    --fuma-color-error: oklch(63.7% 0.237 25.331);
-    --fuma-color-success: oklch(72.3% 0.219 149.579);
-    --fuma-color-idea: oklch(70.5% 0.209 60.849);
-  }
+	/* Functional Colors (Light Mode) */
+	--fuma-color-info: hsl(210, 100%, 45%);
+	--fuma-color-warning: hsl(35, 100%, 40%);
+	--fuma-color-error: hsl(0, 84%, 48%);
+	--fuma-color-success: hsl(142, 70%, 35%);
+	
+	--fuma-bg-info: hsla(210, 100%, 45%, 0.1);
+	--fuma-bg-warning: hsla(35, 100%, 40%, 0.1);
+	--fuma-bg-error: hsla(0, 84%, 48%, 0.1);
+	--fuma-bg-success: hsla(142, 70%, 35%, 0.1);
+}
 
-  /* Collapsed state (Desktop Rail only) */
+/* ── CALLOUT / ASIDE OVERRIDES ─────────────────────────────── */
+/* These ensure that Starlight's default markdown asides also use our design tokens */
+:root .starlight-aside {
+  border-radius: var(--fuma-radius) !important;
+  border: 1px solid var(--sl-color-hairline) !important;
+  background: var(--sl-color-bg-sidebar) !important;
+}
+
+:root .starlight-aside--note { border-inline-start-color: var(--fuma-color-info) !important; background-color: var(--fuma-bg-info) !important; }
+:root .starlight-aside--tip { border-inline-start-color: var(--fuma-color-success) !important; background-color: var(--fuma-bg-success) !important; }
+:root .starlight-aside--caution { border-inline-start-color: var(--fuma-color-warning) !important; background-color: var(--fuma-bg-warning) !important; }
+:root .starlight-aside--danger { border-inline-start-color: var(--fuma-color-error) !important; background-color: var(--fuma-bg-error) !important; }
+
+:root[data-theme='dark'] .starlight-aside--note { border-inline-start-color: var(--fuma-color-info) !important; background-color: var(--fuma-bg-info) !important; }
+:root[data-theme='dark'] .starlight-aside--tip { border-inline-start-color: var(--fuma-color-success) !important; background-color: var(--fuma-bg-success) !important; }
+:root[data-theme='dark'] .starlight-aside--caution { border-inline-start-color: var(--fuma-color-warning) !important; background-color: var(--fuma-bg-warning) !important; }
+:root[data-theme='dark'] .starlight-aside--danger { border-inline-start-color: var(--fuma-color-error) !important; background-color: var(--fuma-bg-error) !important; }
+
+/* Breakpoint Definitions */
   @media (min-width: 768px) {
     .fumadocs-layout[data-sidebar-collapsed='true'] {
       --fuma-sidebar-width: 64px !important;
@@ -169,6 +192,17 @@
     --ec-codeMarkBg: hsla(0, 0%, 98%, 0.1);
     --ec-codeMarkBrd: hsla(0, 0%, 98%, 0.5);
     --ec-codeMarkText: inherit;
+    
+    /* Functional Colors (Dark Mode) */
+    --fuma-color-info: hsl(200, 100%, 70%);
+    --fuma-color-warning: hsl(40, 100%, 65%);
+    --fuma-color-error: hsl(0, 100%, 70%);
+    --fuma-color-success: hsl(140, 80%, 70%);
+
+    --fuma-bg-info: hsla(200, 100%, 70%, 0.1);
+    --fuma-bg-warning: hsla(40, 100%, 65%, 0.1);
+    --fuma-bg-error: hsla(0, 100%, 70%, 0.1);
+    --fuma-bg-success: hsla(140, 80%, 70%, 0.1);
   }
 
   /* Breakpoint Definitions
@@ -259,6 +293,10 @@
       line-height: 1.1;
       margin-top: 0;
       margin-bottom: 2rem;
+    }
+
+    & > :first-child {
+      margin-top: 0 !important;
     }
 
     h2 {
@@ -363,7 +401,7 @@
     hr {
       border: 0;
       border-top: 1px solid var(--sl-color-hairline);
-      margin: 3rem 0;
+      margin: 1rem 0;
     }
 
     table {
@@ -705,14 +743,21 @@
 
     .toc-thumb-svg {
       position: absolute;
-      /* Smooth glide: slightly longer duration + ease-out for natural deceleration */
-      transition: clip-path 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+      overflow: visible;
     }
 
     .toc-thumb-path {
-      stroke: var(--glide-indicator-color);
-      stroke-width: 1;
+      stroke: var(--sl-color-accent);
+      stroke-width: 1.5;
       fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: opacity 0.2s ease;
+    }
+
+    .toc-thumb-dot {
+      fill: var(--sl-color-accent);
+      transition: opacity 0.2s ease;
     }
 
 
@@ -1011,7 +1056,7 @@
 
 :root .sl-link-button.primary {
   background: var(--sl-color-accent) !important;
-  color: #000 !important;
+  color: var(--sl-color-text-invert) !important;
   border: 1px solid var(--sl-color-accent) !important;
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
@@ -1149,31 +1194,6 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-/* ── CALLOUT / ASIDE BLOCKS ──────────────────────────────────── */
-
-:root .starlight-aside {
-  border-radius: var(--mint-radius-lg) !important;
-  border: 1px solid var(--mint-border-strong) !important;
-  background: var(--mint-surface) !important;
-  padding: 1rem 1.25rem !important;
-}
-:root[data-theme='dark'] .starlight-aside--note {
-  border-color: oklch(62% 0.22 250 / 0.3) !important;
-  background: oklch(20% 0.06 250 / 0.5) !important;
-}
-:root[data-theme='dark'] .starlight-aside--tip {
-  border-color: oklch(65% 0.2 150 / 0.3) !important;
-  background: oklch(20% 0.06 150 / 0.5) !important;
-}
-:root[data-theme='dark'] .starlight-aside--caution {
-  border-color: oklch(70% 0.18 50 / 0.3) !important;
-  background: oklch(20% 0.06 50 / 0.5) !important;
-}
-:root[data-theme='dark'] .starlight-aside--danger {
-  border-color: oklch(62% 0.22 15 / 0.3) !important;
-  background: oklch(20% 0.07 15 / 0.5) !important;
-}
-
 /* ── TABLES ──────────────────────────────────────────────────── */
 
 /* Starlight defaults to display: block for mobile scrolling. 
@@ -1309,7 +1329,11 @@
 :root hr {
   border: none !important;
   border-top: 1px solid var(--mint-border) !important;
-  margin: 2.5rem 0 !important;
+  margin: 1rem 0 !important;
+}
+
+:root hr + * {
+  margin-top: 0 !important;
 }
 
 /* ── SCROLLBAR ───────────────────────────────────────────────── */
@@ -1386,7 +1410,7 @@
 /* ── IMAGE STYLING ───────────────────────────────────────────── */
 
 :root starlight-image-zoom {
-  margin: 3rem auto !important;
+  margin: 0 !important;
   display: block;
 }
 
@@ -1559,3 +1583,29 @@
 }
 
 
+
+/* ── Smoothness & Animations ────────────────────────── */
+@keyframes fade-in-up {
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate {
+  opacity: 0;
+  animation: 400ms fade-in-up cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+
+@media (prefers-reduced-motion) {
+  .animate {
+    opacity: 0;
+    animation: 100ms fade-in-up;
+    animation-fill-mode: forwards;
+  }
+}

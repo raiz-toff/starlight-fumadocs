@@ -41,6 +41,9 @@ export default function starlightFumadocs(options?: StarlightFumadocsConfig): St
             Footer: 'starlight-fumadocs/overrides/Footer.astro',
             MobileMenuToggle: 'starlight-fumadocs/overrides/MobileMenuToggle.astro',
             Banner: 'starlight-fumadocs/overrides/Banner.astro',
+            Aside: 'starlight-fumadocs/overrides/Aside.astro',
+            Card: 'starlight-fumadocs/overrides/Card.astro',
+            LinkCard: 'starlight-fumadocs/overrides/LinkCard.astro',
             ...config.components,
           },
         })

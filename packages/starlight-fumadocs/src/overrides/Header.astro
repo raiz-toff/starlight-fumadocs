@@ -2,16 +2,22 @@
 import MobileMenuToggle from 'virtual:starlight/components/MobileMenuToggle';
 import Search from 'virtual:starlight/components/Search';
 import SiteTitle from 'virtual:starlight/components/SiteTitle';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 
 import type { Props as StarlightProps } from '@astrojs/starlight/props';
 
 export interface Props extends StarlightProps {}
 
-// (locale not needed in this override)
+const { hasSidebar: propHasSidebar, entry: propEntry } = Astro.props;
+const route = Astro.locals.starlightRoute;
+const entry = propEntry || route?.entry;
+const hasSidebar = propHasSidebar ?? route?.hasSidebar;
+
+const isSplash = entry?.data.template === 'splash' || !!entry?.data.hero || hasSidebar === false;
 ---
 
 <header class="header">
-	<div class="header-container sl-flex">
+	<div class={`header-container sl-flex ${isSplash ? 'is-splash' : ''}`}>
 		<div class="title-wrapper sl-flex">
 			<SiteTitle {...Astro.props} />
 		</div>
@@ -19,9 +25,15 @@ export interface Props extends StarlightProps {}
 			<div class="search-wrapper">
 				<Search {...Astro.props} />
 			</div>
-			<div class="hamburger-wrapper">
-				<MobileMenuToggle {...Astro.props} />
-			</div>
+			{isSplash ? (
+				<div class="theme-select-wrapper">
+					<ThemeSelect {...Astro.props} />
+				</div>
+			) : (
+				<div class="hamburger-wrapper">
+					<MobileMenuToggle {...Astro.props} />
+				</div>
+			)}
 		</div>
 	</div>
 </header>
@@ -61,9 +73,16 @@ export interface Props extends StarlightProps {}
 		flex-shrink: 0;
 	}
 
-	/* ── MOBILE MENU & SEARCH BUTTONS (SQUARE STYLE) ────────────────── */
-	.search-wrapper :global(button[data-open-modal]),
-	.hamburger-wrapper :global(starlight-menu-button button) {
+	.theme-select-wrapper,
+	.hamburger-wrapper {
+		display: flex;
+		align-items: center;
+		height: 100%;
+	}
+
+	/* Common Button Styling for Mobile Toggle and Theme Select */
+	.hamburger-wrapper :global(starlight-menu-button button),
+	.theme-select-wrapper :global(starlight-theme-select select) {
 		display: flex !important;
 		align-items: center;
 		justify-content: center;
@@ -77,28 +96,68 @@ export interface Props extends StarlightProps {}
 		cursor: pointer;
 		transition: all 0.2s ease;
 		box-sizing: border-box !important;
-    margin: 0 !important;
+		margin: 0 !important;
+	}
+
+	.theme-select-wrapper :global(starlight-theme-select label) {
+		display: none !important;
+	}
+
+	.theme-select-wrapper :global(starlight-theme-select select) {
+		padding-inline: 0.5rem !important;
+		font-size: 0.75rem !important;
+		width: 48px !important;
+		background-color: var(--sl-color-gray-6) !important;
+		border: 1px solid var(--sl-color-hairline) !important;
+		border-radius: var(--fuma-radius, 8px) !important;
+		color: var(--sl-color-text) !important;
+		appearance: none !important;
+		text-align: center !important;
 	}
 
 	.hamburger-wrapper :global(starlight-menu-button) {
 		display: contents !important; /* Neutralize the custom element wrapper */
 	}
 
-	.search-wrapper :global(button[data-open-modal]:hover),
-	.hamburger-wrapper :global(button:hover) {
+	.hamburger-wrapper :global(button:hover),
+	.theme-select-wrapper :global(select:hover) {
 		background-color: var(--sl-color-gray-5) !important;
 		border-color: var(--sl-color-gray-4) !important;
 	}
 
-	.search-wrapper :global(button[data-open-modal] .sl-hidden),
-	.search-wrapper :global(button[data-open-modal] kbd) {
+	/* Header search: compact icon-only button */
+	.search-wrapper :global(.search-trigger) {
+		width: auto !important;
+		max-width: none !important;
+	}
+
+	.search-wrapper :global(.trigger-gooey-wrap) {
+		filter: none !important;
+	}
+
+	.search-wrapper :global(.trigger-pill) {
+		width: 32px !important;
+		height: 32px !important;
+		padding: 0 !important;
+		justify-content: center !important;
+		border: 1px solid var(--sl-color-hairline) !important;
+		border-radius: var(--fuma-radius, 8px) !important;
+		background-color: var(--sl-color-gray-6) !important;
+		color: var(--sl-color-text) !important;
+	}
+
+	.search-wrapper :global(.trigger-pill:hover) {
+		background-color: var(--sl-color-gray-5) !important;
+		border-color: var(--sl-color-gray-4) !important;
+	}
+
+	.search-wrapper :global(.trigger-label),
+	.search-wrapper :global(.trigger-shortcut) {
 		display: none !important;
 	}
 
-	.hamburger-wrapper {
-		display: flex;
-		align-items: center;
-		height: 100%;
+	.search-wrapper :global(.search-icon) {
+		opacity: 0.8 !important;
 	}
 
 	/* Hide Header on Desktop only when Sidebar Rail is present — 

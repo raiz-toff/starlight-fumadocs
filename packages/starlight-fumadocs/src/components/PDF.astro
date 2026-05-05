@@ -8,70 +8,57 @@ interface Props {
 const { src, title = "PDF Document", height = "600px" } = Astro.props;
 ---
 
-<div class="pdf-container not-content">
-  <div class="pdf-header">
-    <div class="pdf-title">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
-      <span>{title}</span>
+<div class="not-content fuma-pdf-card my-8 overflow-hidden rounded-lg border border-sl-color-hairline bg-sl-color-bg-sidebar shadow-sm animate">
+  <div class="flex items-center justify-between border-b border-sl-color-hairline bg-sl-color-bg/30 px-4 py-3">
+    <div class="flex items-center gap-2">
+       <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-sl-color-gray-3"
+        ><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+        ></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"
+        ></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+      <h3 class="text-sm font-semibold text-sl-color-text leading-tight">{title}</h3>
     </div>
-    <a href={src} download class="pdf-download" title="Download PDF">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+    <a 
+      href={src} 
+      download 
+      class="flex size-8 items-center justify-center rounded-md border border-sl-color-hairline bg-sl-color-bg text-sl-color-gray-3 hover:bg-sl-color-bg-nav hover:text-sl-color-text hover:border-sl-color-gray-4 transition-all" 
+      title="Download PDF"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline
+          points="7 10 12 15 17 10"></polyline><line
+          x1="12"
+          x2="12"
+          y1="15"
+          y2="3"></line></svg>
     </a>
   </div>
-  <iframe 
-    src={`${src}#toolbar=0`} 
-    width="100%" 
-    height={height} 
+  <iframe
+    src={`${src}#toolbar=0`}
+    width="100%"
+    height={height}
     style="border: none;"
     title={title}
+    class="bg-[#f1f5f9] dark:bg-slate-900"
   >
     <p>Your browser does not support iframes. <a href={src}>View the PDF here.</a></p>
   </iframe>
 </div>
-
-<style>
-  .pdf-container {
-    border: 1px solid var(--sl-color-hairline);
-    border-radius: var(--fuma-radius);
-    overflow: hidden;
-    margin: 2rem 0;
-    background-color: var(--sl-color-bg-sidebar);
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  }
-
-  .pdf-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-    background-color: var(--sl-color-bg-nav);
-    border-bottom: 1px solid var(--sl-color-hairline);
-  }
-
-  .pdf-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--sl-color-text);
-  }
-
-  .pdf-download {
-    display: flex;
-    align-items: center;
-    color: var(--sl-color-gray-3);
-    transition: all 0.2s;
-    padding: 4px;
-    border-radius: 4px;
-  }
-
-  .pdf-download:hover {
-    color: var(--sl-color-text);
-    background-color: var(--sl-color-gray-7);
-  }
-
-  iframe {
-    background-color: #f1f5f9;
-  }
-</style>

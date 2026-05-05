@@ -1,12 +1,23 @@
 {
-  "extends": "astro/tsconfigs/strictest",
-  "include": ["src/**/*", "src/env.d.ts"],
+  "extends": "astro/tsconfigs/strict",
+  "include": [
+    "src/**/*",
+    "src/env.d.ts"
+  ],
   "compilerOptions": {
-    "typeRoots": ["../../node_modules/@types", "node_modules/@types"],
+    "typeRoots": [
+      "../../node_modules/@types",
+      "node_modules/@types"
+    ],
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@astrojs/starlight/*": ["../../node_modules/@astrojs/starlight/*"]
+      "@astrojs/starlight/*": [
+        "../../node_modules/@astrojs/starlight/*"
+      ],
+      "@/*": [
+        "src/*"
+      ]
     }
   }
 }

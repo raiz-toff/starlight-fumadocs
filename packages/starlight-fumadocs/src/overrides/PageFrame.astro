@@ -74,6 +74,16 @@ const hasHero = Boolean(entry.data.hero);
     width: 100%;
   }
 
+  /* Apply animation to the main content area */
+  :global(.fumadocs-layout .main-pane main) {
+    opacity: 0;
+    animation: 400ms fade-in-up cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation-fill-mode: forwards;
+    animation-delay: 100ms;
+  }
+
+
+
   /* The <main> element fills its parent naturally */
   :global(.fumadocs-layout .main-pane main) {
     width: 100%;
@@ -84,6 +94,12 @@ const hasHero = Boolean(entry.data.hero);
      We just ensure the content-panel itself fills the track. */
   :global(.fumadocs-layout .content-panel) {
     width: 100%;
+    padding-block: 1rem !important; /* Reduce from default 2rem+ */
+  }
+
+  /* Remove gap between adjacent panels (Title and Content) */
+  :global(.fumadocs-layout .content-panel + .content-panel) {
+    padding-block-start: 0 !important;
   }
 
   :global(.fumadocs-layout .content-panel .sl-container) {

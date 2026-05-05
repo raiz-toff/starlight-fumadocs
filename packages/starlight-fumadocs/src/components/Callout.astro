@@ -1,121 +1,64 @@
 ---
+import { Alert, AlertTitle, AlertDescription } from "./starwind/alert";
 import { Icon } from '@astrojs/starlight/components';
 
 export interface Props {
   /**
    * @default "info"
    */
-  type?: 'info' | 'warn' | 'error' | 'success' | 'warning' | 'idea' | 'tip' | 'warning';
+  type?: 'info' | 'warn' | 'error' | 'success' | 'warning' | 'idea' | 'tip';
   title?: string;
   icon?: string;
 }
 
 const { type = 'info', title, icon } = Astro.props;
 
-const resolveAlias = (type: string) => {
+const resolveVariant = (type: string): "info" | "warning" | "error" | "success" | "primary" | "default" => {
   if (type === 'warn' || type === 'warning') return 'warning';
-  if (type === 'tip') return 'info';
-  return type;
+  if (type === 'error') return 'error';
+  if (type === 'success') return 'success';
+  if (type === 'idea') return 'primary';
+  if (type === 'tip') return 'success';
+  return 'info';
 };
 
-const resolvedType = resolveAlias(type);
+const variant = resolveVariant(type);
 
 const iconMap: Record<string, any> = {
   info: 'information',
   warning: 'warning',
   error: 'error',
   success: 'approve-check-circle',
-  idea: 'sun', // Best fallback for lightbulb in Starlight
+  primary: 'sun',
 };
 
-const iconName = icon || iconMap[resolvedType] || 'information';
+const iconName = icon || iconMap[variant] || 'information';
 ---
 
-<div
-  class="fumadocs-callout"
-  data-type={resolvedType}
->
-  <div role="none" class="callout-indicator"></div>
-  <div class="callout-icon">
-    <Icon name={iconName} />
-  </div>
-  <div class="callout-content">
-    {title && <p class="callout-title">{title}</p>}
-    <div class="callout-description">
-      <slot />
+<Alert variant={variant} class="not-content my-5">
+  <div class="flex gap-3">
+    <div class={`mt-1 flex-shrink-0 text-${variant}`}>
+      <Icon name={iconName} size="1.25rem" />
+    </div>
+    <div class="flex-1">
+      {title && <AlertTitle>{title}</AlertTitle>}
+      <AlertDescription>
+        <slot />
+      </AlertDescription>
     </div>
   </div>
-</div>
+</Alert>
 
-<style>
-  .fumadocs-callout {
-    --callout-color: var(--fuma-color-info);
-    
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1.25rem;
-    margin-bottom: 1.25rem;
-    border-radius: var(--fuma-radius, 8px);
-    border: 1px solid var(--sl-color-hairline);
-    background-color: var(--sl-color-gray-6);
-    padding: 0.75rem;
-    padding-inline-start: 0.25rem;
-    font-size: 0.875rem;
-    color: var(--sl-color-text);
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+<style is:global>
+  /* Ensure standard content margins inside callout descriptions */
+  [data-slot="alert-description"] p {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
-
-  .fumadocs-callout[data-type="info"] { --callout-color: var(--fuma-color-info); }
-  .fumadocs-callout[data-type="warning"] { --callout-color: var(--fuma-color-warning); }
-  .fumadocs-callout[data-type="error"] { --callout-color: var(--fuma-color-error); }
-  .fumadocs-callout[data-type="success"] { --callout-color: var(--fuma-color-success); }
-  .fumadocs-callout[data-type="idea"] { --callout-color: var(--fuma-color-idea); }
-
-  .callout-indicator {
-    width: 0.125rem;
-    background-color: var(--callout-color);
-    border-radius: 9999px;
-    opacity: 0.5;
-    flex-shrink: 0;
-  }
-
-  .callout-icon {
-    display: flex;
-    align-items: flex-start;
-    padding-top: 0.125rem;
-    color: var(--callout-color);
-    flex-shrink: 0;
-  }
-
-  .callout-icon :global(svg) {
-    width: 1.25rem;
-    height: 1.25rem;
-    fill: var(--callout-color);
-    fill-opacity: 0.1;
-  }
-
-  .callout-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    min-width: 0;
-    flex: 1;
-  }
-
-  .callout-title {
-    font-weight: 600;
-    margin: 0 !important;
-    color: var(--sl-color-text);
-  }
-
-  .callout-description {
-    color: var(--sl-color-gray-3);
-  }
-
-  .callout-description :global(> *:first-child) {
+  [data-slot="alert-description"] *:first-child {
     margin-top: 0;
   }
-  .callout-description :global(> *:last-child) {
+  [data-slot="alert-description"] *:last-child {
     margin-bottom: 0;
   }
 </style>

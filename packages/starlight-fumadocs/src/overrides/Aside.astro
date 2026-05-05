@@ -1,0 +1,83 @@
+---
+import { Icon } from "@astrojs/starlight/components";
+
+interface Props {
+	type?: "note" | "tip" | "caution" | "danger";
+	title?: string;
+}
+
+const { type = "note", title } = Astro.props;
+
+const variantMap = {
+	note: "info",
+	tip: "success",
+	caution: "warning",
+	danger: "error",
+} as const;
+
+const iconMap = {
+	note: "information",
+	tip: "rocket",
+	caution: "warning",
+	danger: "error",
+} as const;
+
+const variant = variantMap[type];
+const iconName = iconMap[type];
+
+// Use the title from props or the capitalized type as a fallback
+const displayTitle = title || type.charAt(0).toUpperCase() + type.slice(1);
+
+// Map variants to colors
+const colorMap = {
+  info: {
+    accent: "var(--fuma-color-info)",
+    bg: "var(--fuma-bg-info)",
+  },
+  success: {
+    accent: "var(--fuma-color-success)",
+    bg: "var(--fuma-bg-success)",
+  },
+  warning: {
+    accent: "var(--fuma-color-warning)",
+    bg: "var(--fuma-bg-warning)",
+  },
+  error: {
+    accent: "var(--fuma-color-error)",
+    bg: "var(--fuma-bg-error)",
+  },
+};
+const colors = colorMap[variant];
+---
+
+<div 
+  class={`fuma-aside not-content animate my-6 p-4 rounded-lg border-s-4 border-e border-t border-b shadow-sm`} 
+  style={`border-inline-start-color: ${colors.accent}; background-color: ${colors.bg};`}
+>
+  <div class="flex gap-3">
+    <div class="mt-0.5 flex-shrink-0" style={`color: ${colors.accent}`}>
+      <Icon name={iconName} size="1.25rem" />
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="font-semibold text-sl-color-text mb-1 leading-none">{displayTitle}</p>
+      <div class="text-sm text-sl-color-gray-2 leading-relaxed prose-inline">
+        <slot />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .fuma-aside {
+    border-color: var(--sl-color-hairline);
+  }
+  .prose-inline :global(p) {
+    margin: 0.5rem 0;
+  }
+  .prose-inline :global(*:first-child) {
+    margin-top: 0;
+  }
+  .prose-inline :global(*:last-child) {
+    margin-bottom: 0;
+  }
+</style>

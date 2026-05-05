@@ -1,0 +1,199 @@
+---
+import { Icon } from '@astrojs/starlight/components';
+---
+
+<div
+  class='fuma-back-to-top group'
+  id='action-buttons'
+>
+  <scroll-button>
+    <button
+      aria-label='Back to Top'
+      class='scroll-btn'
+      id='to-top-btn'
+    >
+      <div
+        class='top-text group-[.ended]:opacity-0'
+      >
+        <span class='text'>0</span>
+        <span class='percent'>%</span>
+      </div>
+      <Icon name="up-caret" class='top-icon group-[.ended]:opacity-100' size="1.25rem" />
+    </button>
+  </scroll-button>
+</div>
+
+<script>
+  class ScrollBtn extends HTMLElement {
+    actionBtns: HTMLElement | null = null;
+    scrollBtn: HTMLElement | null = null;
+    scrollPercentEl: HTMLElement | null = null;
+    targetHeader: HTMLElement | null = null;
+    articleEl: HTMLElement | null = null;
+    
+    scrollHeight = 0;
+    articleTop = 0;
+    clientHeight = 0;
+    ticking = false;
+
+    calculateScrollPercent() {
+      const MathMax = Math.max;
+      const MathMin = Math.min;
+      const scrollTop = MathMax(0, window.scrollY || document.documentElement.scrollTop);
+      
+      // Before article starts
+      if (scrollTop < this.articleTop) return 0;
+      
+      const maxScrollable = this.scrollHeight - this.clientHeight;
+      // After article or no scroll needed
+      if (maxScrollable <= 0) return 100;
+      
+      const progress = MathMin(scrollTop - this.articleTop, maxScrollable);
+      return Math.round((progress / maxScrollable) * 100);
+    }
+
+    updateScrollPercent() {
+      const percent = this.calculateScrollPercent();
+      if (this.scrollPercentEl) {
+        this.scrollPercentEl.textContent = percent.toString();
+      }
+      if (this.actionBtns) {
+        this.actionBtns.classList.toggle('ended', percent >= 100);
+      }
+      this.ticking = false;
+    }
+
+    connectedCallback() {
+      this.actionBtns = document.getElementById('action-buttons');
+      this.scrollBtn = this.querySelector('button#to-top-btn');
+      if (this.scrollBtn) {
+        this.scrollPercentEl = this.scrollBtn.querySelector('.top-text .text');
+        this.scrollBtn.addEventListener('click', this);
+      }
+      
+      // We target the main markdown content
+      this.articleEl = document.querySelector('.sl-markdown-content');
+      // We observe the top breadcrumb/title block to show/hide the button
+      this.targetHeader = document.querySelector('.page-title-block');
+
+      if (this.targetHeader && this.actionBtns) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            this.actionBtns?.classList.toggle('show', !entry.isIntersecting);
+          });
+        });
+        observer.observe(this.targetHeader);
+      }
+
+      if (this.articleEl) {
+        this.scrollHeight = this.articleEl.scrollHeight;
+        this.articleTop = (this.articleEl as HTMLElement).offsetTop;
+        this.clientHeight = document.documentElement.clientHeight;
+
+        document.addEventListener('scroll', () => {
+          if (!this.ticking) {
+            window.requestAnimationFrame(() => this.updateScrollPercent());
+            this.ticking = true;
+          }
+        });
+      } else if (this.actionBtns) {
+        this.actionBtns.classList.add('ended');
+      }
+    }
+
+    handleEvent(event: Event) {
+      if (event.type === 'click') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }
+  
+  if (!customElements.get('scroll-button')) {
+    customElements.define('scroll-button', ScrollBtn);
+  }
+</script>
+
+<style>
+  .fuma-back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transform: translateY(4rem);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none; /* Let clicks pass through when hidden */
+  }
+
+  @media (max-width: 1024px) {
+    .fuma-back-to-top {
+      bottom: 1.5rem;
+      right: 1.5rem;
+    }
+  }
+
+  .fuma-back-to-top.show {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .fuma-back-to-top.show .scroll-btn {
+    opacity: 1;
+  }
+
+  .scroll-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: var(--sl-color-bg-sidebar);
+    border: 1px solid var(--sl-color-hairline);
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .scroll-btn:hover {
+    border-color: var(--sl-color-gray-4);
+    color: var(--sl-color-text);
+    background-color: var(--sl-color-gray-6);
+  }
+
+  .top-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .top-text .percent {
+    font-size: 0.65rem;
+    margin-left: 1px;
+  }
+
+  .top-icon {
+    opacity: 0;
+    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .fuma-back-to-top.ended .top-text,
+  .scroll-btn:hover .top-text {
+    opacity: 0 !important;
+  }
+
+  .fuma-back-to-top.ended .top-icon,
+  .scroll-btn:hover .top-icon {
+    opacity: 1 !important;
+  }
+</style>
