@@ -43,6 +43,9 @@
     --sl-color-accent: hsl(224, 89%, 55%);
     --sl-color-accent-high: hsl(224, 89%, 40%);
 
+    /* Neutral hover surface (Fumadocs --color-fd-accent) */
+    --fuma-hover: hsla(0, 0%, 82%, 0.5);
+
     /* Gray Scale (Mapped to FumaDocs functional colors) */
     --sl-color-gray-1: hsl(0, 0%, 3.9%);       /* Foreground */
     --sl-color-gray-2: hsl(0, 0%, 15.1%);      /* Popover Foreground */
@@ -156,6 +159,9 @@
     --sl-color-accent-low: hsl(224, 55%, 18%);
     --sl-color-accent: hsl(224, 90%, 66%);
     --sl-color-accent-high: hsl(224, 95%, 78%);
+
+    /* Neutral hover surface (Fumadocs --color-fd-accent) */
+    --fuma-hover: hsla(0, 0%, 40.9%, 0.3);
 
     /* Gray Scale */
     --sl-color-gray-1: hsl(0, 0%, 92%);       /* Foreground */
@@ -589,7 +595,12 @@
 
   /* Override Starlight built-in Card components to match FumaDocs */
   .card, .sl-link-card {
-    border-radius: var(--fuma-radius) !important;
+    border-radius: 12px !important;
+    background-color: var(--sl-color-bg-sidebar) !important;
+    box-shadow: none !important;
+  }
+  .sl-link-card:hover {
+    background-color: var(--fuma-hover) !important;
   }
 
   /* ── D2 Diagram Styles ───────────────────────────────────

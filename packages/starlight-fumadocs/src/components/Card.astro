@@ -15,31 +15,30 @@ const Wrapper = href ? 'a' : 'div';
 const linkProps = href ? { href, target: external ? '_blank' : undefined, rel: external ? 'noopener noreferrer' : undefined } : {};
 ---
 
-<Wrapper {...linkProps} class="not-content fuma-card group/card-wrapper block no-underline animate transition-all">
-  <div class="h-full p-5 border border-sl-color-hairline rounded-lg bg-sl-color-bg-sidebar shadow-sm group-hover/card-wrapper:border-sl-color-accent/50 group-hover/card-wrapper:shadow-md group-hover/card-wrapper:-translate-y-1 transition-all">
-    <div class="flex flex-col gap-3">
-      {icon && (
-        <div class="flex size-10 items-center justify-center rounded-lg border border-sl-color-hairline bg-sl-color-bg text-sl-color-accent shadow-sm transition-colors group-hover/card-wrapper:border-sl-color-accent/30 group-hover/card-wrapper:bg-sl-color-accent/5">
-          <Icon name={icon as any} size="1.25rem" />
-        </div>
-      )}
-      <div class="flex flex-col gap-1">
-        <h3 class="text-lg font-semibold text-sl-color-text leading-tight group-hover/card-wrapper:text-sl-color-accent transition-colors">
-          {title}
-        </h3>
-        {description && <p class="text-sm text-sl-color-gray-3 leading-relaxed">{description}</p>}
+<Wrapper {...linkProps} class:list={["not-content fuma-card block no-underline rounded-xl border border-sl-color-hairline bg-sl-color-bg-sidebar p-4 transition-colors", { "fuma-card--link": href }]}>
+  <div class="flex flex-col gap-2">
+    {icon && (
+      <div class="w-fit rounded-lg border border-sl-color-hairline bg-sl-color-gray-7 p-1.5 text-sl-color-gray-3 shadow-md">
+        <Icon name={icon as any} size="1rem" />
       </div>
-      {Astro.slots.has('default') && (
-        <div class="text-sl-color-gray-2 text-sm leading-relaxed mt-1">
-          <slot />
-        </div>
-      )}
-    </div>
+    )}
+    <h3 class="text-sm font-medium text-sl-color-text leading-tight">
+      {title}
+    </h3>
+    {description && <p class="text-sm text-sl-color-gray-3 leading-relaxed">{description}</p>}
+    {Astro.slots.has('default') && (
+      <div class="text-sl-color-gray-2 text-sm leading-relaxed mt-1">
+        <slot />
+      </div>
+    )}
   </div>
 </Wrapper>
 
 <style is:global>
   .fuma-card p {
     margin: 0 !important;
+  }
+  .fuma-card--link:hover {
+    background-color: var(--fuma-hover);
   }
 </style>

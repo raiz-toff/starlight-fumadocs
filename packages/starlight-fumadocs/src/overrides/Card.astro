@@ -10,17 +10,17 @@ const { icon, title } = Astro.props;
 ---
 
 <div
-  class="fuma-card not-content animate my-4 h-full p-5 border border-sl-color-hairline rounded-lg bg-sl-color-bg-sidebar shadow-sm transition-all hover:shadow-md hover:-translate-y-1"
+  class="fuma-card not-content my-4 rounded-xl border border-sl-color-hairline bg-sl-color-bg-sidebar p-4 transition-colors"
 >
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-2">
     {
       icon && (
-        <div class="flex size-10 items-center justify-center rounded-lg border border-sl-color-hairline bg-sl-color-bg text-sl-color-accent shadow-sm">
-          <Icon name={icon as any} size="1.25rem" />
+        <div class="w-fit rounded-lg border border-sl-color-hairline bg-sl-color-gray-7 p-1.5 text-sl-color-gray-3 shadow-md">
+          <Icon name={icon as any} size="1rem" />
         </div>
       )
     }
-    <h3 class="text-lg font-semibold text-sl-color-text leading-tight">
+    <h3 class="text-sm font-medium text-sl-color-text leading-tight">
       {title}
     </h3>
     <div class="text-sl-color-gray-3 text-sm leading-relaxed">
