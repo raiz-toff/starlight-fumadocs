@@ -21,7 +21,6 @@
     --fuma-theme-enabled: true;
     --fuma-radius: 8px;
     --sl-border-radius: var(--fuma-radius);
-    --fuma-sidebar-width: 312px;
 
     /* starlight-plugin-icons variables */
     --spi-codeblock-icon-size: 1.2rem;
@@ -45,6 +44,9 @@
 
     /* Neutral hover surface (Fumadocs --color-fd-accent) */
     --fuma-hover: hsla(0, 0%, 82%, 0.5);
+
+    /* Dialog/drawer overlay (Fumadocs --color-fd-overlay) */
+    --sl-color-overlay: hsla(0, 0%, 0%, 0.2);
 
     /* Gray Scale (Mapped to FumaDocs functional colors) */
     --sl-color-gray-1: hsl(0, 0%, 3.9%);       /* Foreground */
@@ -743,7 +745,7 @@
 
     .toc-thumb-path {
       stroke: var(--sl-color-accent);
-      stroke-width: 1.5;
+      stroke-width: 1;
       fill: none;
       stroke-linecap: round;
       stroke-linejoin: round;
