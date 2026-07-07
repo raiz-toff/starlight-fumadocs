@@ -96,8 +96,8 @@
     --fuma-toc-width: 0px;
     --fuma-header-height: 0px;
     --fuma-toc-popover-height: 0px;
-    --fuma-content-width: 1000px; /* Increased to utilize space more seamlessly */
-    --fuma-layout-width: 1400px;
+    --fuma-content-width: 900px; /* Fumadocs prose max-width */
+    --fuma-layout-width: 1536px; /* Fumadocs --fd-layout-width (96rem) */
 
     /* Override Starlight's content width to match our grid-driven layout.
        The grid track (middle column) IS the content constraint; within it,
@@ -271,7 +271,7 @@
   .fumadocs-layout[data-has-sidebar="false"] {
     --fuma-sidebar-width: 0px !important;
     --fuma-header-height: 64px;
-    --fuma-content-width: 1400px;
+    --fuma-content-width: 1168px;
   }
   .fumadocs-layout[data-has-toc="false"] {
     --fuma-toc-width: 0px !important;
@@ -658,10 +658,8 @@
       display: flex;
       align-items: center;
       gap: 0.375rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      font-size: 0.875rem;
+      font-weight: 400;
       color: var(--sl-color-gray-3);
       margin: 0 0 1rem;
       padding-inline-start: 0;
@@ -685,7 +683,7 @@
     starlight-toc nav a {
       display: block;
       text-decoration: none;
-      font-size: 0.8125rem;
+      font-size: 0.875rem;
       line-height: 1.5;
       color: var(--sl-color-gray-3);
       border-inline-start: none !important;
@@ -702,7 +700,7 @@
     }
 
     starlight-toc nav a[aria-current="true"] {
-      color: var(--sl-color-text) !important;
+      color: var(--sl-color-text-accent) !important;
       font-weight: 500 !important;
     }
 
