@@ -29,6 +29,7 @@ export default function starlightFumadocs(options?: StarlightFumadocsConfig): St
           components: {
             Header: 'starlight-fumadocs/overrides/Header.astro',
             PageFrame: 'starlight-fumadocs/overrides/PageFrame.astro',
+            Breadcrumbs: 'starlight-fumadocs/overrides/Empty.astro',
             SiteTitle: 'starlight-fumadocs/overrides/SiteTitle.astro',
             Search: 'starlight-fumadocs/overrides/Search.astro',
             ThemeSelect: 'starlight-fumadocs/overrides/ThemeSelect.astro',

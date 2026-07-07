@@ -10,6 +10,7 @@
     "./styles": "./src/styles/fumadocs.css",
     "./middleware": "./src/middleware.ts",
     "./overrides/*": "./src/overrides/*",
+    "./components": "./src/components/index.ts",
     "./components/*": "./src/components/*"
   },
   "devDependencies": {
