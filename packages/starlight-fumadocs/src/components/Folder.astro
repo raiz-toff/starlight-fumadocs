@@ -43,7 +43,7 @@ const { name, defaultOpen = false } = Astro.props;
   }
 
   .folder-trigger:hover {
-    background-color: var(--sl-color-gray-7);
+    background-color: var(--fuma-hover);
   }
 
   .folder-icon {
@@ -58,14 +58,10 @@ const { name, defaultOpen = false } = Astro.props;
   }
 
   .folder-content {
-    margin-inline-start: 1rem;
+    margin-inline-start: 0.5rem;
     padding-inline-start: 0.5rem;
     border-inline-start: 1px solid var(--sl-color-hairline);
     display: flex;
     flex-direction: column;
-  }
-
-  .fumadocs-folder[open] > .folder-trigger .folder-icon {
-    color: var(--sl-color-text-accent);
   }
 </style>
