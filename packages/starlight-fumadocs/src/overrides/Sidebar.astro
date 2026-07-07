@@ -393,27 +393,33 @@ const { sidebar } = Astro.locals.starlightRoute;
   }
 
   @media (min-width: 768px) {
-    /* The rail detaches from the grid and slides fully off-screen */
+    /* The rail detaches into a floating card and slides off-screen. When the
+       user peeks (edge hover) it slides back in as a detached panel. */
     :global([data-sidebar-collapsed="true"]) .sidebar-desktop {
       position: fixed;
-      inset-block: 0;
-      inset-inline-start: 0;
+      inset-block: 0.75rem;
+      inset-inline-start: 0.75rem;
       width: 268px;
-      transform: translateX(-100%);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      height: auto;
+      border: 1px solid var(--sl-color-hairline);
+      border-radius: 12px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+      transform: translateX(calc(-100% - 1.5rem));
+      transition: transform 0.25s ease;
       z-index: 40;
     }
 
-    /* Inner width is driven by --fuma-sidebar-width (0 when collapsed) — pin it */
+    /* Inner fills the floating card (its width is otherwise driven by
+       --fuma-sidebar-width, which is 0 when collapsed) */
     :global([data-sidebar-collapsed="true"]) .sidebar-desktop-inner {
-      width: 268px !important;
+      width: 100% !important;
       margin-inline-start: 0;
     }
 
     /* Reveal on peek (hover zone / rail hover — toggled in JS) */
     :global([data-sidebar-collapsed="true"].sidebar-peek) .sidebar-desktop {
       transform: translateX(0);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
     }
 
     /* Thin strip at the viewport's inline-start edge that triggers the peek */
@@ -484,8 +490,8 @@ const { sidebar } = Astro.locals.starlightRoute;
     color: var(--sl-color-text);
   }
   :global(.sidebar-content a[aria-current="page"]) {
-    background: var(--sl-color-accent-low);
-    color: var(--sl-color-accent-high);
+    background: color-mix(in oklab, var(--sl-color-accent) 12%, transparent);
+    color: var(--sl-color-text-accent);
     font-weight: 500;
   }
 
