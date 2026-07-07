@@ -179,7 +179,7 @@ const { sidebar } = Astro.locals.starlightRoute;
     height: calc(var(--fuma-docs-height, 100dvh) - var(--fuma-docs-row-1, 0px));
     width: 100%;
     border-inline-end: 1px solid var(--sl-color-hairline);
-    background-color: var(--sl-color-bg-sidebar);
+    background-color: var(--sl-color-bg); /* same as page/content — one constant surface */
     overflow: hidden;
     z-index: 10;
     display: none; /* Hidden on mobile by default */
@@ -404,6 +404,7 @@ const { sidebar } = Astro.locals.starlightRoute;
       border: 1px solid var(--sl-color-hairline);
       border-radius: 12px;
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+      background-color: var(--sl-color-bg-sidebar); /* distinct floating popover */
       overflow: hidden;
       transform: translateX(calc(-100% - 1.5rem));
       transition: transform 0.25s ease;
