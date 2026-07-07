@@ -199,10 +199,9 @@
   }
 
   /* Breakpoint Definitions
-   * Cutoffs per FumaDocs spec:
-   *   Header + TOC popover appear at ≤1024px
-   *   TOC rail disappears at ≤1024px
-   *   Sidebar drawer activates at ≤767px
+   * Cutoffs per Fumadocs spec:
+   *   Sidebar rail appears at ≥768px (md); mobile drawer + header below it
+   *   TOC popover active 768–1279px; TOC rail appears at ≥1280px (xl)
    */
 
   /* Banner Control: Hide default Starlight placement, only show our top-level one */
@@ -214,8 +213,8 @@
     display: flex;
   }
 
-  /* Mobile & Tablet (<1024px): sidebar drawer activations, header visible */
-  @media (max-width: 1023px) {
+  /* Mobile (<768px): sidebar drawer, header visible (Fumadocs md breakpoint) */
+  @media (max-width: 767px) {
     :root {
       --fuma-header-height: 56px;
       --fuma-toc-popover-height: 40px;
@@ -230,8 +229,8 @@
     }
   }
 
-  /* Desktop (≥1024px and <1280px): sidebar visible, no header, TOC popover active */
-  @media (min-width: 1024px) and (max-width: 1279px) {
+  /* Tablet (≥768px and <1280px): sidebar rail visible, no header, TOC popover active */
+  @media (min-width: 768px) and (max-width: 1279px) {
     :root {
       --fuma-sidebar-width: 268px;
       --fuma-toc-popover-height: 40px;

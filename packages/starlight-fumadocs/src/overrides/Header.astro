@@ -160,9 +160,9 @@ const isSplash = entry?.data.template === 'splash' || !!entry?.data.hero || hasS
 		opacity: 0.8 !important;
 	}
 
-	/* Hide Header on Desktop only when Sidebar Rail is present — 
-	   FumaDocs shows header on Hero/Splash pages without sidebars */
-	@media (min-width: 1024px) {
+	/* Hide Header once the sidebar rail is present (Fumadocs md breakpoint) —
+	   Fumadocs shows the header on Hero/Splash pages without sidebars */
+	@media (min-width: 768px) {
 		:global(.fumadocs-layout[data-has-sidebar="true"]) .header {
 			display: none;
 		}
