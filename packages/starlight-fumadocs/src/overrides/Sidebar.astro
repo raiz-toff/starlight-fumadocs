@@ -131,6 +131,30 @@ const { sidebar } = Astro.locals.starlightRoute;
   </div>
 </aside>
 
+<!-- 3. Collapsed-rail affordances (siblings of the aside so the aside's
+     transform doesn't trap these fixed elements) -->
+<div class="sidebar-hover-zone" aria-hidden="true"></div>
+<button
+  class="sidebar-float-toggle"
+  id="sidebar-float-toggle"
+  aria-label="Expand sidebar"
+  title="Expand Sidebar"
+>
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+    <path d="M9 3v18"></path>
+  </svg>
+</button>
+
 <style>
   /* ── SHARED STYLES ─────────────────────────────────── */
   .sidebar-content {
@@ -361,59 +385,78 @@ const { sidebar } = Astro.locals.starlightRoute;
     pointer-events: auto;
   }
 
-  /* Collapsed State (Only applies to desktop rail) */
+  /* ── COLLAPSED RAIL: off-screen slide + hover reveal ──── */
+  /* Hidden until the sidebar is collapsed */
+  .sidebar-hover-zone,
+  .sidebar-float-toggle {
+    display: none;
+  }
+
   @media (min-width: 768px) {
-    :global([data-sidebar-collapsed="true"])
-      .sidebar-desktop-inner
-      .site-title-wrapper,
-    :global([data-sidebar-collapsed="true"])
-      .sidebar-desktop-inner
-      .root-nav-wrapper,
-    :global([data-sidebar-collapsed="true"])
-      .sidebar-desktop-inner
-      .sidebar-content,
-    :global([data-sidebar-collapsed="true"])
-      .sidebar-desktop-inner
-      .sidebar-footer {
-      display: none !important;
+    /* The rail detaches from the grid and slides fully off-screen */
+    :global([data-sidebar-collapsed="true"]) .sidebar-desktop {
+      position: fixed;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: 268px;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      z-index: 40;
     }
 
-    :global([data-sidebar-collapsed="true"])
-      .sidebar-desktop-inner
-      .sidebar-header-row {
-      justify-content: center;
+    /* Inner width is driven by --fuma-sidebar-width (0 when collapsed) — pin it */
+    :global([data-sidebar-collapsed="true"]) .sidebar-desktop-inner {
+      width: 268px !important;
+      margin-inline-start: 0;
     }
 
-    /* Collapsed Search Button Styling */
-    :global([data-sidebar-collapsed="true"]) .search-wrapper :global(button) {
-      width: 32px !important;
-      height: 32px !important;
-      padding: 0 !important;
-      border: 1px solid var(--sl-color-hairline) !important;
-      border-radius: var(--fuma-radius, 8px) !important;
-      background-color: transparent !important;
-      color: var(--sl-color-gray-2) !important;
-      display: flex !important;
+    /* Reveal on peek (hover zone / rail hover — toggled in JS) */
+    :global([data-sidebar-collapsed="true"].sidebar-peek) .sidebar-desktop {
+      transform: translateX(0);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    /* Thin strip at the viewport's inline-start edge that triggers the peek */
+    :global([data-sidebar-collapsed="true"]) .sidebar-hover-zone {
+      display: block;
+      position: fixed;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: 12px;
+      z-index: 39;
+    }
+
+    /* Floating expand button, bottom inline-start */
+    :global([data-sidebar-collapsed="true"]) .sidebar-float-toggle {
+      display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
-      margin: 0 auto;
+      position: fixed;
+      inset-inline-start: 1rem;
+      inset-block-end: 1rem;
+      width: 36px;
+      height: 36px;
+      z-index: 41;
+      border: 1px solid var(--sl-color-hairline);
+      border-radius: var(--fuma-radius);
+      background-color: var(--sl-color-bg-sidebar);
+      color: var(--sl-color-gray-2);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: opacity 0.2s ease, color 0.2s ease,
+        background-color 0.2s ease, border-color 0.2s ease;
     }
 
-    :global([data-sidebar-collapsed="true"])
-      .search-wrapper
-      :global(button:hover) {
-      color: var(--sl-color-text) !important;
-      background-color: var(--sl-color-gray-6) !important;
-      border-color: var(--sl-color-gray-4) !important;
+    :global([data-sidebar-collapsed="true"]) .sidebar-float-toggle:hover {
+      color: var(--sl-color-text);
+      background-color: var(--sl-color-gray-6);
+      border-color: var(--sl-color-gray-4);
     }
 
-    /* Hide Search text/shortcut in collapsed rail */
-    :global([data-sidebar-collapsed="true"])
-      .search-wrapper
-      :global(.sl-hidden),
-    :global([data-sidebar-collapsed="true"]) .search-wrapper :global(kbd) {
-      display: none !important;
+    /* While peeked, the rail's own collapse toggle is visible — hide the float button */
+    :global([data-sidebar-collapsed="true"].sidebar-peek) .sidebar-float-toggle {
+      opacity: 0;
+      pointer-events: none;
     }
   }
 
@@ -516,12 +559,29 @@ const { sidebar } = Astro.locals.starlightRoute;
         layout.setAttribute("data-sidebar-collapsed", "true");
       }
 
-      toggle.addEventListener("click", () => {
-        const isCollapsed =
-          layout.getAttribute("data-sidebar-collapsed") === "true";
-        layout.setAttribute("data-sidebar-collapsed", String(!isCollapsed));
-        localStorage.setItem(STORAGE_KEY, String(!isCollapsed));
-      });
+      // ── Peek (hover-reveal) behaviour for the collapsed rail ──
+      const sidebarEl = document.getElementById("starlight-fumadocs-sidebar");
+      const hoverZone = document.querySelector(".sidebar-hover-zone");
+      const floatToggle = document.getElementById("sidebar-float-toggle");
+      const isCollapsed = () =>
+        layout.getAttribute("data-sidebar-collapsed") === "true";
+      const addPeek = () => {
+        if (isCollapsed()) layout.classList.add("sidebar-peek");
+      };
+      const removePeek = () => layout.classList.remove("sidebar-peek");
+
+      hoverZone?.addEventListener("mouseenter", addPeek);
+      sidebarEl?.addEventListener("mouseenter", addPeek);
+      sidebarEl?.addEventListener("mouseleave", removePeek);
+
+      const setCollapsed = (value: boolean) => {
+        layout.setAttribute("data-sidebar-collapsed", String(value));
+        localStorage.setItem(STORAGE_KEY, String(value));
+        removePeek();
+      };
+
+      toggle.addEventListener("click", () => setCollapsed(!isCollapsed()));
+      floatToggle?.addEventListener("click", () => setCollapsed(false));
 
       const mql = window.matchMedia("(min-width: 768px)");
       mql.addEventListener("change", (e) => {
@@ -531,6 +591,7 @@ const { sidebar } = Astro.locals.starlightRoute;
           }
         } else {
           layout.removeAttribute("data-sidebar-collapsed");
+          removePeek();
           close();
         }
       });

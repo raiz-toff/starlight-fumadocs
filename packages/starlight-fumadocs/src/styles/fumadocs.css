@@ -141,10 +141,10 @@
 :root .starlight-aside--caution .starlight-aside__icon { color: var(--fuma-color-warning) !important; }
 :root .starlight-aside--danger .starlight-aside__icon { color: var(--fuma-color-error) !important; }
 
-/* Breakpoint Definitions */
+/* Collapsed sidebar: column goes to 0; the rail slides off-screen (see Sidebar.astro) */
   @media (min-width: 768px) {
     .fumadocs-layout[data-sidebar-collapsed='true'] {
-      --fuma-sidebar-width: 64px !important;
+      --fuma-sidebar-width: 0px !important;
     }
   }
 
