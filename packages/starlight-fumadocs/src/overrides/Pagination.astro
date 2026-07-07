@@ -54,10 +54,7 @@ const isRtl = dir === 'rtl';
 	}
 
 	.pagination-card:hover {
-		border-color: var(--sl-color-accent);
-		background-color: var(--sl-color-gray-7);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+		background-color: var(--fuma-hover);
 	}
 
 	.pagination-label {
@@ -100,14 +97,4 @@ const isRtl = dir === 'rtl';
     align-items: flex-end;
 	}
 
-  /* Animation for icons on hover */
-  .pagination-card:hover :global(svg) {
-    transform: translateX(var(--move-dist, 0));
-  }
-  .prev:hover :global(svg) { --move-dist: -4px; }
-  .next:hover :global(svg) { --move-dist: 4px; }
-
-  :global(svg) {
-    transition: transform 0.2s ease;
-  }
 </style>
