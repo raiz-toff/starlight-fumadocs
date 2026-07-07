@@ -716,7 +716,7 @@
       position: absolute;
       inset-block: 0;
       width: 1px;
-      background: var(--mint-border);
+      background: var(--sl-color-hairline);
       z-index: -1;
       pointer-events: none;
     }
@@ -730,7 +730,7 @@
     }
 
     .toc-curve-path {
-      stroke: var(--mint-border);
+      stroke: var(--sl-color-hairline);
       stroke-width: 1;
       fill: none;
     }
