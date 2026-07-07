@@ -647,6 +647,66 @@
     position: relative;
   }
 
+  /* ── Clerk-style TOC indicator (shared: desktop rail + mobile popover) ──
+     Runtime-injected by TocIndicator. The full curved path is drawn once and
+     the active span is revealed with a clip-path band [--track-top,
+     --track-bottom] that transitions, so the thumb elongates to cover the
+     headings currently on screen and bends at indentation changes. */
+  .toc-track-line {
+    position: absolute;
+    inset-block: 0;
+    width: 1px;
+    background: var(--sl-color-hairline);
+    z-index: -1;
+    pointer-events: none;
+  }
+  .toc-curve-svg {
+    position: absolute;
+    top: -6px;
+    z-index: -1;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .toc-curve-path {
+    stroke: var(--sl-color-hairline);
+    stroke-width: 1;
+    fill: none;
+  }
+  .toc-thumb-track {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    pointer-events: none;
+  }
+  .toc-thumb-svg {
+    position: absolute;
+    overflow: visible;
+    clip-path: polygon(
+      0 var(--track-top, 0px),
+      100% var(--track-top, 0px),
+      100% var(--track-bottom, 0px),
+      0 var(--track-bottom, 0px)
+    );
+    transition: clip-path 0.2s ease;
+  }
+  .toc-thumb-path {
+    stroke: var(--sl-color-accent);
+    stroke-width: 1.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .toc-thumb-dot {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--sl-color-accent);
+    transform: translate(-50%, -50%);
+    transition: top 0.2s ease, inset-inline-start 0.2s ease, opacity 0.2s ease;
+    pointer-events: none;
+  }
+
   @media (min-width: 1280px) {
     starlight-toc nav ul,
     starlight-toc nav ul li {
@@ -711,57 +771,8 @@
       font-weight: 500 !important;
     }
 
-    /* ── Per-item gray track decorations ─────────────────── */
-    .toc-track-line {
-      position: absolute;
-      inset-block: 0;
-      width: 1px;
-      background: var(--sl-color-hairline);
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .toc-curve-svg {
-      position: absolute;
-      top: -6px;
-      z-index: -1;
-      pointer-events: none;
-      overflow: visible;
-    }
-
-    .toc-curve-path {
-      stroke: var(--sl-color-hairline);
-      stroke-width: 1;
-      fill: none;
-    }
-
-    /* ── Active indicator: clip-path masked SVG + dot ──── */
-    .toc-thumb-track {
-      position: absolute;
-      top: 0;
-      inset-inline-start: 0;
-      pointer-events: none;
-    }
-
-    .toc-thumb-svg {
-      position: absolute;
-      overflow: visible;
-    }
-
-    .toc-thumb-path {
-      stroke: var(--sl-color-accent);
-      stroke-width: 1;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      transition: opacity 0.2s ease;
-    }
-
-    .toc-thumb-dot {
-      fill: var(--sl-color-accent);
-      transition: opacity 0.2s ease;
-    }
-
+    /* TOC indicator decoration styles are now global (shared with the
+       mobile popover) — see the "Clerk-style TOC indicator" block below. */
 
     /* ── Accessibility & Focus Rings ──────────────────────── */
     :focus-visible {

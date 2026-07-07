@@ -1,18 +1,18 @@
 /**
  * TocIndicator — reusable "clerk-style" curved TOC indicator engine.
  * ─────────────────────────────────────────────────────────────────
- * Extracted from starlight-toc.ts so both the desktop rail and the mobile
- * popover can share the exact same track-line + animated-path + gliding-dot
- * visuals. The host owns *when* to mount/remeasure and *which* range is
- * active (via an IntersectionObserver); this class owns all the geometry
- * and animation.
+ * Ported from fumadocs/packages/base-ui/src/components/toc/clerk.tsx.
  *
- * Usage:
- *   const ind = new TocIndicator(containerEl, linkEls);
- *   ind.mount();                  // when the container is visible (has layout)
- *   ind.remeasure();              // on resize / re-open
- *   ind.updateActiveRange(a, b);  // when the active heading range changes
- *   ind.destroy();
+ * The full track path (all items connected, bending at indentation changes)
+ * is drawn once in the accent colour. The active "thumb" is that same path
+ * revealed by a `clip-path` polygon spanning [--track-top, --track-bottom] —
+ * the top of the first on-screen heading to the bottom of the last. Because
+ * multiple headings are active at once, the thumb ELONGATES to cover however
+ * much content is currently on screen, and it bends at indentation because
+ * the clip simply reveals whatever slice of the curved path sits in that band.
+ * A small dot rides the bottom edge of the range.
+ *
+ * The host decides *when* to mount/remeasure and *which* range is active.
  */
 
 const LINE_X = [8, 16, 24];
@@ -24,31 +24,15 @@ function getLineX(depth: number): number {
 export class TocIndicator {
 	private positions: [top: number, bottom: number, x: number][] = [];
 	private pathD = '';
-
 	private activeRange: [number, number] = [-1, -1];
-	private currentStart = 0;
-	private currentEnd = 0;
-	private targetStart = 0;
-	private targetEnd = 0;
-	private animationFrame: number | null = null;
-	private lastTickTime = 0;
-	private _cachedPathLength = 0;
-	private readonly boundTick = (t: number) => this.tick(t);
+	private decorationsInjected = false;
 
 	private thumbWrapper: HTMLDivElement | null = null;
 	private thumbSvg: SVGSVGElement | null = null;
 	private thumbPath: SVGPathElement | null = null;
-	private thumbDot: SVGCircleElement | null = null;
-	private decorationsInjected = false;
+	private dot: HTMLDivElement | null = null;
 
 	private resizeObserver: ResizeObserver | null = null;
-	private lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-	private scrollDirection: 'up' | 'down' = 'down';
-	private readonly boundScroll = () => {
-		const y = window.scrollY;
-		this.scrollDirection = y < this.lastScrollY ? 'up' : 'down';
-		this.lastScrollY = y;
-	};
 
 	constructor(
 		private container: HTMLElement,
@@ -66,34 +50,22 @@ export class TocIndicator {
 			this.decorationsInjected = true;
 		}
 		this.computeAndBuild();
-
-		if (this.activeRange[0] !== -1) {
-			this.calculateTargets();
-			this.currentStart = this.targetStart;
-			this.currentEnd = this.targetEnd;
-			this.draw();
-		}
+		this.applyRange();
 
 		if (!this.resizeObserver) {
 			this.resizeObserver = new ResizeObserver(() => {
 				this.computeAndBuild();
-				this.calculateTargets();
+				this.applyRange();
 			});
 			this.resizeObserver.observe(this.container);
 		}
-		window.addEventListener('scroll', this.boundScroll, { passive: true });
 	}
 
 	/** Recompute geometry (call on re-open or when layout may have changed). */
 	remeasure(): void {
 		if (!this.decorationsInjected) return this.mount();
 		this.computeAndBuild();
-		if (this.activeRange[0] !== -1) {
-			this.calculateTargets();
-			this.currentStart = this.targetStart;
-			this.currentEnd = this.targetEnd;
-			this.draw();
-		}
+		this.applyRange();
 	}
 
 	updateActiveRange(startIdx: number, endIdx: number): void {
@@ -105,15 +77,30 @@ export class TocIndicator {
 			else link.removeAttribute('aria-current');
 		});
 
-		this.calculateTargets();
+		this.applyRange();
 	}
 
 	destroy(): void {
 		this.resizeObserver?.disconnect();
-		window.removeEventListener('scroll', this.boundScroll);
-		if (this.animationFrame !== null) {
-			cancelAnimationFrame(this.animationFrame);
-			this.animationFrame = null;
+	}
+
+	// ── active range → clip band ──────────────────────────
+
+	private applyRange(): void {
+		if (!this.thumbWrapper || this.activeRange[0] === -1 || !this.positions.length) return;
+		const startPos = this.positions[this.activeRange[0]];
+		const endPos = this.positions[this.activeRange[1]];
+		if (!startPos || !endPos) return;
+
+		const top = startPos[0];
+		const bottom = endPos[1];
+		this.thumbWrapper.style.setProperty('--track-top', `${top}px`);
+		this.thumbWrapper.style.setProperty('--track-bottom', `${bottom}px`);
+
+		if (this.dot) {
+			this.dot.style.top = `${bottom}px`;
+			this.dot.style.insetInlineStart = `${endPos[2]}px`;
+			this.dot.style.opacity = bottom - top > 1 ? '1' : '0';
 		}
 	}
 
@@ -204,6 +191,7 @@ export class TocIndicator {
 		if (!this.thumbWrapper) {
 			this.thumbWrapper = document.createElement('div');
 			this.thumbWrapper.classList.add('toc-thumb-track');
+
 			const svg = document.createElementNS(NS, 'svg');
 			svg.classList.add('toc-thumb-svg');
 			this.thumbSvg = svg;
@@ -211,104 +199,21 @@ export class TocIndicator {
 			path.classList.add('toc-thumb-path');
 			svg.appendChild(path);
 			this.thumbPath = path;
-			const dot = document.createElementNS(NS, 'circle');
-			dot.classList.add('toc-thumb-dot');
-			dot.setAttribute('r', '2.5');
-			svg.appendChild(dot);
-			this.thumbDot = dot;
 			this.thumbWrapper.append(svg);
+
+			this.dot = document.createElement('div');
+			this.dot.classList.add('toc-thumb-dot');
+			this.dot.style.opacity = '0';
+			this.thumbWrapper.append(this.dot);
+
 			this.container.prepend(this.thumbWrapper);
 		}
 
 		this.thumbWrapper.style.width = `${w}px`;
 		this.thumbWrapper.style.height = `${h}px`;
 		this.thumbSvg!.setAttribute('viewBox', `0 0 ${w} ${h}`);
+		this.thumbSvg!.style.width = `${w}px`;
+		this.thumbSvg!.style.height = `${h}px`;
 		this.thumbPath!.setAttribute('d', this.pathD);
-		this._cachedPathLength = this.thumbPath!.getTotalLength();
-	}
-
-	private calculateTargets(): void {
-		if (this.activeRange[0] === -1 || !this.thumbPath) return;
-		const startPos = this.positions[this.activeRange[0]];
-		const endPos = this.positions[this.activeRange[1]];
-		if (!startPos || !endPos) return;
-
-		this.targetStart = this.getDistanceAtPoint(startPos[2], startPos[0]);
-		this.targetEnd = this.getDistanceAtPoint(endPos[2], endPos[1]);
-
-		if (!this.animationFrame) {
-			this.lastTickTime = 0;
-			this.animationFrame = requestAnimationFrame(this.boundTick);
-		}
-	}
-
-	private getDistanceAtPoint(x: number, y: number): number {
-		if (!this.thumbPath) return 0;
-		const totalLength = this._cachedPathLength || this.thumbPath.getTotalLength();
-		const precision = 32;
-		let bestLen = 0;
-		let minDist = Infinity;
-		for (let i = 0; i <= precision; i++) {
-			const len = (i / precision) * totalLength;
-			const pt = this.thumbPath.getPointAtLength(len);
-			const dist = Math.hypot(pt.x - x, pt.y - y);
-			if (dist < minDist) {
-				minDist = dist;
-				bestLen = len;
-			}
-		}
-		let start = Math.max(0, bestLen - totalLength / precision);
-		let end = Math.min(totalLength, bestLen + totalLength / precision);
-		for (let i = 0; i < 5; i++) {
-			const step = (end - start) / 10;
-			for (let j = 0; j <= 10; j++) {
-				const len = start + j * step;
-				const pt = this.thumbPath.getPointAtLength(len);
-				const dist = Math.hypot(pt.x - x, pt.y - y);
-				if (dist < minDist) {
-					minDist = dist;
-					bestLen = len;
-				}
-			}
-			start = Math.max(0, bestLen - step);
-			end = Math.min(totalLength, bestLen + step);
-		}
-		return bestLen;
-	}
-
-	private tick(timestamp: number): void {
-		const dt = Math.min(timestamp - (this.lastTickTime || timestamp), 50);
-		this.lastTickTime = timestamp;
-		const K = 1 - Math.exp(-dt / 80);
-		const diffStart = this.targetStart - this.currentStart;
-		const diffEnd = this.targetEnd - this.currentEnd;
-		this.currentStart += diffStart * K;
-		this.currentEnd += diffEnd * K;
-
-		if (Math.abs(diffStart) < 0.1 && Math.abs(diffEnd) < 0.1) {
-			this.currentStart = this.targetStart;
-			this.currentEnd = this.targetEnd;
-			this.draw();
-			this.animationFrame = null;
-			return;
-		}
-		this.draw();
-		this.animationFrame = requestAnimationFrame(this.boundTick);
-	}
-
-	private draw(): void {
-		if (!this.thumbPath) return;
-		const totalLength = this._cachedPathLength || this.thumbPath.getTotalLength();
-		const dashLen = Math.max(0.1, this.currentEnd - this.currentStart);
-		this.thumbPath.style.strokeDasharray = `${dashLen} ${totalLength}`;
-		this.thumbPath.style.strokeDashoffset = `${-this.currentStart}`;
-
-		if (this.thumbDot) {
-			const dotPos = this.scrollDirection === 'up' ? this.currentStart : this.currentEnd;
-			const pt = this.thumbPath.getPointAtLength(dotPos);
-			this.thumbDot.setAttribute('cx', `${pt.x}`);
-			this.thumbDot.setAttribute('cy', `${pt.y}`);
-			this.thumbDot.style.opacity = dashLen > 1 ? '1' : '0';
-		}
 	}
 }

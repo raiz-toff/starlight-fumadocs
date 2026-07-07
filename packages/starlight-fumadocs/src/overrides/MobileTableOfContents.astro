@@ -193,55 +193,9 @@ const { toc } = Astro.locals.starlightRoute;
 		font-weight: 500;
 	}
 
-	/* ── Clerk-style curved indicator (runtime-injected elements) ─── */
-	.toc-list :global(.toc-track-line) {
-		position: absolute;
-		inset-block: 0;
-		width: 1px;
-		background: var(--sl-color-hairline);
-		z-index: -1;
-		pointer-events: none;
-	}
-
-	.toc-list :global(.toc-curve-svg) {
-		position: absolute;
-		top: -6px;
-		z-index: -1;
-		pointer-events: none;
-		overflow: visible;
-	}
-
-	.toc-list :global(.toc-curve-path) {
-		stroke: var(--sl-color-hairline);
-		stroke-width: 1;
-		fill: none;
-	}
-
-	.toc-list :global(.toc-thumb-track) {
-		position: absolute;
-		top: 0;
-		inset-inline-start: 0;
-		pointer-events: none;
-	}
-
-	.toc-list :global(.toc-thumb-svg) {
-		position: absolute;
-		overflow: visible;
-	}
-
-	.toc-list :global(.toc-thumb-path) {
-		stroke: var(--sl-color-accent);
-		stroke-width: 1.5;
-		fill: none;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-		transition: opacity 0.2s ease;
-	}
-
-	.toc-list :global(.toc-thumb-dot) {
-		fill: var(--sl-color-accent);
-		transition: opacity 0.2s ease;
-	}
+	/* The clerk-style indicator styles (.toc-thumb-*, .toc-track-line,
+	   .toc-curve-*) are defined globally in fumadocs.css and shared with the
+	   desktop rail. */
 </style>
 
 <script>
