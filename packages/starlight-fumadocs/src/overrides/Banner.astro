@@ -8,13 +8,33 @@ const content = banner ? (banner as any).content : '';
     <>
       <style is:global>
         :root {
-          --fuma-banner-height: 2.5rem;
+          --fuma-banner-height: 3rem;
         }
       </style>
-      <div class="fumadocs-banner not-prose">
-        <div class="banner-rainbow"></div>
+      <div class="fumadocs-banner not-prose" data-banner>
         <div class="banner-content" set:html={content} />
+        <button type="button" class="banner-close" aria-label="Dismiss banner" data-banner-close>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
       </div>
+      <script>
+        const el = document.querySelector('[data-banner]') as HTMLElement | null;
+        if (el) {
+          const text = el.textContent || '';
+          let hash = 0;
+          for (let i = 0; i < text.length; i++) hash = (hash * 31 + text.charCodeAt(i)) | 0;
+          const key = 'fuma-banner-' + hash;
+          const dismiss = () => {
+            el.style.display = 'none';
+            document.documentElement.style.setProperty('--fuma-banner-height', '0px');
+          };
+          if (localStorage.getItem(key)) dismiss();
+          el.querySelector('[data-banner-close]')?.addEventListener('click', () => {
+            localStorage.setItem(key, '1');
+            dismiss();
+          });
+        }
+      </script>
     </>
   )
 }
@@ -23,36 +43,16 @@ const content = banner ? (banner as any).content : '';
   .fumadocs-banner {
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 40;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 2.5rem; /* fd-banner-height */
-    padding-inline: 1rem;
-    background-color: var(--sl-color-bg);
-    border-bottom: 1px solid var(--sl-color-hairline);
-    font-size: 0.8125rem;
+    height: 3rem; /* fd-banner-height */
+    padding-inline: 2.5rem;
+    background-color: var(--sl-color-bg-inline-code); /* bg-fd-secondary */
+    font-size: 0.875rem;
     font-weight: 500;
     overflow: hidden;
-  }
-
-  .banner-rainbow {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    filter: saturate(2);
-    animation: fd-moving-banner 20s linear infinite;
-    mask-image: linear-gradient(to bottom, white, transparent), radial-gradient(circle at top center, white, transparent);
-    mask-composite: intersect;
-    background-image: repeating-linear-gradient(
-      70deg,
-      rgba(0, 149, 255, 0.2) 0%,
-      rgba(231, 77, 255, 0.3) 12.5%,
-      rgba(255, 0, 0, 0.25) 25%,
-      rgba(131, 255, 166, 0.2) 37.5%,
-      rgba(0, 149, 255, 0.2) 50%
-    );
-    background-size: 200% 100%;
   }
 
   .banner-content {
@@ -66,8 +66,24 @@ const content = banner ? (banner as any).content : '';
     font-weight: 600;
   }
 
-  @keyframes fd-moving-banner {
-    from { background-position: 0% 0; }
-    to { background-position: 100% 0; }
+  .banner-close {
+    position: absolute;
+    inset-inline-end: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: var(--fuma-radius);
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    transition: color 0.15s, background-color 0.15s;
+  }
+
+  .banner-close:hover {
+    color: var(--sl-color-text);
+    background-color: var(--fuma-hover);
   }
 </style>
