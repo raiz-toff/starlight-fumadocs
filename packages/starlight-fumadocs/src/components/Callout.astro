@@ -1,5 +1,4 @@
 ---
-import { Alert, AlertTitle, AlertDescription } from "./starwind/alert";
 import { Icon } from '@astrojs/starlight/components';
 
 export interface Props {
@@ -13,52 +12,64 @@ export interface Props {
 
 const { type = 'info', title, icon } = Astro.props;
 
-const resolveVariant = (type: string): "info" | "warning" | "error" | "success" | "primary" | "default" => {
+const resolveVariant = (type: string): "info" | "warning" | "error" | "success" | "idea" => {
   if (type === 'warn' || type === 'warning') return 'warning';
   if (type === 'error') return 'error';
-  if (type === 'success') return 'success';
-  if (type === 'idea') return 'primary';
-  if (type === 'tip') return 'success';
+  if (type === 'success' || type === 'tip') return 'success';
+  if (type === 'idea') return 'idea';
   return 'info';
 };
 
 const variant = resolveVariant(type);
+
+const accentMap: Record<string, string> = {
+  info: 'var(--fuma-color-info)',
+  warning: 'var(--fuma-color-warning)',
+  error: 'var(--fuma-color-error)',
+  success: 'var(--fuma-color-success)',
+  idea: 'var(--fuma-color-idea)',
+};
+const accent = accentMap[variant];
 
 const iconMap: Record<string, any> = {
   info: 'information',
   warning: 'warning',
   error: 'error',
   success: 'approve-check-circle',
-  primary: 'sun',
+  idea: 'sun',
 };
 
 const iconName = icon || iconMap[variant] || 'information';
 ---
 
-<Alert variant={variant} class="not-content my-5">
+<div class="fuma-callout not-content my-5 p-4 rounded-xl border" style={`--callout-accent: ${accent};`}>
   <div class="flex gap-3">
-    <div class={`mt-1 flex-shrink-0 text-${variant}`}>
+    <div class="mt-0.5 flex-shrink-0" style={`color: ${accent}`}>
       <Icon name={iconName} size="1.25rem" />
     </div>
-    <div class="flex-1">
-      {title && <AlertTitle>{title}</AlertTitle>}
-      <AlertDescription>
+    <div class="flex-1 min-w-0">
+      {title && <p class="font-medium text-sl-color-text mb-1 leading-none">{title}</p>}
+      <div class="text-sm text-sl-color-gray-2 leading-relaxed callout-body">
         <slot />
-      </AlertDescription>
+      </div>
     </div>
   </div>
-</Alert>
+</div>
 
-<style is:global>
-  /* Ensure standard content margins inside callout descriptions */
-  [data-slot="alert-description"] p {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+<style>
+  .fuma-callout {
+    border-color: var(--sl-color-hairline);
+    border-inline-start-width: 2px;
+    border-inline-start-color: color-mix(in oklab, var(--callout-accent) 50%, transparent);
+    background-color: var(--sl-color-bg-sidebar);
   }
-  [data-slot="alert-description"] *:first-child {
+  .callout-body :global(p) {
+    margin: 0.5rem 0;
+  }
+  .callout-body :global(*:first-child) {
     margin-top: 0;
   }
-  [data-slot="alert-description"] *:last-child {
+  .callout-body :global(*:last-child) {
     margin-bottom: 0;
   }
 </style>

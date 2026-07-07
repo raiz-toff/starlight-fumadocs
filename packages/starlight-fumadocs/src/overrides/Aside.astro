@@ -28,38 +28,26 @@ const iconName = iconMap[type];
 // Use the title from props or the capitalized type as a fallback
 const displayTitle = title || type.charAt(0).toUpperCase() + type.slice(1);
 
-// Map variants to colors
-const colorMap = {
-  info: {
-    accent: "var(--fuma-color-info)",
-    bg: "var(--fuma-bg-info)",
-  },
-  success: {
-    accent: "var(--fuma-color-success)",
-    bg: "var(--fuma-bg-success)",
-  },
-  warning: {
-    accent: "var(--fuma-color-warning)",
-    bg: "var(--fuma-bg-warning)",
-  },
-  error: {
-    accent: "var(--fuma-color-error)",
-    bg: "var(--fuma-bg-error)",
-  },
+// Map variants to the Fumadocs static accent color
+const accentMap = {
+  info: "var(--fuma-color-info)",
+  success: "var(--fuma-color-success)",
+  warning: "var(--fuma-color-warning)",
+  error: "var(--fuma-color-error)",
 };
-const colors = colorMap[variant];
+const accent = accentMap[variant];
 ---
 
-<div 
-  class={`fuma-aside not-content animate my-6 p-4 rounded-lg border-s-4 border-e border-t border-b shadow-sm`} 
-  style={`border-inline-start-color: ${colors.accent}; background-color: ${colors.bg};`}
+<div
+  class={`fuma-aside not-content my-6 p-4 rounded-xl border`}
+  style={`--callout-accent: ${accent};`}
 >
   <div class="flex gap-3">
-    <div class="mt-0.5 flex-shrink-0" style={`color: ${colors.accent}`}>
+    <div class="mt-0.5 flex-shrink-0" style={`color: ${accent}`}>
       <Icon name={iconName} size="1.25rem" />
     </div>
     <div class="flex-1 min-w-0">
-      <p class="font-semibold text-sl-color-text mb-1 leading-none">{displayTitle}</p>
+      <p class="font-medium text-sl-color-text mb-1 leading-none">{displayTitle}</p>
       <div class="text-sm text-sl-color-gray-2 leading-relaxed prose-inline">
         <slot />
       </div>
@@ -70,6 +58,9 @@ const colors = colorMap[variant];
 <style>
   .fuma-aside {
     border-color: var(--sl-color-hairline);
+    border-inline-start-width: 2px;
+    border-inline-start-color: color-mix(in oklab, var(--callout-accent) 50%, transparent);
+    background-color: var(--sl-color-bg-sidebar);
   }
   .prose-inline :global(p) {
     margin: 0.5rem 0;

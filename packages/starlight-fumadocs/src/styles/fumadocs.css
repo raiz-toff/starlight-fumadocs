@@ -111,35 +111,33 @@
     --fuma-docs-row-2: calc(var(--fuma-docs-row-1) + var(--fuma-header-height));
     --fuma-docs-row-3: calc(var(--fuma-docs-row-2) + var(--fuma-toc-popover-height));
 
-	/* Functional Colors (Light Mode) */
-	--fuma-color-info: hsl(210, 100%, 45%);
-	--fuma-color-warning: hsl(35, 100%, 40%);
-	--fuma-color-error: hsl(0, 84%, 48%);
-	--fuma-color-success: hsl(142, 70%, 35%);
-	
-	--fuma-bg-info: hsla(210, 100%, 45%, 0.1);
-	--fuma-bg-warning: hsla(35, 100%, 40%, 0.1);
-	--fuma-bg-error: hsla(0, 84%, 48%, 0.1);
-	--fuma-bg-success: hsla(142, 70%, 35%, 0.1);
+	/* Functional Colors — Fumadocs static semantic palette (same in both modes) */
+	--fuma-color-info: oklch(62.3% 0.214 259.815);
+	--fuma-color-warning: oklch(76.9% 0.188 70.08);
+	--fuma-color-error: oklch(63.7% 0.237 25.331);
+	--fuma-color-success: oklch(72.3% 0.219 149.579);
+	--fuma-color-idea: oklch(70.5% 0.209 60.849);
 }
 
 /* ── CALLOUT / ASIDE OVERRIDES ─────────────────────────────── */
-/* These ensure that Starlight's default markdown asides also use our design tokens */
+/* Fumadocs callouts: neutral card, NO tint, a thin 2px accent bar at the start. */
 :root .starlight-aside {
   border-radius: var(--fuma-radius) !important;
   border: 1px solid var(--sl-color-hairline) !important;
+  border-inline-start-width: 2px !important;
   background: var(--sl-color-bg-sidebar) !important;
 }
 
-:root .starlight-aside--note { border-inline-start-color: var(--fuma-color-info) !important; background-color: var(--fuma-bg-info) !important; }
-:root .starlight-aside--tip { border-inline-start-color: var(--fuma-color-success) !important; background-color: var(--fuma-bg-success) !important; }
-:root .starlight-aside--caution { border-inline-start-color: var(--fuma-color-warning) !important; background-color: var(--fuma-bg-warning) !important; }
-:root .starlight-aside--danger { border-inline-start-color: var(--fuma-color-error) !important; background-color: var(--fuma-bg-error) !important; }
+:root .starlight-aside--note { border-inline-start-color: color-mix(in oklab, var(--fuma-color-info) 50%, transparent) !important; }
+:root .starlight-aside--tip { border-inline-start-color: color-mix(in oklab, var(--fuma-color-success) 50%, transparent) !important; }
+:root .starlight-aside--caution { border-inline-start-color: color-mix(in oklab, var(--fuma-color-warning) 50%, transparent) !important; }
+:root .starlight-aside--danger { border-inline-start-color: color-mix(in oklab, var(--fuma-color-error) 50%, transparent) !important; }
 
-:root[data-theme='dark'] .starlight-aside--note { border-inline-start-color: var(--fuma-color-info) !important; background-color: var(--fuma-bg-info) !important; }
-:root[data-theme='dark'] .starlight-aside--tip { border-inline-start-color: var(--fuma-color-success) !important; background-color: var(--fuma-bg-success) !important; }
-:root[data-theme='dark'] .starlight-aside--caution { border-inline-start-color: var(--fuma-color-warning) !important; background-color: var(--fuma-bg-warning) !important; }
-:root[data-theme='dark'] .starlight-aside--danger { border-inline-start-color: var(--fuma-color-error) !important; background-color: var(--fuma-bg-error) !important; }
+:root .starlight-aside__title { color: var(--sl-color-text) !important; font-weight: 500 !important; }
+:root .starlight-aside--note .starlight-aside__icon { color: var(--fuma-color-info) !important; }
+:root .starlight-aside--tip .starlight-aside__icon { color: var(--fuma-color-success) !important; }
+:root .starlight-aside--caution .starlight-aside__icon { color: var(--fuma-color-warning) !important; }
+:root .starlight-aside--danger .starlight-aside__icon { color: var(--fuma-color-error) !important; }
 
 /* Breakpoint Definitions */
   @media (min-width: 768px) {
@@ -198,17 +196,6 @@
     --ec-codeMarkBg: hsla(0, 0%, 98%, 0.1);
     --ec-codeMarkBrd: hsla(0, 0%, 98%, 0.5);
     --ec-codeMarkText: inherit;
-    
-    /* Functional Colors (Dark Mode) */
-    --fuma-color-info: hsl(200, 100%, 70%);
-    --fuma-color-warning: hsl(40, 100%, 65%);
-    --fuma-color-error: hsl(0, 100%, 70%);
-    --fuma-color-success: hsl(140, 80%, 70%);
-
-    --fuma-bg-info: hsla(200, 100%, 70%, 0.1);
-    --fuma-bg-warning: hsla(40, 100%, 65%, 0.1);
-    --fuma-bg-error: hsla(0, 100%, 70%, 0.1);
-    --fuma-bg-success: hsla(140, 80%, 70%, 0.1);
   }
 
   /* Breakpoint Definitions
