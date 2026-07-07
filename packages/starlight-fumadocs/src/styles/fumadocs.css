@@ -256,6 +256,11 @@
     min-height: var(--fuma-docs-height, 100dvh);
     background-color: var(--sl-color-bg);
     overflow-x: clip;
+    /* Cap and center the whole layout at Fumadocs' --fd-layout-width so the
+       sidebar, content, and TOC stay together on ultrawide screens. */
+    width: 100%;
+    max-width: var(--fuma-layout-width);
+    margin-inline: auto;
     grid-template-areas:
       "banner  banner      banner"
       "sidebar header      toc"
